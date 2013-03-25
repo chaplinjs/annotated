@@ -340,7 +340,7 @@ Iterate and attempt to replace params in pattern</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>    <span class="keyword">if</span> <span class="property">@test</span> url <span class="keyword">then</span> url <span class="keyword">else</span> <span class="literal">false</span>
+            <div class="content"><div class='highlight'><pre>    <span class="keyword">if</span> <span class="property">@test</span> url <span class="keyword">then</span> <span class="string">"/<span class="subst">#{url}</span>"</span> <span class="keyword">else</span> <span class="literal">false</span>
 
   createRegExp: -&gt;
     <span class="keyword">if</span> _.isRegExp <span class="property">@pattern</span>

@@ -275,25 +275,32 @@ composed view is disposed.</p>
               </div>
               <p>Constructs a composition and composes into the active compositions.
 This function has several forms as described below:</p>
-<p>a) compose(&#39;name&#39;, Class[, options])
-   Composes a class object. The options are passed to the class when
-   an instance is contructed and are further used to test if the
-   composition should be re-composed.</p>
-<p>b) compose(&#39;name&#39;, function)
-   Composes a function that executes in the context of the controller;
-   do NOT bind the function context.</p>
-<p>c) compose(&#39;name&#39;, options, function)
-   Composes a function that executes in the context of the controller;
-   do NOT bind the function context and is passed the options as a
-   parameter. The options are further used to test if the composition
-   should be recomposed.</p>
-<p>d) compose(&#39;name&#39;, options)
-   Gives control over the composition process; the compose method of
-   the options hash is executed in place of the function of form (c) and
-   the check method is called (if present) to determine re-composition (
-   otherwise this is the same as form [c]).</p>
-<p>e) compose(&#39;name&#39;, CompositionClass[, options])
-   Gives complete control over the composition process.</p>
+<ol>
+<li><p>compose(&#39;name&#39;, Class[, options])
+Composes a class object. The options are passed to the class when
+an instance is contructed and are further used to test if the
+composition should be re-composed.</p>
+</li>
+<li><p>compose(&#39;name&#39;, function)
+Composes a function that executes in the context of the controller;
+do NOT bind the function context.</p>
+</li>
+<li><p>compose(&#39;name&#39;, options, function)
+Composes a function that executes in the context of the controller;
+do NOT bind the function context and is passed the options as a
+parameter. The options are further used to test if the composition
+should be recomposed.</p>
+</li>
+<li><p>compose(&#39;name&#39;, options)
+Gives control over the composition process; the compose method of
+the options hash is executed in place of the function of form (3) and
+the check method is called (if present) to determine re-composition (
+otherwise this is the same as form [3]).</p>
+</li>
+<li><p>compose(&#39;name&#39;, CompositionClass[, options])
+Gives complete control over the composition process.</p>
+</li>
+</ol>
 
             </div>
             
@@ -309,7 +316,7 @@ This function has several forms as described below:</p>
                 <a class="pilcrow" href="#section-10">&#182;</a>
               </div>
               <p>Normalize the arguments
-If the second parameter is a function we know it is (a) or (b).</p>
+If the second parameter is a function we know it is (1) or (2).</p>
 
             </div>
             
@@ -324,7 +331,7 @@ If the second parameter is a function we know it is (a) or (b).</p>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-11">&#182;</a>
               </div>
-              <p>This is form (a) or (e) with the optional options hash if the third
+              <p>This is form (1) or (5) with the optional options hash if the third
 is an obj or the second parameter&#39;s prototype has a dispose method</p>
 
             </div>
@@ -340,7 +347,7 @@ is an obj or the second parameter&#39;s prototype has a dispose method</p>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-12">&#182;</a>
               </div>
-              <p>If the class is a Composition class then it is form (e).</p>
+              <p>If the class is a Composition class then it is form (5).</p>
 
             </div>
             
@@ -393,7 +400,7 @@ property is false</p>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-15">&#182;</a>
               </div>
-              <p>This is form (b).</p>
+              <p>This is form (2).</p>
 
             </div>
             
@@ -408,7 +415,7 @@ property is false</p>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-16">&#182;</a>
               </div>
-              <p>If the third parameter exists and is a function this is (c).</p>
+              <p>If the third parameter exists and is a function this is (3).</p>
 
             </div>
             
@@ -424,7 +431,7 @@ property is false</p>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-17">&#182;</a>
               </div>
-              <p>This must be form (d).</p>
+              <p>This must be form (4).</p>
 
             </div>
             
