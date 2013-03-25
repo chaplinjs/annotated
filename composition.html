@@ -1,0 +1,489 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+  <title>composition.coffee</title>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <meta name="viewport" content="width=device-width, target-densitydpi=160dpi, initial-scale=1.0; maximum-scale=1.0; user-scalable=0;">
+  <link rel="stylesheet" media="all" href="docco.css" />
+</head>
+<body>
+  <div id="container">
+    <div id="background"></div>
+    
+      <ul id="jump_to">
+        <li>
+          <a class="large" href="javascript:void(0);">Jump To &hellip;</a>
+          <a class="small" href="javascript:void(0);">+</a>
+          <div id="jump_wrapper">
+          <div id="jump_page">
+            
+              
+              <a class="source" href="chaplin.html">
+                chaplin.coffee
+              </a>
+            
+              
+              <a class="source" href="application.html">
+                application.coffee
+              </a>
+            
+              
+              <a class="source" href="composer.html">
+                composer.coffee
+              </a>
+            
+              
+              <a class="source" href="controller.html">
+                controller.coffee
+              </a>
+            
+              
+              <a class="source" href="dispatcher.html">
+                dispatcher.coffee
+              </a>
+            
+              
+              <a class="source" href="composition.html">
+                composition.coffee
+              </a>
+            
+              
+              <a class="source" href="delayer.html">
+                delayer.coffee
+              </a>
+            
+              
+              <a class="source" href="event_broker.html">
+                event_broker.coffee
+              </a>
+            
+              
+              <a class="source" href="helpers.html">
+                helpers.coffee
+              </a>
+            
+              
+              <a class="source" href="route.html">
+                route.coffee
+              </a>
+            
+              
+              <a class="source" href="router.html">
+                router.coffee
+              </a>
+            
+              
+              <a class="source" href="support.html">
+                support.coffee
+              </a>
+            
+              
+              <a class="source" href="sync_machine.html">
+                sync_machine.coffee
+              </a>
+            
+              
+              <a class="source" href="utils.html">
+                utils.coffee
+              </a>
+            
+              
+              <a class="source" href="mediator.html">
+                mediator.coffee
+              </a>
+            
+              
+              <a class="source" href="collection.html">
+                collection.coffee
+              </a>
+            
+              
+              <a class="source" href="model.html">
+                model.coffee
+              </a>
+            
+              
+              <a class="source" href="collection_view.html">
+                collection_view.coffee
+              </a>
+            
+              
+              <a class="source" href="layout.html">
+                layout.coffee
+              </a>
+            
+              
+              <a class="source" href="view.html">
+                view.coffee
+              </a>
+            
+          </div>
+        </li>
+      </ul>
+    
+    <ul class="sections">
+        
+          <li id="title">
+              <div class="annotation">
+                  <h1>composition.coffee</h1>
+              </div>
+          </li>
+        
+        
+        
+        <li id="section-1">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-1">&#182;</a>
+              </div>
+              
+            </div>
+            
+            <div class="content"><div class='highlight'><pre><span class="string">'use strict'</span>
+
+_ = require <span class="string">'underscore'</span>
+Backbone = require <span class="string">'backbone'</span>
+EventBroker = require <span class="string">'chaplin/lib/event_broker'</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-2">
+            <div class="annotation">
+              
+              <div class="pilwrap for-h2">
+                <a class="pilcrow" href="#section-2">&#182;</a>
+              </div>
+              <h2>Composition</h2>
+
+            </div>
+            
+        </li>
+        
+        
+        <li id="section-3">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-3">&#182;</a>
+              </div>
+              <p>A utility class that is meant as a simple proxied version of a
+controller that is used internally to inflate simple
+calls to !composer:compose and may be extended and used to have complete
+control over the composition process.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>module.exports = <span class="class"><span class="keyword">class</span> <span class="title">Composition</span></span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-4">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-4">&#182;</a>
+              </div>
+              <p>Borrow the static extend method from Backbone.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  <span class="property">@extend</span> = Backbone.Model.extend</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-5">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-5">&#182;</a>
+              </div>
+              <p>Mixin Backbone events and EventBroker.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  _(<span class="property">@prototype</span>).extend Backbone.Events
+  _(<span class="property">@prototype</span>).extend EventBroker</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-6">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-6">&#182;</a>
+              </div>
+              <p>The item that is composed; this is by default a reference to this.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  item: <span class="literal">null</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-7">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-7">&#182;</a>
+              </div>
+              <p>The options that this composition was constructed with.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  options: <span class="literal">null</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-8">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-8">&#182;</a>
+              </div>
+              <p>Whether this composition is currently stale.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  _stale: <span class="literal">false</span>
+
+  constructor: (options) -&gt;
+    <span class="property">@options</span> = _.clone options <span class="keyword">if</span> options?
+    <span class="property">@item</span> = <span class="keyword">this</span>
+    <span class="property">@initialize</span> <span class="property">@options</span>
+
+  initialize: -&gt;</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-9">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-9">&#182;</a>
+              </div>
+              <p>Empty per default.</p>
+<p>The compose method is called when this composition is to be composed.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  compose: -&gt;</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-10">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-10">&#182;</a>
+              </div>
+              <p>Empty per default.</p>
+<p>The check method is called when this composition is asked to be
+composed again. The passed options are the newly passed options.
+If this returns false then the composition is re-composed.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  check: (options) -&gt; <span class="keyword">return</span> _.isEqual <span class="property">@options</span>, options</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-11">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-11">&#182;</a>
+              </div>
+              <p>Marks all applicable items as stale.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  stale: (value) -&gt;</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-12">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-12">&#182;</a>
+              </div>
+              <p>Return the current property if not requesting a change.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    <span class="keyword">return</span> <span class="property">@_stale</span> <span class="keyword">unless</span> value?</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-13">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-13">&#182;</a>
+              </div>
+              <p>Sets the stale property for every item in the composition that has it.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    <span class="property">@_stale</span> = value
+    <span class="keyword">for</span> name, item <span class="keyword">of</span> <span class="keyword">this</span> <span class="keyword">when</span> item <span class="keyword">and</span> item <span class="keyword">isnt</span> <span class="keyword">this</span> <span class="keyword">and</span> _(item).has <span class="string">'stale'</span>
+      item.stale = value</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-14">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-14">&#182;</a>
+              </div>
+              <p>Return nothing.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    <span class="keyword">return</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-15">
+            <div class="annotation">
+              
+              <div class="pilwrap for-h2">
+                <a class="pilcrow" href="#section-15">&#182;</a>
+              </div>
+              <h2>Disposal</h2>
+
+            </div>
+            
+        </li>
+        
+        
+        <li id="section-16">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-16">&#182;</a>
+              </div>
+              
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  disposed: <span class="literal">false</span>
+
+  dispose: -&gt;
+    <span class="keyword">return</span> <span class="keyword">if</span> <span class="property">@disposed</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-17">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-17">&#182;</a>
+              </div>
+              <p>Dispose and delete all members which are disposable.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    <span class="keyword">for</span> own prop, obj <span class="keyword">of</span> <span class="keyword">this</span> <span class="keyword">when</span> obj <span class="keyword">and</span> <span class="keyword">typeof</span> obj.dispose <span class="keyword">is</span> <span class="string">'function'</span>
+      <span class="keyword">unless</span> obj <span class="keyword">is</span> <span class="keyword">this</span>
+        obj.dispose()
+        <span class="keyword">delete</span> <span class="keyword">this</span>[prop]</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-18">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-18">&#182;</a>
+              </div>
+              <p>Unbind handlers of global events.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    <span class="property">@unsubscribeAllEvents</span>()</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-19">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-19">&#182;</a>
+              </div>
+              <p>Unbind all referenced handlers.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    <span class="property">@stopListening</span>()</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-20">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-20">&#182;</a>
+              </div>
+              <p>Remove properties which are not disposable.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    properties = [<span class="string">'redirected'</span>]
+    <span class="keyword">delete</span> <span class="keyword">this</span>[prop] <span class="keyword">for</span> prop <span class="keyword">in</span> properties</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-21">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-21">&#182;</a>
+              </div>
+              <p>Finished.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    <span class="property">@disposed</span> = <span class="literal">true</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-22">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-22">&#182;</a>
+              </div>
+              <p>You&#39;re frozen when your heart’s not open.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    Object.freeze? <span class="keyword">this</span></pre></div></div>
+            
+        </li>
+        
+    </ul>
+  </div>
+</body>
+</html>

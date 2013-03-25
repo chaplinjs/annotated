@@ -1,0 +1,803 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+  <title>route.coffee</title>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <meta name="viewport" content="width=device-width, target-densitydpi=160dpi, initial-scale=1.0; maximum-scale=1.0; user-scalable=0;">
+  <link rel="stylesheet" media="all" href="docco.css" />
+</head>
+<body>
+  <div id="container">
+    <div id="background"></div>
+    
+      <ul id="jump_to">
+        <li>
+          <a class="large" href="javascript:void(0);">Jump To &hellip;</a>
+          <a class="small" href="javascript:void(0);">+</a>
+          <div id="jump_wrapper">
+          <div id="jump_page">
+            
+              
+              <a class="source" href="chaplin.html">
+                chaplin.coffee
+              </a>
+            
+              
+              <a class="source" href="application.html">
+                application.coffee
+              </a>
+            
+              
+              <a class="source" href="composer.html">
+                composer.coffee
+              </a>
+            
+              
+              <a class="source" href="controller.html">
+                controller.coffee
+              </a>
+            
+              
+              <a class="source" href="dispatcher.html">
+                dispatcher.coffee
+              </a>
+            
+              
+              <a class="source" href="composition.html">
+                composition.coffee
+              </a>
+            
+              
+              <a class="source" href="delayer.html">
+                delayer.coffee
+              </a>
+            
+              
+              <a class="source" href="event_broker.html">
+                event_broker.coffee
+              </a>
+            
+              
+              <a class="source" href="helpers.html">
+                helpers.coffee
+              </a>
+            
+              
+              <a class="source" href="route.html">
+                route.coffee
+              </a>
+            
+              
+              <a class="source" href="router.html">
+                router.coffee
+              </a>
+            
+              
+              <a class="source" href="support.html">
+                support.coffee
+              </a>
+            
+              
+              <a class="source" href="sync_machine.html">
+                sync_machine.coffee
+              </a>
+            
+              
+              <a class="source" href="utils.html">
+                utils.coffee
+              </a>
+            
+              
+              <a class="source" href="mediator.html">
+                mediator.coffee
+              </a>
+            
+              
+              <a class="source" href="collection.html">
+                collection.coffee
+              </a>
+            
+              
+              <a class="source" href="model.html">
+                model.coffee
+              </a>
+            
+              
+              <a class="source" href="collection_view.html">
+                collection_view.coffee
+              </a>
+            
+              
+              <a class="source" href="layout.html">
+                layout.coffee
+              </a>
+            
+              
+              <a class="source" href="view.html">
+                view.coffee
+              </a>
+            
+          </div>
+        </li>
+      </ul>
+    
+    <ul class="sections">
+        
+          <li id="title">
+              <div class="annotation">
+                  <h1>route.coffee</h1>
+              </div>
+          </li>
+        
+        
+        
+        <li id="section-1">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-1">&#182;</a>
+              </div>
+              
+            </div>
+            
+            <div class="content"><div class='highlight'><pre><span class="string">'use strict'</span>
+
+_ = require <span class="string">'underscore'</span>
+Backbone = require <span class="string">'backbone'</span>
+EventBroker = require <span class="string">'chaplin/lib/event_broker'</span>
+Controller = require <span class="string">'chaplin/controllers/controller'</span>
+
+module.exports = <span class="class"><span class="keyword">class</span> <span class="title">Route</span></span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-2">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-2">&#182;</a>
+              </div>
+              <p>Borrow the static extend method from Backbone.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  <span class="property">@extend</span> = Backbone.Model.extend</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-3">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-3">&#182;</a>
+              </div>
+              <p>Mixin an EventBroker.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  _(<span class="property">@prototype</span>).extend EventBroker</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-4">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-4">&#182;</a>
+              </div>
+              <p>Taken from Backbone.Router.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  escapeRegExp = <span class="regexp">/[-[\]{}()+?.,\\^$|#\s]/g</span>
+
+  queryStringFieldSeparator = <span class="string">'&amp;'</span>
+  queryStringValueSeparator = <span class="string">'='</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-5">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-5">&#182;</a>
+              </div>
+              <p>Create a route for a URL pattern and a controller action
+e.g. new Route &#39;/users/:id&#39;, &#39;users&#39;, &#39;show&#39;, { some: &#39;options&#39; }</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  constructor: (<span class="property">@pattern</span>, <span class="property">@controller</span>, <span class="property">@action</span>, options) -&gt;
+    <span class="property">@options</span> = <span class="keyword">if</span> options <span class="keyword">then</span> _.clone(options) <span class="keyword">else</span> {}</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-6">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-6">&#182;</a>
+              </div>
+              <p>Store the name on the route if given</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    <span class="property">@name</span> = <span class="property">@options</span>.name <span class="keyword">if</span> <span class="property">@options</span>.name?</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-7">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-7">&#182;</a>
+              </div>
+              <p>Initialize list of :params which the route will use.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    <span class="property">@paramNames</span> = []</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-8">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-8">&#182;</a>
+              </div>
+              <p>Check if the action is a reserved name</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    <span class="keyword">if</span> _(Controller.prototype).has <span class="property">@action</span>
+      <span class="keyword">throw</span> <span class="keyword">new</span> Error <span class="string">'Route: You should not use existing controller '</span> +
+        <span class="string">'properties as action names'</span>
+
+    <span class="property">@createRegExp</span>()
+
+  reverse: (params) -&gt;
+    url = <span class="property">@pattern</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-9">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-9">&#182;</a>
+              </div>
+              <p>TODO: add support for regular expressions in reverser.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    <span class="keyword">return</span> <span class="literal">false</span> <span class="keyword">if</span> _.isRegExp url
+    notEnoughParams = <span class="string">'Route#reverse: Not enough parameters to reverse'</span>
+
+    <span class="keyword">if</span> _.isArray params</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-10">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-10">&#182;</a>
+              </div>
+              <p>Ensure we have enough parameters.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>      <span class="keyword">throw</span> <span class="keyword">new</span> Error notEnoughParams <span class="keyword">if</span> params.length &lt; <span class="property">@paramNames</span>.length
+
+      index = <span class="number">0</span>
+      url = url.replace <span class="regexp">/[:*][^\/\?]+/g</span>, (match) -&gt;
+        result = params[index]
+        index += <span class="number">1</span>
+        result
+    <span class="keyword">else</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-11">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-11">&#182;</a>
+              </div>
+              <p>From a params hash; we need to be able to return
+the actual URL this route represents
+Iterate and attempt to replace params in pattern</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>      <span class="keyword">for</span> name <span class="keyword">in</span> <span class="property">@paramNames</span>
+        value = params[name]
+        <span class="keyword">throw</span> <span class="keyword">new</span> Error notEnoughParams <span class="keyword">if</span> value <span class="keyword">is</span> <span class="literal">undefined</span>
+        url = url.replace <span class="regexp">///[:*]<span class="comment">#{name}///g, value</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-12">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-12">&#182;</a>
+              </div>
+              <p>If the url tests out good; return the url; else, false.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    <span class="keyword">if</span> <span class="property">@test</span> url <span class="keyword">then</span> url <span class="keyword">else</span> <span class="literal">false</span>
+
+  createRegExp: -&gt;
+    <span class="keyword">if</span> _.isRegExp <span class="property">@pattern</span>
+      <span class="property">@regExp</span> = <span class="property">@pattern</span>
+      <span class="property">@paramNames</span> = <span class="property">@options</span>.names <span class="keyword">if</span> _.isArray <span class="property">@options</span>.names
+      <span class="keyword">return</span>
+
+    pattern = <span class="property">@pattern</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-13">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-13">&#182;</a>
+              </div>
+              <p>Escape magic characters.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>      .replace(escapeRegExp, <span class="string">'\\$&amp;'</span>)</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-14">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-14">&#182;</a>
+              </div>
+              <p>Replace named parameters, collecting their names.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>      .replace(<span class="regexp">/(?::|\*)(\w+)/g</span>, <span class="property">@addParamName</span>)</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-15">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-15">&#182;</a>
+              </div>
+              <p>Create the actual regular expression, match until the end of the URL or
+the begin of query string.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    <span class="property">@regExp</span> = <span class="regexp">///^<span class="comment">#{pattern}(?=\?|$)///</span>
+
+  addParamName: (match, paramName) =&gt;</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-16">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-16">&#182;</a>
+              </div>
+              <p>Save parameter name.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    <span class="property">@paramNames</span>.push paramName</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-17">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-17">&#182;</a>
+              </div>
+              <p>Replace with a character class.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    <span class="keyword">if</span> match.charAt(<span class="number">0</span>) <span class="keyword">is</span> <span class="string">':'</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-18">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-18">&#182;</a>
+              </div>
+              <p>Regexp for :foo.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>      <span class="string">'([^\/\?]+)'</span>
+    <span class="keyword">else</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-19">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-19">&#182;</a>
+              </div>
+              <p>Regexp for *foo.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>      <span class="string">'(.*?)'</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-20">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-20">&#182;</a>
+              </div>
+              <p>Test if the route matches to a path (called by Backbone.History#loadUrl).</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  test: (path) -&gt;</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-21">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-21">&#182;</a>
+              </div>
+              <p>Test the main RegExp.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    matched = <span class="property">@regExp</span>.test path
+    <span class="keyword">return</span> <span class="literal">false</span> <span class="keyword">unless</span> matched</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-22">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-22">&#182;</a>
+              </div>
+              <p>Apply the parameter constraints.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    constraints = <span class="property">@options</span>.constraints
+    <span class="keyword">if</span> constraints
+      params = <span class="property">@extractParams</span> path
+      <span class="keyword">for</span> own name, constraint <span class="keyword">of</span> constraints
+        <span class="keyword">unless</span> constraint.test(params[name])
+          <span class="keyword">return</span> <span class="literal">false</span>
+
+    <span class="keyword">return</span> <span class="literal">true</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-23">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-23">&#182;</a>
+              </div>
+              <p>The handler called by Backbone.History when the route matches.
+It is also called by Router#route which might pass options.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  handler: (path, options) =&gt;
+    options = <span class="keyword">if</span> options <span class="keyword">then</span> _.clone(options) <span class="keyword">else</span> {}</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-24">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-24">&#182;</a>
+              </div>
+              <p>If no query string was passed, use the current.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    queryString = options.queryString ? <span class="property">@getCurrentQueryString</span>()</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-25">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-25">&#182;</a>
+              </div>
+              <p>Build params hash.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    params = <span class="property">@buildParams</span> path, queryString</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-26">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-26">&#182;</a>
+              </div>
+              <p>Add a <code>path</code> routing option with the whole path match.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    options.path = path</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-27">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-27">&#182;</a>
+              </div>
+              <p>Publish a global matchRoute event passing the route and the params.
+Original options hash forwarded to allow further forwarding to backbone.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    <span class="property">@publishEvent</span> <span class="string">'matchRoute'</span>, <span class="keyword">this</span>, params, options</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-28">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-28">&#182;</a>
+              </div>
+              <p>Returns the query string for the current document.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  getCurrentQueryString: -&gt;
+    location.search.substring <span class="number">1</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-29">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-29">&#182;</a>
+              </div>
+              <p>Create a proper Rails-like params hash, not an array like Backbone.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  buildParams: (path, queryString) -&gt;
+    _.extend {},</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-30">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-30">&#182;</a>
+              </div>
+              <p>Add params from query string.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>      <span class="property">@extractQueryParams</span>(queryString),</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-31">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-31">&#182;</a>
+              </div>
+              <p>Add named params from pattern matches.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>      <span class="property">@extractParams</span>(path),</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-32">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-32">&#182;</a>
+              </div>
+              <p>Add additional params from options as they might
+overwrite params extracted from URL.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>      <span class="property">@options</span>.params</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-33">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-33">&#182;</a>
+              </div>
+              <p>Extract named parameters from the URL path.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  extractParams: (path) -&gt;
+    params = {}</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-34">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-34">&#182;</a>
+              </div>
+              <p>Apply the regular expression.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    matches = <span class="property">@regExp</span>.exec path</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-35">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-35">&#182;</a>
+              </div>
+              <p>Fill the hash using the paramNames and the matches.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    <span class="keyword">for</span> match, index <span class="keyword">in</span> matches.slice(<span class="number">1</span>)
+      paramName = <span class="keyword">if</span> <span class="property">@paramNames</span>.length <span class="keyword">then</span> <span class="property">@paramNames</span>[index] <span class="keyword">else</span> index
+      params[paramName] = match
+
+    params</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-36">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-36">&#182;</a>
+              </div>
+              <p>Extract parameters from the query string.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  extractQueryParams: (queryString) -&gt;
+    params = {}
+    <span class="keyword">return</span> params <span class="keyword">unless</span> queryString
+    pairs = queryString.split queryStringFieldSeparator
+    <span class="keyword">for</span> pair <span class="keyword">in</span> pairs
+      <span class="keyword">continue</span> <span class="keyword">unless</span> pair.length
+      [field, value] = pair.split queryStringValueSeparator
+      <span class="keyword">continue</span> <span class="keyword">unless</span> field.length
+      field = decodeURIComponent field
+      value = decodeURIComponent value
+      current = params[field]
+      <span class="keyword">if</span> current</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-37">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-37">&#182;</a>
+              </div>
+              <p>Handle multiple params with same name:
+Aggregate them in an array.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>        <span class="keyword">if</span> current.push</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-38">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-38">&#182;</a>
+              </div>
+              <p>Add the existing array.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>          current.push value
+        <span class="keyword">else</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-39">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-39">&#182;</a>
+              </div>
+              <p>Create a new array.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>          params[field] = [current, value]
+      <span class="keyword">else</span>
+        params[field] = value
+
+    params</pre></div></div>
+            
+        </li>
+        
+    </ul>
+  </div>
+</body>
+</html>

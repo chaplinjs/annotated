@@ -1,0 +1,766 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+  <title>router.coffee</title>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <meta name="viewport" content="width=device-width, target-densitydpi=160dpi, initial-scale=1.0; maximum-scale=1.0; user-scalable=0;">
+  <link rel="stylesheet" media="all" href="docco.css" />
+</head>
+<body>
+  <div id="container">
+    <div id="background"></div>
+    
+      <ul id="jump_to">
+        <li>
+          <a class="large" href="javascript:void(0);">Jump To &hellip;</a>
+          <a class="small" href="javascript:void(0);">+</a>
+          <div id="jump_wrapper">
+          <div id="jump_page">
+            
+              
+              <a class="source" href="chaplin.html">
+                chaplin.coffee
+              </a>
+            
+              
+              <a class="source" href="application.html">
+                application.coffee
+              </a>
+            
+              
+              <a class="source" href="composer.html">
+                composer.coffee
+              </a>
+            
+              
+              <a class="source" href="controller.html">
+                controller.coffee
+              </a>
+            
+              
+              <a class="source" href="dispatcher.html">
+                dispatcher.coffee
+              </a>
+            
+              
+              <a class="source" href="composition.html">
+                composition.coffee
+              </a>
+            
+              
+              <a class="source" href="delayer.html">
+                delayer.coffee
+              </a>
+            
+              
+              <a class="source" href="event_broker.html">
+                event_broker.coffee
+              </a>
+            
+              
+              <a class="source" href="helpers.html">
+                helpers.coffee
+              </a>
+            
+              
+              <a class="source" href="route.html">
+                route.coffee
+              </a>
+            
+              
+              <a class="source" href="router.html">
+                router.coffee
+              </a>
+            
+              
+              <a class="source" href="support.html">
+                support.coffee
+              </a>
+            
+              
+              <a class="source" href="sync_machine.html">
+                sync_machine.coffee
+              </a>
+            
+              
+              <a class="source" href="utils.html">
+                utils.coffee
+              </a>
+            
+              
+              <a class="source" href="mediator.html">
+                mediator.coffee
+              </a>
+            
+              
+              <a class="source" href="collection.html">
+                collection.coffee
+              </a>
+            
+              
+              <a class="source" href="model.html">
+                model.coffee
+              </a>
+            
+              
+              <a class="source" href="collection_view.html">
+                collection_view.coffee
+              </a>
+            
+              
+              <a class="source" href="layout.html">
+                layout.coffee
+              </a>
+            
+              
+              <a class="source" href="view.html">
+                view.coffee
+              </a>
+            
+          </div>
+        </li>
+      </ul>
+    
+    <ul class="sections">
+        
+          <li id="title">
+              <div class="annotation">
+                  <h1>router.coffee</h1>
+              </div>
+          </li>
+        
+        
+        
+        <li id="section-1">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-1">&#182;</a>
+              </div>
+              
+            </div>
+            
+            <div class="content"><div class='highlight'><pre><span class="string">'use strict'</span>
+
+_ = require <span class="string">'underscore'</span>
+Backbone = require <span class="string">'backbone'</span>
+EventBroker = require <span class="string">'chaplin/lib/event_broker'</span>
+Route = require <span class="string">'chaplin/lib/route'</span>
+utils = require <span class="string">'chaplin/lib/utils'</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-2">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-2">&#182;</a>
+              </div>
+              <p>The router which is a replacement for Backbone.Router.
+Like the standard router, it creates a Backbone.History
+instance and registers routes on it.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>module.exports = <span class="class"><span class="keyword">class</span> <span class="title">Router</span> # <span class="title">This</span> <span class="title">class</span> <span class="title">does</span> <span class="title">not</span> <span class="title">extend</span> <span class="title">Backbone</span>.<span class="title">Router</span>.</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-3">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-3">&#182;</a>
+              </div>
+              <p>Borrow the static extend method from Backbone.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  <span class="property">@extend</span> = Backbone.Model.extend</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-4">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-4">&#182;</a>
+              </div>
+              <p>Mixin an EventBroker.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  _(<span class="property">@prototype</span>).extend EventBroker
+
+  constructor: (<span class="property">@options</span> = {}) -&gt;
+    _(<span class="property">@options</span>).defaults
+      pushState: <span class="literal">true</span>
+      root: <span class="string">'/'</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-5">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-5">&#182;</a>
+              </div>
+              <p>Cached regex for stripping a leading subdir and hash/slash.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    <span class="property">@removeRoot</span> = <span class="keyword">new</span> RegExp(<span class="string">'^'</span> + utils.escapeRegExp(<span class="property">@options</span>.root) + <span class="string">'(#)?'</span>)
+
+    <span class="property">@subscribeEvent</span> <span class="string">'!router:route'</span>, <span class="property">@routeHandler</span>
+    <span class="property">@subscribeEvent</span> <span class="string">'!router:routeByName'</span>, <span class="property">@routeByNameHandler</span>
+    <span class="property">@subscribeEvent</span> <span class="string">'!router:reverse'</span>, <span class="property">@reverseHandler</span>
+    <span class="property">@subscribeEvent</span> <span class="string">'!router:changeURL'</span>, <span class="property">@changeURLHandler</span>
+
+    <span class="property">@createHistory</span>()</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-6">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-6">&#182;</a>
+              </div>
+              <p>Create a Backbone.History instance.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  createHistory: -&gt;
+    Backbone.history <span class="keyword">or</span>= <span class="keyword">new</span> Backbone.History()
+
+  startHistory: -&gt;</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-7">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-7">&#182;</a>
+              </div>
+              <p>Start the Backbone.History instance to start routing.
+This should be called after all routes have been registered.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    Backbone.history.start <span class="property">@options</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-8">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-8">&#182;</a>
+              </div>
+              <p>Stop the current Backbone.History instance from observing URL changes.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  stopHistory: -&gt;
+    Backbone.history.stop() <span class="keyword">if</span> Backbone.History.started</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-9">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-9">&#182;</a>
+              </div>
+              <p>Connect an address with a controller action.
+Creates a route on the Backbone.History instance.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  match: (pattern, target, options = {}) =&gt;
+    <span class="keyword">if</span> arguments.length <span class="keyword">is</span> <span class="number">2</span> <span class="keyword">and</span> <span class="keyword">typeof</span> target <span class="keyword">is</span> <span class="string">'object'</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-10">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-10">&#182;</a>
+              </div>
+              <p>Handles cases like <code>match &#39;url&#39;, controller: &#39;c&#39;, action: &#39;a&#39;</code>.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>      options = target
+      {controller, action} = options
+      <span class="keyword">unless</span> controller <span class="keyword">and</span> action
+        <span class="keyword">throw</span> <span class="keyword">new</span> Error <span class="string">'Router#match must receive either target or '</span> +
+          <span class="string">'options.controller &amp; options.action'</span>
+    <span class="keyword">else</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-11">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-11">&#182;</a>
+              </div>
+              <p>Handles <code>match &#39;url&#39;, &#39;c#a&#39;</code>.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>      {controller, action} = options
+      <span class="keyword">if</span> controller <span class="keyword">or</span> action
+        <span class="keyword">throw</span> <span class="keyword">new</span> Error <span class="string">'Router#match cannot use both target and '</span> +
+          <span class="string">'options.controller / options.action'</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-12">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-12">&#182;</a>
+              </div>
+              <p>Separate target into controller and controller action.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>      [controller, action] = target.split(<span class="string">'#'</span>)</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-13">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-13">&#182;</a>
+              </div>
+              <p>Create the route.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    route = <span class="keyword">new</span> Route pattern, controller, action, options</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-14">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-14">&#182;</a>
+              </div>
+              <p>Register the route at the Backbone.History instance.
+Don’t use Backbone.history.route here because it calls
+handlers.unshift, inserting the handler at the top of the list.
+Since we want routes to match in the order they were specified,
+we’re appending the route at the end.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    Backbone.history.handlers.push {route, callback: route.handler}
+    route</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-15">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-15">&#182;</a>
+              </div>
+              <p>Route a given URL path manually. Returns whether a route matched.
+This looks quite like Backbone.History::loadUrl but it
+accepts an absolute URL with a leading slash (e.g. /foo)
+and passes the routing options to the callback function.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  route: (path, options) =&gt;
+    options = <span class="keyword">if</span> options <span class="keyword">then</span> _.clone(options) <span class="keyword">else</span> {}</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-16">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-16">&#182;</a>
+              </div>
+              <p>Update the URL programmatically after routing.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    _(options).defaults changeURL: <span class="literal">true</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-17">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-17">&#182;</a>
+              </div>
+              <p>Remove leading subdir and hash or slash.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    path = path.replace <span class="property">@removeRoot</span>, <span class="string">''</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-18">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-18">&#182;</a>
+              </div>
+              <p>Find a matching route.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    <span class="keyword">for</span> handler <span class="keyword">in</span> Backbone.history.handlers
+      <span class="keyword">if</span> handler.route.test(path)
+        handler.callback path, options
+        <span class="keyword">return</span> <span class="literal">true</span>
+    <span class="literal">false</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-19">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-19">&#182;</a>
+              </div>
+              <p>Handler for the global !router:route event.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  routeHandler: (path, options, callback) -&gt;</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-20">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-20">&#182;</a>
+              </div>
+              <p>Support old signature: Assume only path and callback were passed
+if we only got two arguments.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    <span class="keyword">if</span> arguments.length <span class="keyword">is</span> <span class="number">2</span> <span class="keyword">and</span> <span class="keyword">typeof</span> options <span class="keyword">is</span> <span class="string">'function'</span>
+      callback = options
+      options = {}
+
+    routed = <span class="property">@route</span> path, options
+    callback? routed</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-21">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-21">&#182;</a>
+              </div>
+              <p>Find the URL for a given route name and parameters,
+then route the URL. Returns whether a route matched.
+Handler for the global !router:routeByName event.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  routeByNameHandler: (name, params, options, callback) -&gt;</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-22">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-22">&#182;</a>
+              </div>
+              <p>Support old signature: Assume options wasn&#39;t passed
+if we only got three arguments.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    <span class="keyword">if</span> arguments.length <span class="keyword">is</span> <span class="number">3</span> <span class="keyword">and</span> <span class="keyword">typeof</span> options <span class="keyword">is</span> <span class="string">'function'</span>
+      callback = options
+      options = {}
+
+    path = <span class="property">@reverse</span> name, params
+    <span class="keyword">if</span> <span class="keyword">typeof</span> path <span class="keyword">is</span> <span class="string">'string'</span>
+      routed = <span class="property">@route</span> path, options
+      callback? routed
+    <span class="keyword">else</span>
+      callback? <span class="literal">false</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-23">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-23">&#182;</a>
+              </div>
+              <p>Find the URL for a given name using the registered routes and
+provided parameters. Returns the URL string or false.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  reverse: (name, params) -&gt;</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-24">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-24">&#182;</a>
+              </div>
+              <p>First filter the route handlers to those that are of the same name.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    <span class="keyword">for</span> handler <span class="keyword">in</span> Backbone.history.handlers <span class="keyword">when</span> handler.route.name <span class="keyword">is</span> name</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-25">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-25">&#182;</a>
+              </div>
+              <p>Attempt to reverse using the provided parameter hash.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>      url = handler.route.reverse params</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-26">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-26">&#182;</a>
+              </div>
+              <p>Return the url if we got a valid one; else we continue on.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>      <span class="keyword">return</span> url <span class="keyword">if</span> url <span class="keyword">isnt</span> <span class="literal">false</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-27">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-27">&#182;</a>
+              </div>
+              <p>We didn&#39;t get anything.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    <span class="literal">false</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-28">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-28">&#182;</a>
+              </div>
+              <p>Handler for the global !router:reverse event.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  reverseHandler: (name, params, callback) -&gt;
+    callback <span class="property">@reverse</span> name, params</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-29">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-29">&#182;</a>
+              </div>
+              <p>Change the current URL, add a history entry.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  changeURL: (url, options = {}) -&gt;
+    navigateOptions =</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-30">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-30">&#182;</a>
+              </div>
+              <p>Do not trigger or replace per default.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>      trigger: options.trigger <span class="keyword">is</span> <span class="literal">true</span>
+      replace: options.replace <span class="keyword">is</span> <span class="literal">true</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-31">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-31">&#182;</a>
+              </div>
+              <p>Navigate to the passed URL and forward options to Backbone.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    Backbone.history.navigate url, navigateOptions</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-32">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-32">&#182;</a>
+              </div>
+              <p>Handler for the global !router:changeURL event.
+Accepts both the url and an options hash that is forwarded to Backbone.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  changeURLHandler: (url, options) -&gt;
+    <span class="property">@changeURL</span> url, options</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-33">
+            <div class="annotation">
+              
+              <div class="pilwrap for-h2">
+                <a class="pilcrow" href="#section-33">&#182;</a>
+              </div>
+              <h2>Disposal</h2>
+
+            </div>
+            
+        </li>
+        
+        
+        <li id="section-34">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-34">&#182;</a>
+              </div>
+              
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  disposed: <span class="literal">false</span>
+
+  dispose: -&gt;
+    <span class="keyword">return</span> <span class="keyword">if</span> <span class="property">@disposed</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-35">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-35">&#182;</a>
+              </div>
+              <p>Stop Backbone.History instance and remove it.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    <span class="property">@stopHistory</span>()
+    <span class="keyword">delete</span> Backbone.history
+
+    <span class="property">@unsubscribeAllEvents</span>()</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-36">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-36">&#182;</a>
+              </div>
+              <p>Finished.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    <span class="property">@disposed</span> = <span class="literal">true</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-37">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-37">&#182;</a>
+              </div>
+              <p>You’re frozen when your heart’s not open.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    Object.freeze? <span class="keyword">this</span></pre></div></div>
+            
+        </li>
+        
+    </ul>
+  </div>
+</body>
+</html>

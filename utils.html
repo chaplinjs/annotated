@@ -1,0 +1,442 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+  <title>utils.coffee</title>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <meta name="viewport" content="width=device-width, target-densitydpi=160dpi, initial-scale=1.0; maximum-scale=1.0; user-scalable=0;">
+  <link rel="stylesheet" media="all" href="docco.css" />
+</head>
+<body>
+  <div id="container">
+    <div id="background"></div>
+    
+      <ul id="jump_to">
+        <li>
+          <a class="large" href="javascript:void(0);">Jump To &hellip;</a>
+          <a class="small" href="javascript:void(0);">+</a>
+          <div id="jump_wrapper">
+          <div id="jump_page">
+            
+              
+              <a class="source" href="chaplin.html">
+                chaplin.coffee
+              </a>
+            
+              
+              <a class="source" href="application.html">
+                application.coffee
+              </a>
+            
+              
+              <a class="source" href="composer.html">
+                composer.coffee
+              </a>
+            
+              
+              <a class="source" href="controller.html">
+                controller.coffee
+              </a>
+            
+              
+              <a class="source" href="dispatcher.html">
+                dispatcher.coffee
+              </a>
+            
+              
+              <a class="source" href="composition.html">
+                composition.coffee
+              </a>
+            
+              
+              <a class="source" href="delayer.html">
+                delayer.coffee
+              </a>
+            
+              
+              <a class="source" href="event_broker.html">
+                event_broker.coffee
+              </a>
+            
+              
+              <a class="source" href="helpers.html">
+                helpers.coffee
+              </a>
+            
+              
+              <a class="source" href="route.html">
+                route.coffee
+              </a>
+            
+              
+              <a class="source" href="router.html">
+                router.coffee
+              </a>
+            
+              
+              <a class="source" href="support.html">
+                support.coffee
+              </a>
+            
+              
+              <a class="source" href="sync_machine.html">
+                sync_machine.coffee
+              </a>
+            
+              
+              <a class="source" href="utils.html">
+                utils.coffee
+              </a>
+            
+              
+              <a class="source" href="mediator.html">
+                mediator.coffee
+              </a>
+            
+              
+              <a class="source" href="collection.html">
+                collection.coffee
+              </a>
+            
+              
+              <a class="source" href="model.html">
+                model.coffee
+              </a>
+            
+              
+              <a class="source" href="collection_view.html">
+                collection_view.coffee
+              </a>
+            
+              
+              <a class="source" href="layout.html">
+                layout.coffee
+              </a>
+            
+              
+              <a class="source" href="view.html">
+                view.coffee
+              </a>
+            
+          </div>
+        </li>
+      </ul>
+    
+    <ul class="sections">
+        
+          <li id="title">
+              <div class="annotation">
+                  <h1>utils.coffee</h1>
+              </div>
+          </li>
+        
+        
+        
+        <li id="section-1">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-1">&#182;</a>
+              </div>
+              
+            </div>
+            
+            <div class="content"><div class='highlight'><pre><span class="string">'use strict'</span>
+
+_ = require <span class="string">'underscore'</span>
+support = require <span class="string">'chaplin/lib/support'</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-2">
+            <div class="annotation">
+              
+              <div class="pilwrap for-h2">
+                <a class="pilcrow" href="#section-2">&#182;</a>
+              </div>
+              <h2>Utilities</h2>
+
+            </div>
+            
+        </li>
+        
+        
+        <li id="section-3">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-3">&#182;</a>
+              </div>
+              
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>utils =</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-4">
+            <div class="annotation">
+              
+              <div class="pilwrap for-h2">
+                <a class="pilcrow" href="#section-4">&#182;</a>
+              </div>
+              <h2>Object Helpers</h2>
+
+            </div>
+            
+        </li>
+        
+        
+        <li id="section-5">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-5">&#182;</a>
+              </div>
+              <p>Prototypal delegation. Create an object which delegates
+to another object.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  beget: <span class="keyword">do</span> -&gt;
+    <span class="keyword">if</span> <span class="keyword">typeof</span> Object.create <span class="keyword">is</span> <span class="string">'function'</span>
+      Object.create
+    <span class="keyword">else</span>
+      <span class="function"><span class="title">ctor</span></span> = -&gt;
+      (obj) -&gt;
+        ctor.prototype = obj
+        <span class="keyword">new</span> ctor</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-6">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-6">&#182;</a>
+              </div>
+              <p>Simple duck-typing serializer for models and collections.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  serialize: (data) -&gt;
+    <span class="keyword">if</span> <span class="keyword">typeof</span> data.serialize <span class="keyword">is</span> <span class="string">'function'</span>
+      data.serialize()
+    <span class="keyword">else</span> <span class="keyword">if</span> <span class="keyword">typeof</span> data.toJSON <span class="keyword">is</span> <span class="string">'function'</span>
+      data.toJSON()
+    <span class="keyword">else</span>
+      <span class="keyword">throw</span> <span class="keyword">new</span> TypeError <span class="string">'utils.serialize: Unknown data was passed'</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-7">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-7">&#182;</a>
+              </div>
+              <p>Make properties readonly and not configurable
+using ECMAScript 5 property descriptors.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  readonly: <span class="keyword">do</span> -&gt;
+    <span class="keyword">if</span> support.propertyDescriptors
+      readonlyDescriptor =
+        writable: <span class="literal">false</span>
+        enumerable: <span class="literal">true</span>
+        configurable: <span class="literal">false</span>
+      (obj, properties...) -&gt;
+        <span class="keyword">for</span> prop <span class="keyword">in</span> properties
+          readonlyDescriptor.value = obj[prop]
+          Object.defineProperty obj, prop, readonlyDescriptor
+        <span class="literal">true</span>
+    <span class="keyword">else</span>
+      -&gt;
+        <span class="literal">false</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-8">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-8">&#182;</a>
+              </div>
+              <p>Get the whole chain of object prototypes.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  getPrototypeChain: (object) -&gt;
+    chain = [object.constructor.prototype]
+    chain.push object <span class="keyword">while</span> object = object.constructor?.__super__
+    chain</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-9">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-9">&#182;</a>
+              </div>
+              <p>Get all property versions from object’s prototype chain.
+E.g. if object1 &amp; object2 have <code>prop</code> and object2 inherits from
+object1, it will get [object1prop, object2prop].</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  getAllPropertyVersions: (object, property) -&gt;
+    result = []
+    <span class="keyword">for</span> proto <span class="keyword">in</span> utils.getPrototypeChain object
+      value = proto[property]
+      <span class="keyword">if</span> value <span class="keyword">and</span> value <span class="keyword">not</span> <span class="keyword">in</span> result
+        result.push value
+    result.reverse()</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-10">
+            <div class="annotation">
+              
+              <div class="pilwrap for-h2">
+                <a class="pilcrow" href="#section-10">&#182;</a>
+              </div>
+              <h2>String Helpers</h2>
+
+            </div>
+            
+        </li>
+        
+        
+        <li id="section-11">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-11">&#182;</a>
+              </div>
+              <p>Upcase the first character.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  upcase: (str) -&gt;
+    str.charAt(<span class="number">0</span>).toUpperCase() + str.substring(<span class="number">1</span>)</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-12">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-12">&#182;</a>
+              </div>
+              <p>underScoreHelper -&gt; under_score_helper.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  underscorize: (string) -&gt;
+    string.replace <span class="regexp">/[A-Z]/g</span>, (char, index) -&gt;
+      (<span class="keyword">if</span> index <span class="keyword">isnt</span> <span class="number">0</span> <span class="keyword">then</span> <span class="string">'_'</span> <span class="keyword">else</span> <span class="string">''</span>) + char.toLowerCase()</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-13">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-13">&#182;</a>
+              </div>
+              <p>Escapes a string to use in a regex.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  escapeRegExp: (str) -&gt;
+    <span class="keyword">return</span> String(str <span class="keyword">or</span> <span class="string">''</span>).replace <span class="regexp">/([.*+?^=!:${}()|[\]\/\\])/g</span>, <span class="string">'\\$1'</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-14">
+            <div class="annotation">
+              
+              <div class="pilwrap for-h2">
+                <a class="pilcrow" href="#section-14">&#182;</a>
+              </div>
+              <h2>Event handling helpers</h2>
+
+            </div>
+            
+        </li>
+        
+        
+        <li id="section-15">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-15">&#182;</a>
+              </div>
+              <p>Returns whether a modifier key is pressed during a keypress or mouse click.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  modifierKeyPressed: (event) -&gt;
+    event.shiftKey <span class="keyword">or</span> event.altKey <span class="keyword">or</span> event.ctrlKey <span class="keyword">or</span> event.metaKey</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-16">
+            <div class="annotation">
+              
+              <div class="pilwrap for-h2">
+                <a class="pilcrow" href="#section-16">&#182;</a>
+              </div>
+              <h2>Finish</h2>
+
+            </div>
+            
+        </li>
+        
+        
+        <li id="section-17">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-17">&#182;</a>
+              </div>
+              <p>Seal the utils object.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>Object.seal? utils</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-18">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-18">&#182;</a>
+              </div>
+              <p>Return our creation.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>module.exports = utils</pre></div></div>
+            
+        </li>
+        
+    </ul>
+  </div>
+</body>
+</html>

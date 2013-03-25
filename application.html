@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+  <title>application.coffee</title>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <meta name="viewport" content="width=device-width, target-densitydpi=160dpi, initial-scale=1.0; maximum-scale=1.0; user-scalable=0;">
+  <link rel="stylesheet" media="all" href="docco.css" />
+</head>
+<body>
+  <div id="container">
+    <div id="background"></div>
+    
+      <ul id="jump_to">
+        <li>
+          <a class="large" href="javascript:void(0);">Jump To &hellip;</a>
+          <a class="small" href="javascript:void(0);">+</a>
+          <div id="jump_wrapper">
+          <div id="jump_page">
+            
+              
+              <a class="source" href="chaplin.html">
+                chaplin.coffee
+              </a>
+            
+              
+              <a class="source" href="application.html">
+                application.coffee
+              </a>
+            
+              
+              <a class="source" href="composer.html">
+                composer.coffee
+              </a>
+            
+              
+              <a class="source" href="controller.html">
+                controller.coffee
+              </a>
+            
+              
+              <a class="source" href="dispatcher.html">
+                dispatcher.coffee
+              </a>
+            
+              
+              <a class="source" href="composition.html">
+                composition.coffee
+              </a>
+            
+              
+              <a class="source" href="delayer.html">
+                delayer.coffee
+              </a>
+            
+              
+              <a class="source" href="event_broker.html">
+                event_broker.coffee
+              </a>
+            
+              
+              <a class="source" href="helpers.html">
+                helpers.coffee
+              </a>
+            
+              
+              <a class="source" href="route.html">
+                route.coffee
+              </a>
+            
+              
+              <a class="source" href="router.html">
+                router.coffee
+              </a>
+            
+              
+              <a class="source" href="support.html">
+                support.coffee
+              </a>
+            
+              
+              <a class="source" href="sync_machine.html">
+                sync_machine.coffee
+              </a>
+            
+              
+              <a class="source" href="utils.html">
+                utils.coffee
+              </a>
+            
+              
+              <a class="source" href="mediator.html">
+                mediator.coffee
+              </a>
+            
+              
+              <a class="source" href="collection.html">
+                collection.coffee
+              </a>
+            
+              
+              <a class="source" href="model.html">
+                model.coffee
+              </a>
+            
+              
+              <a class="source" href="collection_view.html">
+                collection_view.coffee
+              </a>
+            
+              
+              <a class="source" href="layout.html">
+                layout.coffee
+              </a>
+            
+              
+              <a class="source" href="view.html">
+                view.coffee
+              </a>
+            
+          </div>
+        </li>
+      </ul>
+    
+    <ul class="sections">
+        
+          <li id="title">
+              <div class="annotation">
+                  <h1>application.coffee</h1>
+              </div>
+          </li>
+        
+        
+        
+        <li id="section-1">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-1">&#182;</a>
+              </div>
+              
+            </div>
+            
+            <div class="content"><div class='highlight'><pre><span class="string">'use strict'</span>
+
+_ = require <span class="string">'underscore'</span>
+Backbone = require <span class="string">'backbone'</span>
+mediator = require <span class="string">'chaplin/mediator'</span>
+Dispatcher = require <span class="string">'chaplin/dispatcher'</span>
+Layout = require <span class="string">'chaplin/views/layout'</span>
+Composer = require <span class="string">'chaplin/composer'</span>
+Router = require <span class="string">'chaplin/lib/router'</span>
+EventBroker = require <span class="string">'chaplin/lib/event_broker'</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-2">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-2">&#182;</a>
+              </div>
+              <p>The bootstrapper is the entry point for Chaplin apps.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>module.exports = <span class="class"><span class="keyword">class</span> <span class="title">Application</span></span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-3">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-3">&#182;</a>
+              </div>
+              <p>Borrow the <code>extend</code> method from a dear friend.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  <span class="property">@extend</span> = Backbone.Model.extend</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-4">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-4">&#182;</a>
+              </div>
+              <p>Mixin an <code>EventBroker</code> for <strong>publish/subscribe</strong> functionality.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  _(<span class="property">@prototype</span>).extend EventBroker</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-5">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-5">&#182;</a>
+              </div>
+              <p>Site-wide title that is mapped to HTML <code>title</code> tag.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  title: <span class="string">''</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-6">
+            <div class="annotation">
+              
+              <div class="pilwrap for-h3">
+                <a class="pilcrow" href="#section-6">&#182;</a>
+              </div>
+              <h3>Core Object Instantiation</h3>
+<p>The application instantiates three <strong>core modules</strong>:</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  dispatcher: <span class="literal">null</span>
+  layout: <span class="literal">null</span>
+  router: <span class="literal">null</span>
+  composer: <span class="literal">null</span>
+
+  initialize: -&gt;</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-7">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-7">&#182;</a>
+              </div>
+              <p><strong>Chaplin.Dispatcher</strong> sits between the router and controllers to listen
+for routing events. When they occur, Chaplin.Dispatcher loads the target
+controller module and instantiates it before invoking the target action.
+Any previously active controller is automatically disposed.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  initDispatcher: (options) -&gt;
+    <span class="property">@dispatcher</span> = <span class="keyword">new</span> Dispatcher options</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-8">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-8">&#182;</a>
+              </div>
+              <p><strong>Chaplin.Layout</strong> is the top-level application view. It <em>does not
+inherit</em> from Chaplin.View but borrows some of its functionalities. It
+is tied to the document dom element and registers application-wide
+events, such as internal links. And mainly, when a new controller is
+activated, Chaplin.Layout is responsible for changing the main view to
+the view of the new controller.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  initLayout: (options = {}) -&gt;
+    options.title ?= <span class="property">@title</span>
+    <span class="property">@layout</span> = <span class="keyword">new</span> Layout options
+
+  initComposer: (options = {}) -&gt;
+    <span class="property">@composer</span> = <span class="keyword">new</span> Composer options</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-9">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-9">&#182;</a>
+              </div>
+              <p><strong>Chaplin.Router</strong> is responsible for observing URL changes. The router
+is a replacement for Backbone.Router and <em>does not inherit from it</em>
+directly. It&#39;s a different implementation with several advantages over
+the standard router provided by Backbone. The router is typically
+initialized by passing the function returned by <strong>routes.coffee</strong>.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  initRouter: (routes, options) -&gt;</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-10">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-10">&#182;</a>
+              </div>
+              <p>Save the reference for testing introspection only.
+Modules should communicate with each other via <strong>publish/subscribe</strong>.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    <span class="property">@router</span> = <span class="keyword">new</span> Router options</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-11">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-11">&#182;</a>
+              </div>
+              <p>Register any provided routes.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    routes? <span class="property">@router</span>.match</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-12">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-12">&#182;</a>
+              </div>
+              <p>After registering the routes, start <strong>Backbone.history</strong>.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    <span class="property">@router</span>.startHistory()</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-13">
+            <div class="annotation">
+              
+              <div class="pilwrap for-h3">
+                <a class="pilcrow" href="#section-13">&#182;</a>
+              </div>
+              <h3>Disposal</h3>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  disposed: <span class="literal">false</span>
+
+  dispose: -&gt;</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-14">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-14">&#182;</a>
+              </div>
+              <p>Am I already disposed?</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    <span class="keyword">return</span> <span class="keyword">if</span> <span class="property">@disposed</span>
+
+    properties = [<span class="string">'dispatcher'</span>, <span class="string">'layout'</span>, <span class="string">'router'</span>, <span class="string">'composer'</span>]
+    <span class="keyword">for</span> prop <span class="keyword">in</span> properties <span class="keyword">when</span> <span class="keyword">this</span>[prop]?
+      <span class="keyword">this</span>[prop].dispose()
+      <span class="keyword">delete</span> <span class="keyword">this</span>[prop]
+
+    <span class="property">@disposed</span> = <span class="literal">true</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-15">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-15">&#182;</a>
+              </div>
+              <p>You&#39;re frozen when your heart&#39;s not open.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    Object.freeze? <span class="keyword">this</span></pre></div></div>
+            
+        </li>
+        
+    </ul>
+  </div>
+</body>
+</html>
