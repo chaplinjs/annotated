@@ -412,13 +412,12 @@ route but has not yet been composed by the current route.</p>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-18">&#182;</a>
               </div>
-              <p>Wrap <code>render</code> so <code>attach</code> is called afterwards.</p>
+              <p>Wrap <code>render</code> so <code>attach</code> is called afterwards.
+Enclose the original function.</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>    <span class="keyword">if</span> <span class="property">@render</span> <span class="keyword">is</span> View::render
-      <span class="property">@render</span> = _(<span class="property">@render</span>).bind <span class="keyword">this</span>
-    <span class="keyword">else</span></pre></div></div>
+            <div class="content"><div class='highlight'><pre>    render = <span class="property">@render</span></pre></div></div>
             
         </li>
         
@@ -429,11 +428,11 @@ route but has not yet been composed by the current route.</p>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-19">&#182;</a>
               </div>
-              <p>Enclose the original function.</p>
+              <p>Create the wrapper method.</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>      render = <span class="property">@render</span></pre></div></div>
+            <div class="content"><div class='highlight'><pre>    <span class="property">@render</span> = =&gt;</pre></div></div>
             
         </li>
         
@@ -444,11 +443,11 @@ route but has not yet been composed by the current route.</p>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-20">&#182;</a>
               </div>
-              <p>Set a flag.</p>
+              <p>Stop if the instance was already disposed.</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>      <span class="property">@renderIsWrapped</span> = <span class="literal">true</span></pre></div></div>
+            <div class="content"><div class='highlight'><pre>      <span class="keyword">return</span> <span class="literal">false</span> <span class="keyword">if</span> <span class="property">@disposed</span></pre></div></div>
             
         </li>
         
@@ -459,11 +458,11 @@ route but has not yet been composed by the current route.</p>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-21">&#182;</a>
               </div>
-              <p>Create the wrapper method.</p>
+              <p>Call the original method.</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>      <span class="property">@render</span> = =&gt;</pre></div></div>
+            <div class="content"><div class='highlight'><pre>      render.apply <span class="keyword">this</span>, arguments</pre></div></div>
             
         </li>
         
@@ -474,11 +473,11 @@ route but has not yet been composed by the current route.</p>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-22">&#182;</a>
               </div>
-              <p>Stop if the instance was already disposed.</p>
+              <p>Attach to DOM.</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>        <span class="keyword">return</span> <span class="literal">false</span> <span class="keyword">if</span> <span class="property">@disposed</span></pre></div></div>
+            <div class="content"><div class='highlight'><pre>      <span class="property">@attach</span> arguments... <span class="keyword">if</span> <span class="property">@autoAttach</span></pre></div></div>
             
         </li>
         
@@ -489,11 +488,11 @@ route but has not yet been composed by the current route.</p>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-23">&#182;</a>
               </div>
-              <p>Call the original method.</p>
+              <p>Return the view.</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>        render.apply <span class="keyword">this</span>, arguments</pre></div></div>
+            <div class="content"><div class='highlight'><pre>      <span class="keyword">this</span></pre></div></div>
             
         </li>
         
@@ -504,52 +503,6 @@ route but has not yet been composed by the current route.</p>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-24">&#182;</a>
               </div>
-              <p>Attach to DOM.</p>
-
-            </div>
-            
-            <div class="content"><div class='highlight'><pre>        <span class="property">@attach</span> arguments... <span class="keyword">if</span> <span class="property">@autoAttach</span></pre></div></div>
-            
-        </li>
-        
-        
-        <li id="section-25">
-            <div class="annotation">
-              
-              <div class="pilwrap ">
-                <a class="pilcrow" href="#section-25">&#182;</a>
-              </div>
-              <p>Return the view.</p>
-
-            </div>
-            
-            <div class="content"><div class='highlight'><pre>        <span class="keyword">this</span></pre></div></div>
-            
-        </li>
-        
-        
-        <li id="section-26">
-            <div class="annotation">
-              
-              <div class="pilwrap ">
-                <a class="pilcrow" href="#section-26">&#182;</a>
-              </div>
-              <p>Initialize subviews collections.</p>
-
-            </div>
-            
-            <div class="content"><div class='highlight'><pre>    <span class="property">@subviews</span> = []
-    <span class="property">@subviewsByName</span> = {}</pre></div></div>
-            
-        </li>
-        
-        
-        <li id="section-27">
-            <div class="annotation">
-              
-              <div class="pilwrap ">
-                <a class="pilcrow" href="#section-27">&#182;</a>
-              </div>
               <p>Call Backbone’s constructor.</p>
 
             </div>
@@ -559,11 +512,11 @@ route but has not yet been composed by the current route.</p>
         </li>
         
         
-        <li id="section-28">
+        <li id="section-25">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-28">&#182;</a>
+                <a class="pilcrow" href="#section-25">&#182;</a>
               </div>
               <p>Set up declarative bindings after <code>initialize</code> has been called
 so initialize may set model/collection and create or bind methods.</p>
@@ -575,11 +528,11 @@ so initialize may set model/collection and create or bind methods.</p>
         </li>
         
         
-        <li id="section-29">
+        <li id="section-26">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-29">&#182;</a>
+                <a class="pilcrow" href="#section-26">&#182;</a>
               </div>
               <p>Listen for disposal of the model or collection.
 If the model is disposed, automatically dispose the associated view.</p>
@@ -587,16 +540,18 @@ If the model is disposed, automatically dispose the associated view.</p>
             </div>
             
             <div class="content"><div class='highlight'><pre>    <span class="property">@listenTo</span> <span class="property">@model</span>, <span class="string">'dispose'</span>, <span class="property">@dispose</span> <span class="keyword">if</span> <span class="property">@model</span>
-    <span class="property">@listenTo</span> <span class="property">@collection</span>, <span class="string">'dispose'</span>, <span class="property">@dispose</span> <span class="keyword">if</span> <span class="property">@collection</span></pre></div></div>
+    <span class="keyword">if</span> <span class="property">@collection</span>
+      <span class="property">@listenTo</span> <span class="property">@collection</span>, <span class="string">'dispose'</span>, (subject) =&gt;
+        <span class="property">@dispose</span>() <span class="keyword">if</span> <span class="keyword">not</span> subject <span class="keyword">or</span> subject <span class="keyword">is</span> <span class="property">@collection</span></pre></div></div>
             
         </li>
         
         
-        <li id="section-30">
+        <li id="section-27">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-30">&#182;</a>
+                <a class="pilcrow" href="#section-27">&#182;</a>
               </div>
               <p>Register all exposed regions.</p>
 
@@ -607,11 +562,11 @@ If the model is disposed, automatically dispose the associated view.</p>
         </li>
         
         
-        <li id="section-31">
+        <li id="section-28">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-31">&#182;</a>
+                <a class="pilcrow" href="#section-28">&#182;</a>
               </div>
               <p>Render automatically if set by options or instance property.</p>
 
@@ -622,11 +577,11 @@ If the model is disposed, automatically dispose the associated view.</p>
         </li>
         
         
-        <li id="section-32">
+        <li id="section-29">
             <div class="annotation">
               
               <div class="pilwrap for-h2">
-                <a class="pilcrow" href="#section-32">&#182;</a>
+                <a class="pilcrow" href="#section-29">&#182;</a>
               </div>
               <h2>User input event handling</h2>
 
@@ -635,11 +590,11 @@ If the model is disposed, automatically dispose the associated view.</p>
         </li>
         
         
-        <li id="section-33">
+        <li id="section-30">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-33">&#182;</a>
+                <a class="pilcrow" href="#section-30">&#182;</a>
               </div>
               <p>Event handling using event delegation
 Register a handler for a specific event type
@@ -677,11 +632,11 @@ For an element in the passing a selector:
         </li>
         
         
-        <li id="section-34">
+        <li id="section-31">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-34">&#182;</a>
+                <a class="pilcrow" href="#section-31">&#182;</a>
               </div>
               <p>Add an event namespace, bind handler it to view.</p>
 
@@ -695,11 +650,11 @@ For an element in the passing a selector:
         </li>
         
         
-        <li id="section-35">
+        <li id="section-32">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-35">&#182;</a>
+                <a class="pilcrow" href="#section-32">&#182;</a>
               </div>
               <p>Return the bound handler.</p>
 
@@ -710,11 +665,11 @@ For an element in the passing a selector:
         </li>
         
         
-        <li id="section-36">
+        <li id="section-33">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-36">&#182;</a>
+                <a class="pilcrow" href="#section-33">&#182;</a>
               </div>
               <p>Copy of original backbone method without <code>undelegateEvents</code> call.</p>
 
@@ -725,11 +680,11 @@ For an element in the passing a selector:
         </li>
         
         
-        <li id="section-37">
+        <li id="section-34">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-37">&#182;</a>
+                <a class="pilcrow" href="#section-34">&#182;</a>
               </div>
               <p>Call Backbone.delegateEvents on all superclasses events.</p>
 
@@ -748,11 +703,11 @@ For an element in the passing a selector:
         </li>
         
         
-        <li id="section-38">
+        <li id="section-35">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-38">&#182;</a>
+                <a class="pilcrow" href="#section-35">&#182;</a>
               </div>
               <p>Override Backbones method to combine the events
 of the parent view if it exists.</p>
@@ -764,6 +719,7 @@ of the parent view if it exists.</p>
     <span class="keyword">if</span> events
       <span class="property">@_delegateEvents</span> events
       <span class="keyword">return</span>
+    <span class="keyword">return</span> <span class="keyword">unless</span> <span class="property">@events</span>
     <span class="keyword">for</span> classEvents <span class="keyword">in</span> utils.getAllPropertyVersions <span class="keyword">this</span>, <span class="string">'events'</span>
       <span class="keyword">if</span> <span class="keyword">typeof</span> classEvents <span class="keyword">is</span> <span class="string">'function'</span>
         <span class="keyword">throw</span> <span class="keyword">new</span> TypeError <span class="string">'View#delegateEvents: functions are not supported'</span>
@@ -773,11 +729,11 @@ of the parent view if it exists.</p>
         </li>
         
         
-        <li id="section-39">
+        <li id="section-36">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-39">&#182;</a>
+                <a class="pilcrow" href="#section-36">&#182;</a>
               </div>
               <p>Remove all handlers registered with @delegate.</p>
 
@@ -789,11 +745,11 @@ of the parent view if it exists.</p>
         </li>
         
         
-        <li id="section-40">
+        <li id="section-37">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-40">&#182;</a>
+                <a class="pilcrow" href="#section-37">&#182;</a>
               </div>
               <p>Handle declarative event bindings from <code>listen</code></p>
 
@@ -805,11 +761,11 @@ of the parent view if it exists.</p>
         </li>
         
         
-        <li id="section-41">
+        <li id="section-38">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-41">&#182;</a>
+                <a class="pilcrow" href="#section-38">&#182;</a>
               </div>
               <p>Walk all <code>listen</code> hashes in the prototype chain.</p>
 
@@ -821,11 +777,11 @@ of the parent view if it exists.</p>
         </li>
         
         
-        <li id="section-42">
+        <li id="section-39">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-42">&#182;</a>
+                <a class="pilcrow" href="#section-39">&#182;</a>
               </div>
               <p>Get the method, ensure it is a function.</p>
 
@@ -840,11 +796,11 @@ of the parent view if it exists.</p>
         </li>
         
         
-        <li id="section-43">
+        <li id="section-40">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-43">&#182;</a>
+                <a class="pilcrow" href="#section-40">&#182;</a>
               </div>
               <p>Split event name and target.</p>
 
@@ -869,11 +825,11 @@ of the parent view if it exists.</p>
         </li>
         
         
-        <li id="section-44">
+        <li id="section-41">
             <div class="annotation">
               
               <div class="pilwrap for-h2">
-                <a class="pilcrow" href="#section-44">&#182;</a>
+                <a class="pilcrow" href="#section-41">&#182;</a>
               </div>
               <h2>Region management</h2>
 
@@ -882,11 +838,11 @@ of the parent view if it exists.</p>
         </li>
         
         
-        <li id="section-45">
+        <li id="section-42">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-45">&#182;</a>
+                <a class="pilcrow" href="#section-42">&#182;</a>
               </div>
               <p>Functionally register a single region.</p>
 
@@ -898,11 +854,11 @@ of the parent view if it exists.</p>
         </li>
         
         
-        <li id="section-46">
+        <li id="section-43">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-46">&#182;</a>
+                <a class="pilcrow" href="#section-43">&#182;</a>
               </div>
               <p>Functionally unregister a single region by name.</p>
 
@@ -914,11 +870,11 @@ of the parent view if it exists.</p>
         </li>
         
         
-        <li id="section-47">
+        <li id="section-44">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-47">&#182;</a>
+                <a class="pilcrow" href="#section-44">&#182;</a>
               </div>
               <p>Unregister all regions; called upon view disposal.</p>
 
@@ -930,15 +886,67 @@ of the parent view if it exists.</p>
         </li>
         
         
-        <li id="section-48">
+        <li id="section-45">
             <div class="annotation">
               
               <div class="pilwrap for-h2">
-                <a class="pilcrow" href="#section-48">&#182;</a>
+                <a class="pilcrow" href="#section-45">&#182;</a>
               </div>
               <h2>Subviews</h2>
 
             </div>
+            
+        </li>
+        
+        
+        <li id="section-46">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-46">&#182;</a>
+              </div>
+              <p>Getting or adding a subview.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  subview: (name, view) -&gt;</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-47">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-47">&#182;</a>
+              </div>
+              <p>Initialize subviews collections if they don’t exist yet.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    subviews = <span class="property">@subviews</span> ?= []
+    byName = <span class="property">@subviewsByName</span> ?= {}
+
+    <span class="keyword">if</span> name <span class="keyword">and</span> view</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-48">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-48">&#182;</a>
+              </div>
+              <p>Add the subview, ensure it’s unique.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>      <span class="property">@removeSubview</span> name
+      subviews.push view
+      byName[name] = view
+      view
+    <span class="keyword">else</span> <span class="keyword">if</span> name</pre></div></div>
             
         </li>
         
@@ -949,12 +957,11 @@ of the parent view if it exists.</p>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-49">&#182;</a>
               </div>
-              <p>Getting or adding a subview.</p>
+              <p>Get and return the subview by the given name.</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>  subview: (name, view) -&gt;
-    <span class="keyword">if</span> name <span class="keyword">and</span> view</pre></div></div>
+            <div class="content"><div class='highlight'><pre>      byName[name]</pre></div></div>
             
         </li>
         
@@ -965,15 +972,16 @@ of the parent view if it exists.</p>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-50">&#182;</a>
               </div>
-              <p>Add the subview, ensure it’s unique.</p>
+              <p>Removing a subview.</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>      <span class="property">@removeSubview</span> name
-      <span class="property">@subviews</span>.push view
-      <span class="property">@subviewsByName</span>[name] = view
-      view
-    <span class="keyword">else</span> <span class="keyword">if</span> name</pre></div></div>
+            <div class="content"><div class='highlight'><pre>  removeSubview: (nameOrView) -&gt;
+    <span class="keyword">return</span> <span class="keyword">unless</span> nameOrView
+    subviews = <span class="property">@subviews</span> ?= []
+    byName = <span class="property">@subviewsByName</span> ?= {}
+
+    <span class="keyword">if</span> <span class="keyword">typeof</span> nameOrView <span class="keyword">is</span> <span class="string">'string'</span></pre></div></div>
             
         </li>
         
@@ -984,11 +992,13 @@ of the parent view if it exists.</p>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-51">&#182;</a>
               </div>
-              <p>Get and return the subview by the given name.</p>
+              <p>Name given, search for a subview by name.</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>      <span class="property">@subviewsByName</span>[name]</pre></div></div>
+            <div class="content"><div class='highlight'><pre>      name = nameOrView
+      view = byName[name]
+    <span class="keyword">else</span></pre></div></div>
             
         </li>
         
@@ -999,14 +1009,15 @@ of the parent view if it exists.</p>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-52">&#182;</a>
               </div>
-              <p>Removing a subview.</p>
+              <p>View instance given, search for the corresponding name.</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>  removeSubview: (nameOrView) -&gt;
-    <span class="keyword">return</span> <span class="keyword">unless</span> nameOrView
-
-    <span class="keyword">if</span> <span class="keyword">typeof</span> nameOrView <span class="keyword">is</span> <span class="string">'string'</span></pre></div></div>
+            <div class="content"><div class='highlight'><pre>      view = nameOrView
+      <span class="keyword">for</span> otherName, otherView <span class="keyword">of</span> byName
+        <span class="keyword">if</span> view <span class="keyword">is</span> otherView
+          name = otherName
+          <span class="keyword">break</span></pre></div></div>
             
         </li>
         
@@ -1017,13 +1028,11 @@ of the parent view if it exists.</p>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-53">&#182;</a>
               </div>
-              <p>Name given, search for a subview by name.</p>
+              <p>Break if no view and name were found.</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>      name = nameOrView
-      view = <span class="property">@subviewsByName</span>[name]
-    <span class="keyword">else</span></pre></div></div>
+            <div class="content"><div class='highlight'><pre>    <span class="keyword">return</span> <span class="keyword">unless</span> name <span class="keyword">and</span> view <span class="keyword">and</span> view.dispose</pre></div></div>
             
         </li>
         
@@ -1034,15 +1043,11 @@ of the parent view if it exists.</p>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-54">&#182;</a>
               </div>
-              <p>View instance given, search for the corresponding name.</p>
+              <p>Dispose the view.</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>      view = nameOrView
-      <span class="keyword">for</span> otherName, otherView <span class="keyword">of</span> <span class="property">@subviewsByName</span>
-        <span class="keyword">if</span> view <span class="keyword">is</span> otherView
-          name = otherName
-          <span class="keyword">break</span></pre></div></div>
+            <div class="content"><div class='highlight'><pre>    view.dispose()</pre></div></div>
             
         </li>
         
@@ -1053,11 +1058,13 @@ of the parent view if it exists.</p>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-55">&#182;</a>
               </div>
-              <p>Break if no view and name were found.</p>
+              <p>Remove the subview from the lists.</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>    <span class="keyword">return</span> <span class="keyword">unless</span> name <span class="keyword">and</span> view <span class="keyword">and</span> view.dispose</pre></div></div>
+            <div class="content"><div class='highlight'><pre>    index = _.indexOf subviews, view
+    subviews.splice index, <span class="number">1</span> <span class="keyword">if</span> index <span class="keyword">isnt</span> -<span class="number">1</span>
+    <span class="keyword">delete</span> byName[name]</pre></div></div>
             
         </li>
         
@@ -1065,14 +1072,12 @@ of the parent view if it exists.</p>
         <li id="section-56">
             <div class="annotation">
               
-              <div class="pilwrap ">
+              <div class="pilwrap for-h2">
                 <a class="pilcrow" href="#section-56">&#182;</a>
               </div>
-              <p>Dispose the view.</p>
+              <h2>Rendering</h2>
 
             </div>
-            
-            <div class="content"><div class='highlight'><pre>    view.dispose()</pre></div></div>
             
         </li>
         
@@ -1082,36 +1087,6 @@ of the parent view if it exists.</p>
               
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-57">&#182;</a>
-              </div>
-              <p>Remove the subview from the lists.</p>
-
-            </div>
-            
-            <div class="content"><div class='highlight'><pre>    index = _(<span class="property">@subviews</span>).indexOf(view)
-    <span class="property">@subviews</span>.splice index, <span class="number">1</span> <span class="keyword">if</span> index &gt; -<span class="number">1</span>
-    <span class="keyword">delete</span> <span class="property">@subviewsByName</span>[name]</pre></div></div>
-            
-        </li>
-        
-        
-        <li id="section-58">
-            <div class="annotation">
-              
-              <div class="pilwrap for-h2">
-                <a class="pilcrow" href="#section-58">&#182;</a>
-              </div>
-              <h2>Rendering</h2>
-
-            </div>
-            
-        </li>
-        
-        
-        <li id="section-59">
-            <div class="annotation">
-              
-              <div class="pilwrap ">
-                <a class="pilcrow" href="#section-59">&#182;</a>
               </div>
               <p>Get the model/collection data for the templating function
 Uses optimized Chaplin serialization if available.</p>
@@ -1132,11 +1107,11 @@ Uses optimized Chaplin serialization if available.</p>
         </li>
         
         
-        <li id="section-60">
+        <li id="section-58">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-60">&#182;</a>
+                <a class="pilcrow" href="#section-58">&#182;</a>
               </div>
               <p>If the model/collection is a Deferred, add a <code>resolved</code> flag,
 but only if it’s not present yet.</p>
@@ -1149,11 +1124,11 @@ but only if it’s not present yet.</p>
         </li>
         
         
-        <li id="section-61">
+        <li id="section-59">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-61">&#182;</a>
+                <a class="pilcrow" href="#section-59">&#182;</a>
               </div>
               <p>If the model/collection is a SyncMachine, add a <code>synced</code> flag,
 but only if it’s not present yet.</p>
@@ -1168,11 +1143,11 @@ but only if it’s not present yet.</p>
         </li>
         
         
-        <li id="section-62">
+        <li id="section-60">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-62">&#182;</a>
+                <a class="pilcrow" href="#section-60">&#182;</a>
               </div>
               <p>Returns the compiled template function.</p>
 
@@ -1183,11 +1158,11 @@ but only if it’s not present yet.</p>
         </li>
         
         
-        <li id="section-63">
+        <li id="section-61">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-63">&#182;</a>
+                <a class="pilcrow" href="#section-61">&#182;</a>
               </div>
               <p>Chaplin doesn’t define how you load and compile templates in order to
 render views. The example application uses Handlebars and RequireJS
@@ -1207,11 +1182,11 @@ JST[@templateName]</p>
         </li>
         
         
-        <li id="section-64">
+        <li id="section-62">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-64">&#182;</a>
+                <a class="pilcrow" href="#section-62">&#182;</a>
               </div>
               <p>Main render function.
 This method is bound to the instance in the constructor (see above)</p>
@@ -1223,11 +1198,11 @@ This method is bound to the instance in the constructor (see above)</p>
         </li>
         
         
-        <li id="section-65">
+        <li id="section-63">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-65">&#182;</a>
+                <a class="pilcrow" href="#section-63">&#182;</a>
               </div>
               <p>Do not render if the object was disposed
 (render might be called as an event handler which wasn’t
@@ -1238,16 +1213,17 @@ removed correctly).</p>
             <div class="content"><div class='highlight'><pre>    <span class="keyword">return</span> <span class="literal">false</span> <span class="keyword">if</span> <span class="property">@disposed</span>
 
     templateFunc = <span class="property">@getTemplateFunction</span>()
+
     <span class="keyword">if</span> <span class="keyword">typeof</span> templateFunc <span class="keyword">is</span> <span class="string">'function'</span></pre></div></div>
             
         </li>
         
         
-        <li id="section-66">
+        <li id="section-64">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-66">&#182;</a>
+                <a class="pilcrow" href="#section-64">&#182;</a>
               </div>
               <p>Call the template function passing the template data.</p>
 
@@ -1258,11 +1234,11 @@ removed correctly).</p>
         </li>
         
         
-        <li id="section-67">
+        <li id="section-65">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-67">&#182;</a>
+                <a class="pilcrow" href="#section-65">&#182;</a>
               </div>
               <p>Replace HTML</p>
 
@@ -1273,26 +1249,11 @@ removed correctly).</p>
         </li>
         
         
-        <li id="section-68">
+        <li id="section-66">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-68">&#182;</a>
-              </div>
-              <p>Call <code>attach</code> if <code>render</code> was not wrapped.</p>
-
-            </div>
-            
-            <div class="content"><div class='highlight'><pre>    <span class="property">@attach</span>() <span class="keyword">unless</span> <span class="property">@renderIsWrapped</span></pre></div></div>
-            
-        </li>
-        
-        
-        <li id="section-69">
-            <div class="annotation">
-              
-              <div class="pilwrap ">
-                <a class="pilcrow" href="#section-69">&#182;</a>
+                <a class="pilcrow" href="#section-66">&#182;</a>
               </div>
               <p>Return the view.</p>
 
@@ -1303,11 +1264,11 @@ removed correctly).</p>
         </li>
         
         
-        <li id="section-70">
+        <li id="section-67">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-70">&#182;</a>
+                <a class="pilcrow" href="#section-67">&#182;</a>
               </div>
               <p>This method is called after a specific <code>render</code> of a derived class.</p>
 
@@ -1318,11 +1279,11 @@ removed correctly).</p>
         </li>
         
         
-        <li id="section-71">
+        <li id="section-68">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-71">&#182;</a>
+                <a class="pilcrow" href="#section-68">&#182;</a>
               </div>
               <p>Attempt to bind this view to its named region.</p>
 
@@ -1333,11 +1294,11 @@ removed correctly).</p>
         </li>
         
         
-        <li id="section-72">
+        <li id="section-69">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-72">&#182;</a>
+                <a class="pilcrow" href="#section-69">&#182;</a>
               </div>
               <p>Automatically append to DOM if the container element is set.</p>
 
@@ -1348,11 +1309,11 @@ removed correctly).</p>
         </li>
         
         
-        <li id="section-73">
+        <li id="section-70">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-73">&#182;</a>
+                <a class="pilcrow" href="#section-70">&#182;</a>
               </div>
               <p>Append the view to the DOM.</p>
 
@@ -1363,11 +1324,11 @@ removed correctly).</p>
         </li>
         
         
-        <li id="section-74">
+        <li id="section-71">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-74">&#182;</a>
+                <a class="pilcrow" href="#section-71">&#182;</a>
               </div>
               <p>Trigger an event.</p>
 
@@ -1378,11 +1339,11 @@ removed correctly).</p>
         </li>
         
         
-        <li id="section-75">
+        <li id="section-72">
             <div class="annotation">
               
               <div class="pilwrap for-h2">
-                <a class="pilcrow" href="#section-75">&#182;</a>
+                <a class="pilcrow" href="#section-72">&#182;</a>
               </div>
               <h2>Disposal</h2>
 
@@ -1391,31 +1352,28 @@ removed correctly).</p>
         </li>
         
         
-        <li id="section-76">
+        <li id="section-73">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-76">&#182;</a>
+                <a class="pilcrow" href="#section-73">&#182;</a>
               </div>
               
             </div>
             
-            <div class="content"><div class='highlight'><pre>  disposed: false
+            <div class="content"><div class='highlight'><pre>  disposed: <span class="literal">false</span>
 
   dispose: -&gt;
-    return if @disposed
-
-    throw new Error('Your `initialize` method must include a super call to
-      Chaplin `initialize`') unless @subviews?</pre></div></div>
+    <span class="keyword">return</span> <span class="keyword">if</span> <span class="property">@disposed</span></pre></div></div>
             
         </li>
         
         
-        <li id="section-77">
+        <li id="section-74">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-77">&#182;</a>
+                <a class="pilcrow" href="#section-74">&#182;</a>
               </div>
               <p>Unregister all regions.</p>
 
@@ -1426,26 +1384,26 @@ removed correctly).</p>
         </li>
         
         
-        <li id="section-78">
+        <li id="section-75">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-78">&#182;</a>
+                <a class="pilcrow" href="#section-75">&#182;</a>
               </div>
               <p>Dispose subviews.</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>    subview.dispose() <span class="keyword">for</span> subview <span class="keyword">in</span> <span class="property">@subviews</span></pre></div></div>
+            <div class="content"><div class='highlight'><pre>    subview.dispose() <span class="keyword">for</span> subview <span class="keyword">in</span> <span class="property">@subviews</span> <span class="keyword">if</span> <span class="property">@subviews</span>?</pre></div></div>
             
         </li>
         
         
-        <li id="section-79">
+        <li id="section-76">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-79">&#182;</a>
+                <a class="pilcrow" href="#section-76">&#182;</a>
               </div>
               <p>Unbind handlers of global events.</p>
 
@@ -1456,11 +1414,11 @@ removed correctly).</p>
         </li>
         
         
-        <li id="section-80">
+        <li id="section-77">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-80">&#182;</a>
+                <a class="pilcrow" href="#section-77">&#182;</a>
               </div>
               <p>Unbind all referenced handlers.</p>
 
@@ -1471,11 +1429,11 @@ removed correctly).</p>
         </li>
         
         
-        <li id="section-81">
+        <li id="section-78">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-81">&#182;</a>
+                <a class="pilcrow" href="#section-78">&#182;</a>
               </div>
               <p>Remove all event handlers on this module.</p>
 
@@ -1486,11 +1444,11 @@ removed correctly).</p>
         </li>
         
         
-        <li id="section-82">
+        <li id="section-79">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-82">&#182;</a>
+                <a class="pilcrow" href="#section-79">&#182;</a>
               </div>
               <p>Remove the topmost element from DOM. This also removes all event
 handlers from the element and all its children.</p>
@@ -1502,11 +1460,11 @@ handlers from the element and all its children.</p>
         </li>
         
         
-        <li id="section-83">
+        <li id="section-80">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-83">&#182;</a>
+                <a class="pilcrow" href="#section-80">&#182;</a>
               </div>
               <p>Remove element references, options,
 model/collection references and subview lists.</p>
@@ -1524,11 +1482,11 @@ model/collection references and subview lists.</p>
         </li>
         
         
-        <li id="section-84">
+        <li id="section-81">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-84">&#182;</a>
+                <a class="pilcrow" href="#section-81">&#182;</a>
               </div>
               <p>Finished.</p>
 
@@ -1539,11 +1497,11 @@ model/collection references and subview lists.</p>
         </li>
         
         
-        <li id="section-85">
+        <li id="section-82">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-85">&#182;</a>
+                <a class="pilcrow" href="#section-82">&#182;</a>
               </div>
               <p>You’re frozen when your heart’s not open.</p>
 

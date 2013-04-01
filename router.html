@@ -533,12 +533,16 @@ if we only got three arguments.</p>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-23">&#182;</a>
               </div>
-              <p>Find the URL for a given name using the registered routes and
-provided parameters. Returns the URL string or false.</p>
+              <p>Find the URL for given criteria using the registered routes and
+provided parameters. The criteria may be just the name of a route
+or an object containing the name, controller, and/or action.
+Warning: this is usually <strong>hot</strong> code in terms of performance.
+Returns the URL string or false.</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>  reverse: (name, params) -&gt;</pre></div></div>
+            <div class="content"><div class='highlight'><pre>  reverse: (criteria, params) -&gt;
+    root = <span class="property">@options</span>.root</pre></div></div>
             
         </li>
         
@@ -553,7 +557,8 @@ provided parameters. Returns the URL string or false.</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>    <span class="keyword">for</span> handler <span class="keyword">in</span> Backbone.history.handlers <span class="keyword">when</span> handler.route.name <span class="keyword">is</span> name</pre></div></div>
+            <div class="content"><div class='highlight'><pre>    handlers = Backbone.history.handlers
+    <span class="keyword">for</span> handler <span class="keyword">in</span> handlers <span class="keyword">when</span> handler.route.matches criteria</pre></div></div>
             
         </li>
         
@@ -568,7 +573,7 @@ provided parameters. Returns the URL string or false.</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>      url = handler.route.reverse params</pre></div></div>
+            <div class="content"><div class='highlight'><pre>      reversed = handler.route.reverse params</pre></div></div>
             
         </li>
         
@@ -583,7 +588,9 @@ provided parameters. Returns the URL string or false.</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>      <span class="keyword">return</span> url <span class="keyword">if</span> url <span class="keyword">isnt</span> <span class="literal">false</span></pre></div></div>
+            <div class="content"><div class='highlight'><pre>      <span class="keyword">if</span> reversed <span class="keyword">isnt</span> <span class="literal">false</span>
+        url = <span class="keyword">if</span> root <span class="keyword">then</span> root + reversed <span class="keyword">else</span> reversed
+        <span class="keyword">return</span> url</pre></div></div>
             
         </li>
         

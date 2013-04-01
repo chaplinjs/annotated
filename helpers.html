@@ -173,7 +173,7 @@ helpers =</pre></div></div>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>  reverse: (routeName, params...) -&gt;
+            <div class="content"><div class='highlight'><pre>  reverse: (routeName, params) -&gt;
     url = <span class="literal">null</span></pre></div></div>
             
         </li>
@@ -190,10 +190,9 @@ helpers =</pre></div></div>
             </div>
             
             <div class="content"><div class='highlight'><pre>    mediator.publish <span class="string">'!router:reverse'</span>, routeName, params, (result) -&gt;
-      <span class="keyword">if</span> result <span class="keyword">isnt</span> <span class="literal">false</span>
-        url = result
-      <span class="keyword">else</span>
+      <span class="keyword">if</span> result <span class="keyword">is</span> <span class="literal">false</span>
         <span class="keyword">throw</span> <span class="keyword">new</span> Error <span class="string">'Chaplin.helpers.reverse: invalid route specified.'</span>
+      url = result
     url
 
 module.exports = helpers</pre></div></div>

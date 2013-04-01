@@ -1098,8 +1098,9 @@ disable the check.</p>
             
             <div class="content"><div class='highlight'><pre>  getItemViews: -&gt;
     itemViews = {}
-    <span class="keyword">for</span> name, view <span class="keyword">of</span> <span class="property">@subviewsByName</span> <span class="keyword">when</span> name.slice(<span class="number">0</span>, <span class="number">9</span>) <span class="keyword">is</span> <span class="string">'itemView:'</span>
-      itemViews[name.slice(<span class="number">9</span>)] = view
+    <span class="keyword">if</span> <span class="property">@subviewsByName</span>
+      <span class="keyword">for</span> name, view <span class="keyword">of</span> <span class="property">@subviewsByName</span> <span class="keyword">when</span> name.slice(<span class="number">0</span>, <span class="number">9</span>) <span class="keyword">is</span> <span class="string">'itemView:'</span>
+        itemViews[name.slice(<span class="number">9</span>)] = view
     itemViews</pre></div></div>
             
         </li>
@@ -1633,7 +1634,11 @@ on the model type or data.</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>    <span class="property">@filterCallback</span> view, included <span class="keyword">if</span> <span class="property">@filterer</span></pre></div></div>
+            <div class="content"><div class='highlight'><pre>    <span class="property">@filterCallback</span> view, included <span class="keyword">if</span> <span class="property">@filterer</span>
+
+    length = <span class="property">@collection</span>.length
+    insertInMiddle = (<span class="number">0</span> &lt; position &lt; length)
+    <span class="function"><span class="title">isEnd</span></span> = (length) -&gt; length <span class="keyword">is</span> <span class="number">0</span> <span class="keyword">or</span> position <span class="keyword">is</span> length</pre></div></div>
             
         </li>
         
@@ -1648,7 +1653,9 @@ on the model type or data.</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>    $list = <span class="property">@$list</span></pre></div></div>
+            <div class="content"><div class='highlight'><pre>    $list = <span class="property">@$list</span>
+
+    <span class="keyword">if</span> insertInMiddle <span class="keyword">or</span> <span class="property">@itemSelector</span></pre></div></div>
             
         </li>
         
@@ -1663,10 +1670,8 @@ on the model type or data.</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>    children = <span class="keyword">if</span> <span class="property">@itemSelector</span>
-      $list.children <span class="property">@itemSelector</span>
-    <span class="keyword">else</span>
-      $list.children()</pre></div></div>
+            <div class="content"><div class='highlight'><pre>      children = $list.children <span class="property">@itemSelector</span>
+      childrenLength = children.length</pre></div></div>
             
         </li>
         
@@ -1681,9 +1686,8 @@ on the model type or data.</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>    <span class="keyword">unless</span> children.get(position) <span class="keyword">is</span> viewEl
-      length = children.length
-      <span class="keyword">if</span> length <span class="keyword">is</span> <span class="number">0</span> <span class="keyword">or</span> position <span class="keyword">is</span> length</pre></div></div>
+            <div class="content"><div class='highlight'><pre>      <span class="keyword">unless</span> children.get(position) <span class="keyword">is</span> viewEl
+        <span class="keyword">if</span> isEnd childrenLength</pre></div></div>
             
         </li>
         
@@ -1698,8 +1702,8 @@ on the model type or data.</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>        $list.append viewEl
-      <span class="keyword">else</span></pre></div></div>
+            <div class="content"><div class='highlight'><pre>          $list.append viewEl
+        <span class="keyword">else</span></pre></div></div>
             
         </li>
         
@@ -1714,12 +1718,15 @@ on the model type or data.</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>        <span class="keyword">if</span> position <span class="keyword">is</span> <span class="number">0</span>
-          $next = children.eq position
-          $next.before viewEl
-        <span class="keyword">else</span>
-          $previous = children.eq position - <span class="number">1</span>
-          $previous.after viewEl</pre></div></div>
+            <div class="content"><div class='highlight'><pre>          <span class="keyword">if</span> position <span class="keyword">is</span> <span class="number">0</span>
+            $next = children.eq position
+            $next.before viewEl
+          <span class="keyword">else</span>
+            $previous = children.eq position - <span class="number">1</span>
+            $previous.after viewEl
+    <span class="keyword">else</span>
+      method = <span class="keyword">if</span> isEnd length <span class="keyword">then</span> <span class="string">'append'</span> <span class="keyword">else</span> <span class="string">'prepend'</span>
+      $list[method] viewEl</pre></div></div>
             
         </li>
         
@@ -1864,7 +1871,7 @@ if an item changed its visibility.</p>
     visibilityChanged = <span class="literal">false</span>
 
     visibleItemsIndex = _(<span class="property">@visibleItems</span>).indexOf item
-    includedInVisibleItems = visibleItemsIndex &gt; -<span class="number">1</span>
+    includedInVisibleItems = visibleItemsIndex <span class="keyword">isnt</span> -<span class="number">1</span>
 
     <span class="keyword">if</span> includedInFilter <span class="keyword">and</span> <span class="keyword">not</span> includedInVisibleItems</pre></div></div>
             
