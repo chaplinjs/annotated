@@ -206,8 +206,8 @@ control over the composition process.</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>  _(<span class="property">@prototype</span>).extend Backbone.Events
-  _(<span class="property">@prototype</span>).extend EventBroker</pre></div></div>
+            <div class="content"><div class='highlight'><pre>  _.extend <span class="property">@prototype</span>, Backbone.Events
+  _.extend <span class="property">@prototype</span>, EventBroker</pre></div></div>
             
         </li>
         
@@ -339,7 +339,7 @@ If this returns false then the composition is re-composed.</p>
             </div>
             
             <div class="content"><div class='highlight'><pre>    <span class="property">@_stale</span> = value
-    <span class="keyword">for</span> name, item <span class="keyword">of</span> <span class="keyword">this</span> <span class="keyword">when</span> item <span class="keyword">and</span> item <span class="keyword">isnt</span> <span class="keyword">this</span> <span class="keyword">and</span> _(item).has <span class="string">'stale'</span>
+    <span class="keyword">for</span> name, item <span class="keyword">of</span> <span class="keyword">this</span> <span class="keyword">when</span> item <span class="keyword">and</span> item <span class="keyword">isnt</span> <span class="keyword">this</span> <span class="keyword">and</span> _.has item, <span class="string">'stale'</span>
       item.stale = value</pre></div></div>
             
         </li>

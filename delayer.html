@@ -170,9 +170,9 @@ so they can be cleared afterwards when disposing the object.
 This is especially useful in your custom View class which inherits
 from the standard Chaplin.View.</p>
 <p>Mixin this object to add the delayer capability to any object:
-_(object).extend Delayer</p>
+_.extend object, Delayer</p>
 <p>Or to a prototype of a class:
-_(@prototype).extend Delayer</p>
+_.extend @prototype, Delayer</p>
 <p>In the dispose method, call <code>clearDelayed</code> to remove all pending
 timeouts and running intervals:</p>
 <p>dispose: -&gt;

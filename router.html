@@ -194,10 +194,10 @@ instance and registers routes on it.</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>  _(<span class="property">@prototype</span>).extend EventBroker
+            <div class="content"><div class='highlight'><pre>  _.extend <span class="property">@prototype</span>, EventBroker
 
   constructor: (<span class="property">@options</span> = {}) -&gt;
-    _(<span class="property">@options</span>).defaults
+    _.defaults <span class="property">@options</span>,
       pushState: <span class="literal">true</span>
       root: <span class="string">'/'</span></pre></div></div>
             
@@ -410,7 +410,7 @@ and passes the routing options to the callback function.</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>    _(options).defaults changeURL: <span class="literal">true</span></pre></div></div>
+            <div class="content"><div class='highlight'><pre>    _.defaults options, changeURL: <span class="literal">true</span></pre></div></div>
             
         </li>
         

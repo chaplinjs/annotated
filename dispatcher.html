@@ -178,7 +178,7 @@ module.exports = <span class="class"><span class="keyword">class</span> <span cl
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>  _(<span class="property">@prototype</span>).extend EventBroker</pre></div></div>
+            <div class="content"><div class='highlight'><pre>  _.extend <span class="property">@prototype</span>, EventBroker</pre></div></div>
             
         </li>
         
@@ -232,7 +232,7 @@ The current route object contains the same information as previous.</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>    <span class="property">@settings</span> = _(options).defaults
+            <div class="content"><div class='highlight'><pre>    <span class="property">@settings</span> = _.defaults options,
       controllerPath: <span class="string">'controllers/'</span>
       controllerSuffix: <span class="string">'_controller'</span></pre></div></div>
             
@@ -387,7 +387,7 @@ like RequireJS to fetch the constructor.</p>
             </div>
             
             <div class="content"><div class='highlight'><pre>  loadController: (name, handler) -&gt;
-    fileName = utils.underscorize(name) + <span class="property">@settings</span>.controllerSuffix
+    fileName = name + <span class="property">@settings</span>.controllerSuffix
     moduleName = <span class="property">@settings</span>.controllerPath + fileName
     <span class="keyword">if</span> define?.amd
       require [moduleName], handler
@@ -407,7 +407,11 @@ like RequireJS to fetch the constructor.</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>  controllerLoaded: (route, params, options, Controller) -&gt;</pre></div></div>
+            <div class="content"><div class='highlight'><pre>  controllerLoaded: (route, params, options, Controller) -&gt;
+    <span class="property">@previousRoute</span> = <span class="property">@currentRoute</span>
+    <span class="property">@currentRoute</span> = _.extend {}, route, {previous: utils.beget(<span class="property">@previousRoute</span>)}
+    controller = <span class="keyword">new</span> Controller params, <span class="property">@currentRoute</span>, options
+    <span class="property">@executeBeforeAction</span> controller, <span class="property">@currentRoute</span>, params, options</pre></div></div>
             
         </li>
         
@@ -418,11 +422,11 @@ like RequireJS to fetch the constructor.</p>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-17">&#182;</a>
               </div>
-              <p>Store the current route as the previous route.</p>
+              <p>Executes controller action.</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>    <span class="property">@previousRoute</span> = <span class="property">@currentRoute</span></pre></div></div>
+            <div class="content"><div class='highlight'><pre>  executeAction: (controller, route, params, options) -&gt;</pre></div></div>
             
         </li>
         
@@ -433,11 +437,11 @@ like RequireJS to fetch the constructor.</p>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-18">&#182;</a>
               </div>
-              <p>Setup the current route object.</p>
+              <p>Dispose the previous controller.</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>    <span class="property">@currentRoute</span> = _.extend {}, route, previous: utils.beget <span class="property">@previousRoute</span></pre></div></div>
+            <div class="content"><div class='highlight'><pre>    <span class="keyword">if</span> <span class="property">@currentController</span></pre></div></div>
             
         </li>
         
@@ -448,11 +452,11 @@ like RequireJS to fetch the constructor.</p>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-19">&#182;</a>
               </div>
-              <p>Initialize the new controller.</p>
+              <p>Notify the rest of the world beforehand.</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>    controller = <span class="keyword">new</span> Controller params, <span class="property">@currentRoute</span>, options</pre></div></div>
+            <div class="content"><div class='highlight'><pre>      <span class="property">@publishEvent</span> <span class="string">'beforeControllerDispose'</span>, <span class="property">@currentController</span></pre></div></div>
             
         </li>
         
@@ -463,17 +467,11 @@ like RequireJS to fetch the constructor.</p>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-20">&#182;</a>
               </div>
-              <p>Execute before actions if necessary.</p>
+              <p>Passing new parameters that the action method will receive.</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>    methodName = <span class="keyword">if</span> controller.beforeAction
-      <span class="string">'executeBeforeActions'</span>
-    <span class="keyword">else</span>
-      <span class="string">'executeAction'</span>
-    <span class="keyword">this</span>[methodName](controller, <span class="property">@currentRoute</span>, params, options)
-
-  executeAction: (controller, route, params, options) -&gt;</pre></div></div>
+            <div class="content"><div class='highlight'><pre>      <span class="property">@currentController</span>.dispose params, route, options</pre></div></div>
             
         </li>
         
@@ -484,51 +482,6 @@ like RequireJS to fetch the constructor.</p>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-21">&#182;</a>
               </div>
-              <p>Dispose the previous controller.</p>
-
-            </div>
-            
-            <div class="content"><div class='highlight'><pre>    <span class="keyword">if</span> <span class="property">@currentController</span></pre></div></div>
-            
-        </li>
-        
-        
-        <li id="section-22">
-            <div class="annotation">
-              
-              <div class="pilwrap ">
-                <a class="pilcrow" href="#section-22">&#182;</a>
-              </div>
-              <p>Notify the rest of the world beforehand.</p>
-
-            </div>
-            
-            <div class="content"><div class='highlight'><pre>      <span class="property">@publishEvent</span> <span class="string">'beforeControllerDispose'</span>, <span class="property">@currentController</span></pre></div></div>
-            
-        </li>
-        
-        
-        <li id="section-23">
-            <div class="annotation">
-              
-              <div class="pilwrap ">
-                <a class="pilcrow" href="#section-23">&#182;</a>
-              </div>
-              <p>Passing new parameters that the action method will receive.</p>
-
-            </div>
-            
-            <div class="content"><div class='highlight'><pre>      <span class="property">@currentController</span>.dispose params, route, options</pre></div></div>
-            
-        </li>
-        
-        
-        <li id="section-24">
-            <div class="annotation">
-              
-              <div class="pilwrap ">
-                <a class="pilcrow" href="#section-24">&#182;</a>
-              </div>
               <p>Call the controller action with params and options.</p>
 
             </div>
@@ -538,11 +491,11 @@ like RequireJS to fetch the constructor.</p>
         </li>
         
         
-        <li id="section-25">
+        <li id="section-22">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-25">&#182;</a>
+                <a class="pilcrow" href="#section-22">&#182;</a>
               </div>
               <p>Save the new controller and its parameters.</p>
 
@@ -554,11 +507,11 @@ like RequireJS to fetch the constructor.</p>
         </li>
         
         
-        <li id="section-26">
+        <li id="section-23">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-26">&#182;</a>
+                <a class="pilcrow" href="#section-23">&#182;</a>
               </div>
               <p>Stop if the action triggered a redirect.</p>
 
@@ -569,11 +522,11 @@ like RequireJS to fetch the constructor.</p>
         </li>
         
         
-        <li id="section-27">
+        <li id="section-24">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-27">&#182;</a>
+                <a class="pilcrow" href="#section-24">&#182;</a>
               </div>
               <p>Adjust the URL.</p>
 
@@ -584,11 +537,11 @@ like RequireJS to fetch the constructor.</p>
         </li>
         
         
-        <li id="section-28">
+        <li id="section-25">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-28">&#182;</a>
+                <a class="pilcrow" href="#section-25">&#182;</a>
               </div>
               <p>We&#39;re done! Spread the word!</p>
 
@@ -600,210 +553,73 @@ like RequireJS to fetch the constructor.</p>
         </li>
         
         
+        <li id="section-26">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-26">&#182;</a>
+              </div>
+              <p>Executes before action filterer.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  executeBeforeAction: (controller, route, params, options) -&gt;
+    before = controller.beforeAction
+
+    <span class="function"><span class="title">executeAction</span></span> = =&gt;
+      <span class="keyword">if</span> controller.redirected <span class="keyword">or</span> <span class="property">@currentRoute</span> <span class="keyword">and</span> route <span class="keyword">isnt</span> <span class="property">@currentRoute</span>
+        controller.dispose()
+        <span class="keyword">return</span>
+      <span class="property">@executeAction</span> controller, route, params, options
+
+    <span class="keyword">unless</span> before
+      executeAction()
+      <span class="keyword">return</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-27">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-27">&#182;</a>
+              </div>
+              <p>Throw deprecation warning.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    <span class="keyword">if</span> <span class="keyword">typeof</span> before <span class="keyword">isnt</span> <span class="string">'function'</span>
+      <span class="keyword">throw</span> <span class="keyword">new</span> TypeError <span class="string">'Controller#beforeAction: function expected. '</span> +
+        <span class="string">'Old object-like form is not supported.'</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-28">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-28">&#182;</a>
+              </div>
+              <p>Execute action in controller context.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    promise = controller.beforeAction params, route, options
+    <span class="keyword">if</span> promise <span class="keyword">and</span> promise.<span class="keyword">then</span>
+      promise.<span class="keyword">then</span> executeAction
+    <span class="keyword">else</span>
+      executeAction()</pre></div></div>
+            
+        </li>
+        
+        
         <li id="section-29">
             <div class="annotation">
               
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-29">&#182;</a>
-              </div>
-              <p>Before actions with chained execution.</p>
-
-            </div>
-            
-            <div class="content"><div class='highlight'><pre>  executeBeforeActions: (controller, route, params, options) -&gt;
-    beforeActions = []</pre></div></div>
-            
-        </li>
-        
-        
-        <li id="section-30">
-            <div class="annotation">
-              
-              <div class="pilwrap ">
-                <a class="pilcrow" href="#section-30">&#182;</a>
-              </div>
-              <p>Before actions can be extended by subclasses, so we need to check the
-whole prototype chain for matching before actions. Before actions in
-parent classes are executed before actions in child classes.</p>
-
-            </div>
-            
-            <div class="content"><div class='highlight'><pre>    <span class="keyword">for</span> actions <span class="keyword">in</span> utils.getAllPropertyVersions controller, <span class="string">'beforeAction'</span></pre></div></div>
-            
-        </li>
-        
-        
-        <li id="section-31">
-            <div class="annotation">
-              
-              <div class="pilwrap ">
-                <a class="pilcrow" href="#section-31">&#182;</a>
-              </div>
-              <p>Iterate over the before actions in search for a matching
-name with the arguments’ action name.</p>
-
-            </div>
-            
-            <div class="content"><div class='highlight'><pre>      <span class="keyword">for</span> name, action <span class="keyword">of</span> actions</pre></div></div>
-            
-        </li>
-        
-        
-        <li id="section-32">
-            <div class="annotation">
-              
-              <div class="pilwrap ">
-                <a class="pilcrow" href="#section-32">&#182;</a>
-              </div>
-              <p>Do not add this object more than once.</p>
-
-            </div>
-            
-            <div class="content"><div class='highlight'><pre>        <span class="keyword">if</span> name <span class="keyword">is</span> route.action <span class="keyword">or</span> RegExp(<span class="string">"^<span class="subst">#{name}</span>$"</span>).test route.action
-
-          <span class="keyword">if</span> <span class="keyword">typeof</span> action <span class="keyword">is</span> <span class="string">'string'</span>
-            action = controller[action]
-
-          <span class="keyword">unless</span> <span class="keyword">typeof</span> action <span class="keyword">is</span> <span class="string">'function'</span>
-            <span class="keyword">throw</span> <span class="keyword">new</span> Error <span class="string">'Controller#executeBeforeActions: '</span> +
-              <span class="string">"<span class="subst">#{action}</span> is not a valid action method for <span class="subst">#{name}</span>."</span></pre></div></div>
-            
-        </li>
-        
-        
-        <li id="section-33">
-            <div class="annotation">
-              
-              <div class="pilwrap ">
-                <a class="pilcrow" href="#section-33">&#182;</a>
-              </div>
-              <p>Save the before action.</p>
-
-            </div>
-            
-            <div class="content"><div class='highlight'><pre>          beforeActions.push action</pre></div></div>
-            
-        </li>
-        
-        
-        <li id="section-34">
-            <div class="annotation">
-              
-              <div class="pilwrap ">
-                <a class="pilcrow" href="#section-34">&#182;</a>
-              </div>
-              <p>Save returned value and also immediately return in case the value is false.</p>
-
-            </div>
-            
-            <div class="content"><div class='highlight'><pre>    <span class="function"><span class="title">next</span></span> = (method, previous = <span class="literal">null</span>) =&gt;</pre></div></div>
-            
-        </li>
-        
-        
-        <li id="section-35">
-            <div class="annotation">
-              
-              <div class="pilwrap ">
-                <a class="pilcrow" href="#section-35">&#182;</a>
-              </div>
-              <p>Stop if the action triggered a redirect.</p>
-
-            </div>
-            
-            <div class="content"><div class='highlight'><pre>      <span class="keyword">return</span> <span class="keyword">if</span> controller.redirected</pre></div></div>
-            
-        </li>
-        
-        
-        <li id="section-36">
-            <div class="annotation">
-              
-              <div class="pilwrap ">
-                <a class="pilcrow" href="#section-36">&#182;</a>
-              </div>
-              <p>End of chain, finally start the action.</p>
-
-            </div>
-            
-            <div class="content"><div class='highlight'><pre>      <span class="keyword">unless</span> method
-        <span class="property">@executeAction</span> controller, route, params, options
-        <span class="keyword">return</span></pre></div></div>
-            
-        </li>
-        
-        
-        <li id="section-37">
-            <div class="annotation">
-              
-              <div class="pilwrap ">
-                <a class="pilcrow" href="#section-37">&#182;</a>
-              </div>
-              <p>Execute the next before action.</p>
-
-            </div>
-            
-            <div class="content"><div class='highlight'><pre>      previous = method.call controller, params, route, options, previous</pre></div></div>
-            
-        </li>
-        
-        
-        <li id="section-38">
-            <div class="annotation">
-              
-              <div class="pilwrap ">
-                <a class="pilcrow" href="#section-38">&#182;</a>
-              </div>
-              <p>Detect a CommonJS promise in order to use pipelining below,
-otherwise execute next method directly.</p>
-
-            </div>
-            
-            <div class="content"><div class='highlight'><pre>      <span class="keyword">if</span> previous <span class="keyword">and</span> <span class="keyword">typeof</span> previous.<span class="keyword">then</span> <span class="keyword">is</span> <span class="string">'function'</span>
-        previous.<span class="keyword">then</span> (data) =&gt;</pre></div></div>
-            
-        </li>
-        
-        
-        <li id="section-39">
-            <div class="annotation">
-              
-              <div class="pilwrap ">
-                <a class="pilcrow" href="#section-39">&#182;</a>
-              </div>
-              <p>Execute as long as the currentController is
-the callee for this promise.</p>
-
-            </div>
-            
-            <div class="content"><div class='highlight'><pre>          <span class="keyword">if</span> <span class="keyword">not</span> <span class="property">@currentController</span> <span class="keyword">or</span> controller <span class="keyword">is</span> <span class="property">@currentController</span>
-            next beforeActions.shift(), data
-      <span class="keyword">else</span>
-        next beforeActions.shift(), previous</pre></div></div>
-            
-        </li>
-        
-        
-        <li id="section-40">
-            <div class="annotation">
-              
-              <div class="pilwrap ">
-                <a class="pilcrow" href="#section-40">&#182;</a>
-              </div>
-              <p>Start beforeAction execution chain.</p>
-
-            </div>
-            
-            <div class="content"><div class='highlight'><pre>    next beforeActions.shift()</pre></div></div>
-            
-        </li>
-        
-        
-        <li id="section-41">
-            <div class="annotation">
-              
-              <div class="pilwrap ">
-                <a class="pilcrow" href="#section-41">&#182;</a>
               </div>
               <p>Change the URL to the new controller using the router.</p>
 
@@ -815,11 +631,11 @@ the callee for this promise.</p>
         </li>
         
         
-        <li id="section-42">
+        <li id="section-30">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-42">&#182;</a>
+                <a class="pilcrow" href="#section-30">&#182;</a>
               </div>
               <p>Tell the router to actually change the current URL.</p>
 
@@ -831,11 +647,11 @@ the callee for this promise.</p>
         </li>
         
         
-        <li id="section-43">
+        <li id="section-31">
             <div class="annotation">
               
               <div class="pilwrap for-h2">
-                <a class="pilcrow" href="#section-43">&#182;</a>
+                <a class="pilcrow" href="#section-31">&#182;</a>
               </div>
               <h2>Disposal</h2>
 
@@ -844,11 +660,11 @@ the callee for this promise.</p>
         </li>
         
         
-        <li id="section-44">
+        <li id="section-32">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-44">&#182;</a>
+                <a class="pilcrow" href="#section-32">&#182;</a>
               </div>
               
             </div>
@@ -865,11 +681,11 @@ the callee for this promise.</p>
         </li>
         
         
-        <li id="section-45">
+        <li id="section-33">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-45">&#182;</a>
+                <a class="pilcrow" href="#section-33">&#182;</a>
               </div>
               <p>You’re frozen when your heart’s not open.</p>
 

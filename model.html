@@ -308,7 +308,7 @@ in the context of a given tree.</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>  <span class="keyword">return</span> <span class="literal">null</span> <span class="keyword">if</span> model <span class="keyword">is</span> currentModel <span class="keyword">or</span> _(modelStack).has model.cid</pre></div></div>
+            <div class="content"><div class='highlight'><pre>  <span class="keyword">return</span> <span class="literal">null</span> <span class="keyword">if</span> model <span class="keyword">is</span> currentModel <span class="keyword">or</span> _.has modelStack, model.cid</pre></div></div>
             
         </li>
         
@@ -385,7 +385,7 @@ in the context of a given tree.</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>  _(<span class="property">@prototype</span>).extend EventBroker</pre></div></div>
+            <div class="content"><div class='highlight'><pre>  _.extend <span class="property">@prototype</span>, EventBroker</pre></div></div>
             
         </li>
         
@@ -395,22 +395,6 @@ in the context of a given tree.</p>
               
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-17">&#182;</a>
-              </div>
-              <p>Mixin a Deferred.</p>
-
-            </div>
-            
-            <div class="content"><div class='highlight'><pre>  initDeferred: -&gt;
-    _(<span class="keyword">this</span>).extend $.Deferred()</pre></div></div>
-            
-        </li>
-        
-        
-        <li id="section-18">
-            <div class="annotation">
-              
-              <div class="pilwrap ">
-                <a class="pilcrow" href="#section-18">&#182;</a>
               </div>
               <p>This method is used to get the attributes for the view template
 and might be overwritten by decorators which cannot create a
@@ -424,11 +408,11 @@ proper <code>attributes</code> getter due to ECMAScript 3 limits.</p>
         </li>
         
         
-        <li id="section-19">
+        <li id="section-18">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-19">&#182;</a>
+                <a class="pilcrow" href="#section-18">&#182;</a>
               </div>
               <p>Return an object which delegates to the attributes
 (i.e. an object which has the attributes as prototype)
@@ -443,11 +427,11 @@ Map models to their attributes, recursively.</p>
         </li>
         
         
-        <li id="section-20">
+        <li id="section-19">
             <div class="annotation">
               
               <div class="pilwrap for-h2">
-                <a class="pilcrow" href="#section-20">&#182;</a>
+                <a class="pilcrow" href="#section-19">&#182;</a>
               </div>
               <h2>Disposal</h2>
 
@@ -456,11 +440,11 @@ Map models to their attributes, recursively.</p>
         </li>
         
         
-        <li id="section-21">
+        <li id="section-20">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-21">&#182;</a>
+                <a class="pilcrow" href="#section-20">&#182;</a>
               </div>
               
             </div>
@@ -473,11 +457,11 @@ Map models to their attributes, recursively.</p>
         </li>
         
         
-        <li id="section-22">
+        <li id="section-21">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-22">&#182;</a>
+                <a class="pilcrow" href="#section-21">&#182;</a>
               </div>
               <p>Fire an event to notify associated collections and views.</p>
 
@@ -488,11 +472,11 @@ Map models to their attributes, recursively.</p>
         </li>
         
         
-        <li id="section-23">
+        <li id="section-22">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-23">&#182;</a>
+                <a class="pilcrow" href="#section-22">&#182;</a>
               </div>
               <p>Unbind all global event handlers.</p>
 
@@ -503,11 +487,11 @@ Map models to their attributes, recursively.</p>
         </li>
         
         
-        <li id="section-24">
+        <li id="section-23">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-24">&#182;</a>
+                <a class="pilcrow" href="#section-23">&#182;</a>
               </div>
               <p>Unbind all referenced handlers.</p>
 
@@ -518,11 +502,11 @@ Map models to their attributes, recursively.</p>
         </li>
         
         
-        <li id="section-25">
+        <li id="section-24">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-25">&#182;</a>
+                <a class="pilcrow" href="#section-24">&#182;</a>
               </div>
               <p>Remove all event handlers on this module.</p>
 
@@ -533,27 +517,11 @@ Map models to their attributes, recursively.</p>
         </li>
         
         
-        <li id="section-26">
+        <li id="section-25">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-26">&#182;</a>
-              </div>
-              <p>If the model is a Deferred, reject it
-This does nothing if it was resolved before.</p>
-
-            </div>
-            
-            <div class="content"><div class='highlight'><pre>    <span class="property">@reject</span>?()</pre></div></div>
-            
-        </li>
-        
-        
-        <li id="section-27">
-            <div class="annotation">
-              
-              <div class="pilwrap ">
-                <a class="pilcrow" href="#section-27">&#182;</a>
+                <a class="pilcrow" href="#section-25">&#182;</a>
               </div>
               <p>Remove the collection reference, internal attribute hashes
 and event handlers.</p>
@@ -572,11 +540,11 @@ and event handlers.</p>
         </li>
         
         
-        <li id="section-28">
+        <li id="section-26">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-28">&#182;</a>
+                <a class="pilcrow" href="#section-26">&#182;</a>
               </div>
               <p>Finished.</p>
 
@@ -587,11 +555,11 @@ and event handlers.</p>
         </li>
         
         
-        <li id="section-29">
+        <li id="section-27">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-29">&#182;</a>
+                <a class="pilcrow" href="#section-27">&#182;</a>
               </div>
               <p>You’re frozen when your heart’s not open.</p>
 
