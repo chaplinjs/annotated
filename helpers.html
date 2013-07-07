@@ -190,8 +190,6 @@ helpers =</pre></div></div>
             </div>
             
             <div class="content"><div class='highlight'><pre>    mediator.publish <span class="string">'!router:reverse'</span>, routeName, params, (result) -&gt;
-      <span class="keyword">if</span> result <span class="keyword">is</span> <span class="literal">false</span>
-        <span class="keyword">throw</span> <span class="keyword">new</span> Error <span class="string">'Chaplin.helpers.reverse: invalid route specified.'</span>
       url = result
     url
 

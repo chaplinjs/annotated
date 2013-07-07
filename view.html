@@ -314,8 +314,8 @@ Like jQuery’s <code>html</code>, <code>prepend</code>, <code>append</code>, <c
 to decouple the view from its parent.</p>
 <p>This functions close to the declarative events hash; use as follows:
 regions:
-  &#39;.class&#39;: &#39;region&#39;
-  &#39;#id&#39;: &#39;region&#39;</p>
+  &#39;region1&#39;: &#39;.class&#39;
+  &#39;region2&#39;: &#39;#id&#39;</p>
 
             </div>
             
@@ -415,7 +415,12 @@ route but has not yet been composed by the current route.</p>
             
             <div class="content"><div class='highlight'><pre>    <span class="keyword">if</span> options
       _.extend <span class="keyword">this</span>, _.pick options, [
-        <span class="string">'autoAttach'</span>, <span class="string">'autoRender'</span>, <span class="string">'container'</span>, <span class="string">'containerMethod'</span>, <span class="string">'region'</span>
+        <span class="string">'autoAttach'</span>
+        <span class="string">'autoRender'</span>
+        <span class="string">'container'</span>
+        <span class="string">'containerMethod'</span>
+        <span class="string">'region'</span>
+        <span class="string">'regions'</span>
       ]</pre></div></div>
             
         </li>
@@ -770,8 +775,28 @@ of the parent view if it exists.</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>  undelegate: -&gt;
-    <span class="property">@$el</span>.unbind <span class="string">".delegate<span class="subst">#{@cid}</span>"</span></pre></div></div>
+            <div class="content"><div class='highlight'><pre>  undelegate: (eventName, second, third) -&gt;
+    <span class="keyword">if</span> eventName
+      <span class="keyword">if</span> <span class="keyword">typeof</span> eventName <span class="keyword">isnt</span> <span class="string">'string'</span>
+        <span class="keyword">throw</span> <span class="keyword">new</span> TypeError <span class="string">'View#undelegate: first argument must be a string'</span>
+
+      <span class="keyword">if</span> arguments.length <span class="keyword">is</span> <span class="number">2</span>
+        <span class="keyword">if</span> <span class="keyword">typeof</span> second <span class="keyword">is</span> <span class="string">'string'</span>
+          selector = second
+        <span class="keyword">else</span>
+          handler = second
+      <span class="keyword">else</span> <span class="keyword">if</span> arguments.length <span class="keyword">is</span> <span class="number">3</span>
+        selector = second
+        <span class="keyword">if</span> <span class="keyword">typeof</span> selector <span class="keyword">isnt</span> <span class="string">'string'</span>
+          <span class="keyword">throw</span> <span class="keyword">new</span> TypeError <span class="string">'View#undelegate: '</span> +
+            <span class="string">'second argument must be a string'</span>
+        handler = third
+
+      list = _.map eventName.split(<span class="string">' '</span>), (event) =&gt; <span class="string">"<span class="subst">#{event}</span>.delegate<span class="subst">#{@cid}</span>"</span>
+      events = list.join(<span class="string">' '</span>)
+      <span class="property">@$el</span>.<span class="literal">off</span> events, (selector <span class="keyword">or</span> <span class="literal">null</span>)
+    <span class="keyword">else</span>
+      <span class="property">@$el</span>.<span class="literal">off</span> <span class="string">".delegate<span class="subst">#{@cid}</span>"</span></pre></div></div>
             
         </li>
         
@@ -879,7 +904,7 @@ of the parent view if it exists.</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>  registerRegion: (selector, name) -&gt;
+            <div class="content"><div class='highlight'><pre>  registerRegion: (name, selector) -&gt;
     <span class="property">@publishEvent</span> <span class="string">'!region:register'</span>, <span class="keyword">this</span>, name, selector</pre></div></div>
             
         </li>

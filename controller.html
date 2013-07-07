@@ -325,11 +325,9 @@ composer for information on parameters, etc.</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>  redirectTo: (url, options = {}) -&gt;
+            <div class="content"><div class='highlight'><pre>  redirectTo: (url, options) -&gt;
     <span class="property">@redirected</span> = <span class="literal">true</span>
-    <span class="property">@publishEvent</span> <span class="string">'!router:route'</span>, url, options, (routed) -&gt;
-      <span class="keyword">unless</span> routed
-        <span class="keyword">throw</span> <span class="keyword">new</span> Error <span class="string">'Controller#redirectTo: no route matched'</span></pre></div></div>
+    <span class="property">@publishEvent</span> <span class="string">'!router:route'</span>, url, options</pre></div></div>
             
         </li>
         
@@ -346,9 +344,7 @@ composer for information on parameters, etc.</p>
             
             <div class="content"><div class='highlight'><pre>  redirectToRoute: (name, params, options) -&gt;
     <span class="property">@redirected</span> = <span class="literal">true</span>
-    <span class="property">@publishEvent</span> <span class="string">'!router:routeByName'</span>, name, params, options, (routed) -&gt;
-      <span class="keyword">unless</span> routed
-        <span class="keyword">throw</span> <span class="keyword">new</span> Error <span class="string">'Controller#redirectToRoute: no route matched'</span></pre></div></div>
+    <span class="property">@publishEvent</span> <span class="string">'!router:routeByName'</span>, name, params, options</pre></div></div>
             
         </li>
         

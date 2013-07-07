@@ -417,11 +417,12 @@ while the collection is syncing.</p>
                 <a class="pilcrow" href="#section-19">&#182;</a>
               </div>
               <p>Selector which identifies child elements belonging to collection
-If empty, all children of $list are considered.</p>
+If empty, all children of $list are considered.
+Not null, because of Zepto bug <a href="https://github.com/madrobby/zepto/pull/768">https://github.com/madrobby/zepto/pull/768</a>.</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>  itemSelector: <span class="literal">null</span></pre></div></div>
+            <div class="content"><div class='highlight'><pre>  itemSelector: <span class="literal">undefined</span></pre></div></div>
             
         </li>
         
@@ -1789,7 +1790,7 @@ on the model type or data.</p>
             
             <div class="content"><div class='highlight'><pre>        $viewEl.animate {opacity: <span class="number">1</span>}, <span class="property">@animationDuration</span>
 
-    <span class="keyword">return</span></pre></div></div>
+    view</pre></div></div>
             
         </li>
         

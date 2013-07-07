@@ -242,8 +242,12 @@ EventBroker = require <span class="string">'chaplin/lib/event_broker'</span></pr
   layout: <span class="literal">null</span>
   router: <span class="literal">null</span>
   composer: <span class="literal">null</span>
+  initialized: <span class="literal">false</span>
 
-  initialize: -&gt;</pre></div></div>
+  constructor: (options = {}) -&gt;
+    <span class="property">@initialize</span> options
+
+  initialize: (options = {}) -&gt;</pre></div></div>
             
         </li>
         
@@ -253,6 +257,160 @@ EventBroker = require <span class="string">'chaplin/lib/event_broker'</span></pr
               
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-8">&#182;</a>
+              </div>
+              <p>Check if app is already initialized.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    <span class="keyword">if</span> <span class="property">@initialized</span>
+      <span class="keyword">throw</span> <span class="keyword">new</span> Error <span class="string">'Application#initialize: App was already initialized'</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-9">
+            <div class="annotation">
+              
+              <div class="pilwrap for-h2">
+                <a class="pilcrow" href="#section-9">&#182;</a>
+              </div>
+              <h2>Initialize core components.</h2>
+
+            </div>
+            
+        </li>
+        
+        
+        <li id="section-10">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-10">&#182;</a>
+              </div>
+              <p>Register all routes.
+You might pass Router/History options as the second parameter.
+Chaplin enables pushState per default and Backbone uses / as
+the root per default. You might change that in the options
+if necessary:
+@initRouter routes, pushState: false, root: &#39;/subdir/&#39;</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    <span class="property">@initRouter</span> options.routes, options</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-11">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-11">&#182;</a>
+              </div>
+              <p>Dispatcher listens for routing events and initialises controllers.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    <span class="property">@initDispatcher</span> options</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-12">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-12">&#182;</a>
+              </div>
+              <p>Layout listens for click events &amp; delegates internal links to router.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    <span class="property">@initLayout</span> options</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-13">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-13">&#182;</a>
+              </div>
+              <p>Composer grants the ability for views and stuff to be persisted.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    <span class="property">@initComposer</span> options</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-14">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-14">&#182;</a>
+              </div>
+              <p>Mediator is a global message broker which implements pub / sub pattern.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    <span class="property">@initMediator</span>()</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-15">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-15">&#182;</a>
+              </div>
+              <p>Actually start routing.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    <span class="property">@startRouting</span>()</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-16">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-16">&#182;</a>
+              </div>
+              <p>Mark app as initialized.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    <span class="property">@initialized</span> = <span class="literal">true</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-17">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-17">&#182;</a>
+              </div>
+              <p>Freeze the application instance to prevent further changes.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    Object.freeze? <span class="keyword">this</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-18">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-18">&#182;</a>
               </div>
               <p><strong>Chaplin.Dispatcher</strong> sits between the router and controllers to listen
 for routing events. When they occur, Chaplin.Dispatcher loads the target
@@ -267,11 +425,11 @@ Any previously active controller is automatically disposed.</p>
         </li>
         
         
-        <li id="section-9">
+        <li id="section-19">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-9">&#182;</a>
+                <a class="pilcrow" href="#section-19">&#182;</a>
               </div>
               <p><strong>Chaplin.Layout</strong> is the top-level application view. It <em>does not
 inherit</em> from Chaplin.View but borrows some of its functionalities. It
@@ -292,11 +450,31 @@ the view of the new controller.</p>
         </li>
         
         
-        <li id="section-10">
+        <li id="section-20">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-10">&#182;</a>
+                <a class="pilcrow" href="#section-20">&#182;</a>
+              </div>
+              <p><strong>Chaplin.mediator</strong> is a singleton that serves as the sole communication
+channel for all parts of the application. It should be sealed so that its
+misuse as a kitchen sink is prohibited. If you do want to give modules
+access to some shared resource, however, add it here before sealing the
+mediator.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  initMediator: -&gt;
+    mediator.seal()</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-21">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-21">&#182;</a>
               </div>
               <p><strong>Chaplin.Router</strong> is responsible for observing URL changes. The router
 is a replacement for Backbone.Router and <em>does not inherit from it</em>
@@ -311,11 +489,11 @@ initialized by passing the function returned by <strong>routes.coffee</strong>.<
         </li>
         
         
-        <li id="section-11">
+        <li id="section-22">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-11">&#182;</a>
+                <a class="pilcrow" href="#section-22">&#182;</a>
               </div>
               <p>Save the reference for testing introspection only.
 Modules should communicate with each other via <strong>publish/subscribe</strong>.</p>
@@ -327,11 +505,11 @@ Modules should communicate with each other via <strong>publish/subscribe</strong
         </li>
         
         
-        <li id="section-12">
+        <li id="section-23">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-12">&#182;</a>
+                <a class="pilcrow" href="#section-23">&#182;</a>
               </div>
               <p>Register any provided routes.</p>
 
@@ -344,11 +522,11 @@ Modules should communicate with each other via <strong>publish/subscribe</strong
         </li>
         
         
-        <li id="section-13">
+        <li id="section-24">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-13">&#182;</a>
+                <a class="pilcrow" href="#section-24">&#182;</a>
               </div>
               <p>After registering the routes, start <strong>Backbone.history</strong>.</p>
 
@@ -359,11 +537,11 @@ Modules should communicate with each other via <strong>publish/subscribe</strong
         </li>
         
         
-        <li id="section-14">
+        <li id="section-25">
             <div class="annotation">
               
               <div class="pilwrap for-h2">
-                <a class="pilcrow" href="#section-14">&#182;</a>
+                <a class="pilcrow" href="#section-25">&#182;</a>
               </div>
               <h2>Disposal</h2>
 
@@ -372,11 +550,11 @@ Modules should communicate with each other via <strong>publish/subscribe</strong
         </li>
         
         
-        <li id="section-15">
+        <li id="section-26">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-15">&#182;</a>
+                <a class="pilcrow" href="#section-26">&#182;</a>
               </div>
               
             </div>
@@ -388,33 +566,48 @@ Modules should communicate with each other via <strong>publish/subscribe</strong
         </li>
         
         
-        <li id="section-16">
+        <li id="section-27">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-16">&#182;</a>
+                <a class="pilcrow" href="#section-27">&#182;</a>
               </div>
               <p>Am I already disposed?</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>    <span class="keyword">return</span> <span class="keyword">if</span> <span class="property">@disposed</span>
+            <div class="content"><div class='highlight'><pre>    <span class="keyword">return</span> <span class="keyword">if</span> <span class="property">@disposed</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-28">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-28">&#182;</a>
+              </div>
+              <p>Check if object is already frozen.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    frozen = Object.isFrozen? <span class="keyword">this</span>
 
     properties = [<span class="string">'dispatcher'</span>, <span class="string">'layout'</span>, <span class="string">'router'</span>, <span class="string">'composer'</span>]
     <span class="keyword">for</span> prop <span class="keyword">in</span> properties <span class="keyword">when</span> <span class="keyword">this</span>[prop]?
       <span class="keyword">this</span>[prop].dispose()
-      <span class="keyword">delete</span> <span class="keyword">this</span>[prop]
+      <span class="keyword">delete</span> <span class="keyword">this</span>[prop] <span class="keyword">unless</span> frozen
 
     <span class="property">@disposed</span> = <span class="literal">true</span></pre></div></div>
             
         </li>
         
         
-        <li id="section-17">
+        <li id="section-29">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-17">&#182;</a>
+                <a class="pilcrow" href="#section-29">&#182;</a>
               </div>
               <p>You&#39;re frozen when your heart&#39;s not open.</p>
 

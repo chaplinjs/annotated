@@ -1,0 +1,1 @@
+docco --output ../annotated src/**/*.coffee

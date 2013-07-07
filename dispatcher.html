@@ -482,11 +482,12 @@ like RequireJS to fetch the constructor.</p>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-21">&#182;</a>
               </div>
-              <p>Call the controller action with params and options.</p>
+              <p>Save the new controller and its parameters.</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>    controller[route.action] params, route, options</pre></div></div>
+            <div class="content"><div class='highlight'><pre>    <span class="property">@currentController</span> = controller
+    <span class="property">@currentParams</span> = params</pre></div></div>
             
         </li>
         
@@ -497,12 +498,11 @@ like RequireJS to fetch the constructor.</p>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-22">&#182;</a>
               </div>
-              <p>Save the new controller and its parameters.</p>
+              <p>Call the controller action with params and options.</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>    <span class="property">@currentController</span> = controller
-    <span class="property">@currentParams</span> = params</pre></div></div>
+            <div class="content"><div class='highlight'><pre>    controller[route.action] params, route, options</pre></div></div>
             
         </li>
         
