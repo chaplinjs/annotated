@@ -64,6 +64,11 @@
               </a>
             
               
+              <a class="source" href="history.html">
+                history.coffee
+              </a>
+            
+              
               <a class="source" href="route.html">
                 route.coffee
               </a>
@@ -145,6 +150,8 @@
 
 _ = require <span class="string">'underscore'</span>
 Backbone = require <span class="string">'backbone'</span>
+mediator = require <span class="string">'chaplin/mediator'</span>
+helpers = require <span class="string">'chaplin/lib/helpers'</span>
 utils = require <span class="string">'chaplin/lib/utils'</span>
 EventBroker = require <span class="string">'chaplin/lib/event_broker'</span>
 View = require <span class="string">'chaplin/views/view'</span></pre></div></div>
@@ -243,17 +250,15 @@ and passed as an option.</p>
 
   listen:
     <span class="string">'beforeControllerDispose mediator'</span>: <span class="string">'scroll'</span>
-    <span class="string">'!adjustTitle mediator'</span>: <span class="string">'adjustTitle'</span>
-    <span class="string">'!region:show mediator'</span>: <span class="string">'showRegion'</span>
-    <span class="string">'!region:register mediator'</span>: <span class="string">'registerRegionHandler'</span>
-    <span class="string">'!region:unregister mediator'</span>: <span class="string">'unregisterRegionHandler'</span>
 
   constructor: (options = {}) -&gt;
     <span class="property">@globalRegions</span> = []
     <span class="property">@title</span> = options.title
     <span class="property">@regions</span> = options.regions <span class="keyword">if</span> options.regions
     <span class="property">@settings</span> = _.defaults options,
-      titleTemplate: _.template(<span class="string">"&lt;%= subtitle %&gt; \u2013 &lt;%= title %&gt;"</span>)
+      titleTemplate: _.template(
+        <span class="string">"&lt;% if (subtitle) { %&gt;&lt;%= subtitle %&gt; \u2013 &lt;% } %&gt;&lt;%= title %&gt;"</span>
+      )
       openExternalToBlank: <span class="literal">false</span>
       routeLinks: <span class="string">'a, .go-to'</span>
       skipRouting: <span class="string">'.noscript'</span></pre></div></div>
@@ -272,6 +277,12 @@ and passed as an option.</p>
             </div>
             
             <div class="content"><div class='highlight'><pre>      scrollTo: [<span class="number">0</span>, <span class="number">0</span>]
+
+    mediator.setHandler <span class="string">'region:show'</span>, <span class="property">@showRegion</span>, <span class="keyword">this</span>
+    mediator.setHandler <span class="string">'region:register'</span>, <span class="property">@registerRegionHandler</span>, <span class="keyword">this</span>
+    mediator.setHandler <span class="string">'region:unregister'</span>, <span class="property">@unregisterRegionHandler</span>, <span class="keyword">this</span>
+    mediator.setHandler <span class="string">'region:find'</span>, <span class="property">@regionByName</span>, <span class="keyword">this</span>
+    mediator.setHandler <span class="string">'adjustTitle'</span>, <span class="property">@adjustTitle</span>, <span class="keyword">this</span>
 
     <span class="keyword">super</span></pre></div></div>
             
@@ -366,7 +377,11 @@ Get the title from the title property of the current controller.</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>    setTimeout (-&gt; document.title = title), <span class="number">50</span></pre></div></div>
+            <div class="content"><div class='highlight'><pre>    setTimeout =&gt;
+      document.title = title
+      <span class="property">@publishEvent</span> <span class="string">'adjustTitle'</span>, subtitle, title
+    , <span class="number">50</span>
+    title</pre></div></div>
             
         </li>
         
@@ -455,7 +470,7 @@ Get the title from the title property of the current controller.</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>    <span class="keyword">return</span> <span class="keyword">if</span> href <span class="keyword">is</span> <span class="literal">null</span> <span class="keyword">or</span> href <span class="keyword">is</span> <span class="literal">undefined</span> <span class="keyword">or</span></pre></div></div>
+            <div class="content"><div class='highlight'><pre>    <span class="keyword">return</span> <span class="keyword">if</span> <span class="keyword">not</span> href? <span class="keyword">or</span></pre></div></div>
             
         </li>
         
@@ -537,12 +552,8 @@ but it doesn’t make sense to route it.</p>
             </div>
             
             <div class="content"><div class='highlight'><pre>        event.preventDefault()
-        window.open el.href
-      <span class="keyword">return</span>
-
-    <span class="keyword">if</span> isAnchor
-      path = el.pathname
-      query = el.search.substring <span class="number">1</span></pre></div></div>
+        window.open href
+      <span class="keyword">return</span></pre></div></div>
             
         </li>
         
@@ -553,14 +564,11 @@ but it doesn’t make sense to route it.</p>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-25">&#182;</a>
               </div>
-              <p>Append leading slash for IE8.</p>
+              <p>Pass to the router, try to route the path internally.</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>      path = <span class="string">"/<span class="subst">#{path}</span>"</span> <span class="keyword">if</span> path.charAt(<span class="number">0</span>) <span class="keyword">isnt</span> <span class="string">'/'</span>
-    <span class="keyword">else</span>
-      [path, query] = href.split <span class="string">'?'</span>
-      query ?= <span class="string">''</span></pre></div></div>
+            <div class="content"><div class='highlight'><pre>    helpers.redirectTo url: href</pre></div></div>
             
         </li>
         
@@ -570,36 +578,6 @@ but it doesn’t make sense to route it.</p>
               
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-26">&#182;</a>
-              </div>
-              <p>Create routing options and callback.</p>
-
-            </div>
-            
-            <div class="content"><div class='highlight'><pre>    options = {query}</pre></div></div>
-            
-        </li>
-        
-        
-        <li id="section-27">
-            <div class="annotation">
-              
-              <div class="pilwrap ">
-                <a class="pilcrow" href="#section-27">&#182;</a>
-              </div>
-              <p>Pass to the router, try to route the path internally.</p>
-
-            </div>
-            
-            <div class="content"><div class='highlight'><pre>    <span class="property">@publishEvent</span> <span class="string">'!router:route'</span>, path, options</pre></div></div>
-            
-        </li>
-        
-        
-        <li id="section-28">
-            <div class="annotation">
-              
-              <div class="pilwrap ">
-                <a class="pilcrow" href="#section-28">&#182;</a>
               </div>
               <p>Prevent default handling if the URL could be routed.</p>
 
@@ -611,11 +589,11 @@ but it doesn’t make sense to route it.</p>
         </li>
         
         
-        <li id="section-29">
+        <li id="section-27">
             <div class="annotation">
               
               <div class="pilwrap for-h2">
-                <a class="pilcrow" href="#section-29">&#182;</a>
+                <a class="pilcrow" href="#section-27">&#182;</a>
               </div>
               <h2>Region management</h2>
 
@@ -624,11 +602,11 @@ but it doesn’t make sense to route it.</p>
         </li>
         
         
-        <li id="section-30">
+        <li id="section-28">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-30">&#182;</a>
+                <a class="pilcrow" href="#section-28">&#182;</a>
               </div>
               <p>Handler for <code>!region:register</code>.
 Register a single view region or all regions exposed.</p>
@@ -644,11 +622,11 @@ Register a single view region or all regions exposed.</p>
         </li>
         
         
-        <li id="section-31">
+        <li id="section-29">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-31">&#182;</a>
+                <a class="pilcrow" href="#section-29">&#182;</a>
               </div>
               <p>Registering one region bound to a view.</p>
 
@@ -659,11 +637,11 @@ Register a single view region or all regions exposed.</p>
         </li>
         
         
-        <li id="section-32">
+        <li id="section-30">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-32">&#182;</a>
+                <a class="pilcrow" href="#section-30">&#182;</a>
               </div>
               <p>Remove the region if there was already one registered perhaps by
 a base class.</p>
@@ -675,11 +653,11 @@ a base class.</p>
         </li>
         
         
-        <li id="section-33">
+        <li id="section-31">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-33">&#182;</a>
+                <a class="pilcrow" href="#section-31">&#182;</a>
               </div>
               <p>Place this region registration into the regions array.</p>
 
@@ -690,11 +668,11 @@ a base class.</p>
         </li>
         
         
-        <li id="section-34">
+        <li id="section-32">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-34">&#182;</a>
+                <a class="pilcrow" href="#section-32">&#182;</a>
               </div>
               <p>Triggered by view; passed in the regions hash.
 Simply register all regions exposed by it.</p>
@@ -706,11 +684,11 @@ Simply register all regions exposed by it.</p>
         </li>
         
         
-        <li id="section-35">
+        <li id="section-33">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-35">&#182;</a>
+                <a class="pilcrow" href="#section-33">&#182;</a>
               </div>
               <p>Regions can be be extended by subclasses, so we need to check the
 whole prototype chain for matching regions. Regions registered by the
@@ -726,11 +704,11 @@ class.</p>
         </li>
         
         
-        <li id="section-36">
+        <li id="section-34">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-36">&#182;</a>
+                <a class="pilcrow" href="#section-34">&#182;</a>
               </div>
               <p>Return nothing.</p>
 
@@ -741,11 +719,11 @@ class.</p>
         </li>
         
         
-        <li id="section-37">
+        <li id="section-35">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-37">&#182;</a>
+                <a class="pilcrow" href="#section-35">&#182;</a>
               </div>
               <p>Handler for <code>!region:unregister</code>.
 Unregisters single named region or all view regions.</p>
@@ -761,11 +739,11 @@ Unregisters single named region or all view regions.</p>
         </li>
         
         
-        <li id="section-38">
+        <li id="section-36">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-38">&#182;</a>
+                <a class="pilcrow" href="#section-36">&#182;</a>
               </div>
               <p>Unregisters a specific named region from a view.</p>
 
@@ -779,11 +757,11 @@ Unregisters single named region or all view regions.</p>
         </li>
         
         
-        <li id="section-39">
+        <li id="section-37">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-39">&#182;</a>
+                <a class="pilcrow" href="#section-37">&#182;</a>
               </div>
               <p>When views are disposed; remove all their registered regions.</p>
 
@@ -796,11 +774,28 @@ Unregisters single named region or all view regions.</p>
         </li>
         
         
-        <li id="section-40">
+        <li id="section-38">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-40">&#182;</a>
+                <a class="pilcrow" href="#section-38">&#182;</a>
+              </div>
+              <p>Returns the region by its name, if found.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  regionByName: (name) -&gt;
+    _.find <span class="property">@globalRegions</span>, (region) -&gt;
+      region.name <span class="keyword">is</span> name <span class="keyword">and</span> <span class="keyword">not</span> region.instance.stale</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-39">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-39">&#182;</a>
               </div>
               <p>When views are instantiated and request for a region assignment;
 attempt to fulfill it.</p>
@@ -812,27 +807,26 @@ attempt to fulfill it.</p>
         </li>
         
         
-        <li id="section-41">
+        <li id="section-40">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-41">&#182;</a>
+                <a class="pilcrow" href="#section-40">&#182;</a>
               </div>
               <p>Find an appropriate region.</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>    region = _.find <span class="property">@globalRegions</span>, (region) -&gt;
-      region.name <span class="keyword">is</span> name <span class="keyword">and</span> <span class="keyword">not</span> region.instance.stale</pre></div></div>
+            <div class="content"><div class='highlight'><pre>    region = <span class="property">@regionByName</span> name</pre></div></div>
             
         </li>
         
         
-        <li id="section-42">
+        <li id="section-41">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-42">&#182;</a>
+                <a class="pilcrow" href="#section-41">&#182;</a>
               </div>
               <p>Assert that we got a valid region.</p>
 
@@ -843,11 +837,11 @@ attempt to fulfill it.</p>
         </li>
         
         
-        <li id="section-43">
+        <li id="section-42">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-43">&#182;</a>
+                <a class="pilcrow" href="#section-42">&#182;</a>
               </div>
               <p>Apply the region selector.</p>
 
@@ -856,16 +850,19 @@ attempt to fulfill it.</p>
             <div class="content"><div class='highlight'><pre>    instance.container = <span class="keyword">if</span> region.selector <span class="keyword">is</span> <span class="string">''</span>
       region.instance.$el
     <span class="keyword">else</span>
-      region.instance.$ region.selector</pre></div></div>
+      <span class="keyword">if</span> region.instance.noWrap
+        $(region.instance.container).find region.selector
+      <span class="keyword">else</span>
+        region.instance.$ region.selector</pre></div></div>
             
         </li>
         
         
-        <li id="section-44">
+        <li id="section-43">
             <div class="annotation">
               
               <div class="pilwrap for-h2">
-                <a class="pilcrow" href="#section-44">&#182;</a>
+                <a class="pilcrow" href="#section-43">&#182;</a>
               </div>
               <h2>Disposal</h2>
 
@@ -874,11 +871,11 @@ attempt to fulfill it.</p>
         </li>
         
         
-        <li id="section-45">
+        <li id="section-44">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-45">&#182;</a>
+                <a class="pilcrow" href="#section-44">&#182;</a>
               </div>
               
             </div>
@@ -889,11 +886,11 @@ attempt to fulfill it.</p>
         </li>
         
         
-        <li id="section-46">
+        <li id="section-45">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-46">&#182;</a>
+                <a class="pilcrow" href="#section-45">&#182;</a>
               </div>
               <p>Stop routing links.</p>
 
@@ -904,17 +901,19 @@ attempt to fulfill it.</p>
         </li>
         
         
-        <li id="section-47">
+        <li id="section-46">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-47">&#182;</a>
+                <a class="pilcrow" href="#section-46">&#182;</a>
               </div>
               <p>Remove all regions and document title setting.</p>
 
             </div>
             
             <div class="content"><div class='highlight'><pre>    <span class="keyword">delete</span> <span class="keyword">this</span>[prop] <span class="keyword">for</span> prop <span class="keyword">in</span> [<span class="string">'globalRegions'</span>, <span class="string">'title'</span>, <span class="string">'route'</span>]
+
+    mediator.removeHandlers <span class="keyword">this</span>
 
     <span class="keyword">super</span></pre></div></div>
             

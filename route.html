@@ -64,6 +64,11 @@
               </a>
             
               
+              <a class="source" href="history.html">
+                history.coffee
+              </a>
+            
+              
               <a class="source" href="route.html">
                 route.coffee
               </a>
@@ -147,6 +152,7 @@ _ = require <span class="string">'underscore'</span>
 Backbone = require <span class="string">'backbone'</span>
 EventBroker = require <span class="string">'chaplin/lib/event_broker'</span>
 Controller = require <span class="string">'chaplin/controllers/controller'</span>
+utils = require <span class="string">'chaplin/lib/utils'</span>
 
 module.exports = <span class="class"><span class="keyword">class</span> <span class="title">Route</span></span></pre></div></div>
             
@@ -355,10 +361,13 @@ e.g. new Route &#39;/users/:id&#39;, &#39;users&#39;, &#39;show&#39;, { some: &#
     <span class="keyword">if</span> <span class="keyword">typeof</span> criteria <span class="keyword">is</span> <span class="string">'string'</span>
       criteria <span class="keyword">is</span> <span class="property">@name</span>
     <span class="keyword">else</span>
+      propertiesCount = <span class="number">0</span>
       <span class="keyword">for</span> name <span class="keyword">in</span> [<span class="string">'name'</span>, <span class="string">'action'</span>, <span class="string">'controller'</span>]
+        propertiesCount++
         property = criteria[name]
         <span class="keyword">return</span> <span class="literal">false</span> <span class="keyword">if</span> property <span class="keyword">and</span> property <span class="keyword">isnt</span> <span class="keyword">this</span>[name]
-      <span class="literal">true</span></pre></div></div>
+      invalidParamsCount = propertiesCount <span class="keyword">is</span> <span class="number">1</span> <span class="keyword">and</span> name <span class="keyword">in</span> [<span class="string">'action'</span>, <span class="string">'controller'</span>]
+      <span class="keyword">not</span> invalidParamsCount</pre></div></div>
             
         </li>
         
@@ -373,9 +382,11 @@ e.g. new Route &#39;/users/:id&#39;, &#39;users&#39;, &#39;show&#39;, { some: &#
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>  reverse: (params) -&gt;
-    url = <span class="property">@pattern</span>
-    <span class="keyword">if</span> _.isArray params</pre></div></div>
+            <div class="content"><div class='highlight'><pre>  reverse: (params, query) -&gt;
+    params = <span class="property">@normalizeParams</span> params
+    <span class="keyword">return</span> <span class="literal">false</span> <span class="keyword">if</span> params <span class="keyword">is</span> <span class="literal">false</span>
+
+    url = <span class="property">@pattern</span></pre></div></div>
             
         </li>
         
@@ -386,18 +397,17 @@ e.g. new Route &#39;/users/:id&#39;, &#39;users&#39;, &#39;show&#39;, { some: &#
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-16">&#182;</a>
               </div>
-              <p>Ensure we have enough parameters.</p>
+              <p>From a params hash; we need to be able to return
+the actual URL this route represents.
+Iterate and replace params in pattern.</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>      <span class="keyword">return</span> <span class="literal">false</span> <span class="keyword">if</span> params.length &lt; <span class="property">@paramNames</span>.length
+            <div class="content"><div class='highlight'><pre>    <span class="keyword">for</span> name <span class="keyword">in</span> <span class="property">@paramNames</span>
+      value = params[name]
+      url = url.replace <span class="regexp">///[:*]<span class="comment">#{name}///g, value</span>
 
-      index = <span class="number">0</span>
-      url = url.replace <span class="regexp">/[:*][^\/\?]+/g</span>, (match) -&gt;
-        result = params[index]
-        index += <span class="number">1</span>
-        result
-    <span class="keyword">else</span></pre></div></div>
+    return url unless query</pre></div></div>
             
         </li>
         
@@ -408,16 +418,15 @@ e.g. new Route &#39;/users/:id&#39;, &#39;users&#39;, &#39;show&#39;, { some: &#
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-17">&#182;</a>
               </div>
-              <p>From a params hash; we need to be able to return
-the actual URL this route represents
-Iterate and attempt to replace params in pattern</p>
+              <p>Stringify query params if needed.</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>      <span class="keyword">for</span> name <span class="keyword">in</span> <span class="property">@paramNames</span>
-        value = params[name]
-        <span class="keyword">return</span> <span class="literal">false</span> <span class="keyword">if</span> value <span class="keyword">is</span> <span class="literal">undefined</span>
-        url = url.replace <span class="regexp">///[:*]<span class="comment">#{name}///g, value</span></pre></div></div>
+            <div class="content"><div class='highlight'><pre>    <span class="keyword">if</span> <span class="keyword">typeof</span> query <span class="keyword">is</span> <span class="string">'object'</span>
+      queryString = utils.queryParams.stringify query
+      url += <span class="keyword">if</span> queryString <span class="keyword">then</span> <span class="string">'?'</span> + queryString <span class="keyword">else</span> <span class="string">''</span>
+    <span class="keyword">else</span>
+      url += (<span class="keyword">if</span> query[<span class="number">0</span>] <span class="keyword">is</span> <span class="string">'?'</span> <span class="keyword">then</span> <span class="string">''</span> <span class="keyword">else</span> <span class="string">'?'</span>) + query</pre></div></div>
             
         </li>
         
@@ -428,11 +437,12 @@ Iterate and attempt to replace params in pattern</p>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-18">&#182;</a>
               </div>
-              <p>If the url tests out good; return the url; else, false.</p>
+              <p>Validates incoming params and returns them in a unified form - hash</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>    <span class="keyword">if</span> <span class="property">@test</span> url <span class="keyword">then</span> url <span class="keyword">else</span> <span class="literal">false</span></pre></div></div>
+            <div class="content"><div class='highlight'><pre>  normalizeParams: (params) -&gt;
+    <span class="keyword">if</span> _.isArray params</pre></div></div>
             
         </li>
         
@@ -442,6 +452,130 @@ Iterate and attempt to replace params in pattern</p>
               
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-19">&#182;</a>
+              </div>
+              <p>Ensure we have enough parameters.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>      <span class="keyword">return</span> <span class="literal">false</span> <span class="keyword">if</span> params.length &lt; <span class="property">@paramNames</span>.length</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-20">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-20">&#182;</a>
+              </div>
+              <p>Convert params from array into object.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>      paramsHash = {}
+      <span class="keyword">for</span> paramName, paramIndex <span class="keyword">in</span> <span class="property">@paramNames</span>
+        paramsHash[paramName] = params[paramIndex]
+
+      <span class="keyword">return</span> <span class="literal">false</span> <span class="keyword">unless</span> <span class="property">@testConstraints</span> paramsHash
+
+      params = paramsHash
+    <span class="keyword">else</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-21">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-21">&#182;</a>
+              </div>
+              <p>null or undefined params are equivalent to an empty hash</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>      params ?= {}
+
+      <span class="keyword">return</span> <span class="literal">false</span> <span class="keyword">unless</span> <span class="property">@testParams</span> params
+
+    params</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-22">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-22">&#182;</a>
+              </div>
+              <p>Test if passed params hash matches current constraints.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  testConstraints: (params) -&gt;</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-23">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-23">&#182;</a>
+              </div>
+              <p>Apply the parameter constraints.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    constraints = <span class="property">@options</span>.constraints
+    <span class="keyword">if</span> constraints
+      <span class="keyword">for</span> own name, constraint <span class="keyword">of</span> constraints
+        <span class="keyword">return</span> <span class="literal">false</span> <span class="keyword">unless</span> constraint.test params[name]
+
+    <span class="literal">true</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-24">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-24">&#182;</a>
+              </div>
+              <p>Test if passed params hash matches current route.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  testParams: (params) -&gt;</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-25">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-25">&#182;</a>
+              </div>
+              <p>Ensure that params contains all the parameters needed.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    <span class="keyword">for</span> paramName <span class="keyword">in</span> <span class="property">@paramNames</span>
+      <span class="keyword">return</span> <span class="literal">false</span> <span class="keyword">if</span> params[paramName] <span class="keyword">is</span> <span class="literal">undefined</span>
+
+    <span class="property">@testConstraints</span> params</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-26">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-26">&#182;</a>
               </div>
               <p>Creates the actual regular expression that Backbone.History#loadUrl
 uses to determine if the current url is a match.</p>
@@ -454,11 +588,11 @@ uses to determine if the current url is a match.</p>
         </li>
         
         
-        <li id="section-20">
+        <li id="section-27">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-20">&#182;</a>
+                <a class="pilcrow" href="#section-27">&#182;</a>
               </div>
               <p>Escape magic characters.</p>
 
@@ -469,11 +603,11 @@ uses to determine if the current url is a match.</p>
         </li>
         
         
-        <li id="section-21">
+        <li id="section-28">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-21">&#182;</a>
+                <a class="pilcrow" href="#section-28">&#182;</a>
               </div>
               <p>Replace named parameters, collecting their names.</p>
 
@@ -484,11 +618,11 @@ uses to determine if the current url is a match.</p>
         </li>
         
         
-        <li id="section-22">
+        <li id="section-29">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-22">&#182;</a>
+                <a class="pilcrow" href="#section-29">&#182;</a>
               </div>
               <p>Create the actual regular expression, match until the end of the URL or
 the begin of query string.</p>
@@ -502,11 +636,11 @@ the begin of query string.</p>
         </li>
         
         
-        <li id="section-23">
+        <li id="section-30">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-23">&#182;</a>
+                <a class="pilcrow" href="#section-30">&#182;</a>
               </div>
               <p>Save parameter name.</p>
 
@@ -517,11 +651,11 @@ the begin of query string.</p>
         </li>
         
         
-        <li id="section-24">
+        <li id="section-31">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-24">&#182;</a>
+                <a class="pilcrow" href="#section-31">&#182;</a>
               </div>
               <p>Replace with a character class.</p>
 
@@ -532,11 +666,11 @@ the begin of query string.</p>
         </li>
         
         
-        <li id="section-25">
+        <li id="section-32">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-25">&#182;</a>
+                <a class="pilcrow" href="#section-32">&#182;</a>
               </div>
               <p>Regexp for :foo.</p>
 
@@ -548,11 +682,11 @@ the begin of query string.</p>
         </li>
         
         
-        <li id="section-26">
+        <li id="section-33">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-26">&#182;</a>
+                <a class="pilcrow" href="#section-33">&#182;</a>
               </div>
               <p>Regexp for *foo.</p>
 
@@ -563,11 +697,11 @@ the begin of query string.</p>
         </li>
         
         
-        <li id="section-27">
+        <li id="section-34">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-27">&#182;</a>
+                <a class="pilcrow" href="#section-34">&#182;</a>
               </div>
               <p>Test if the route matches to a path (called by Backbone.History#loadUrl).</p>
 
@@ -578,11 +712,11 @@ the begin of query string.</p>
         </li>
         
         
-        <li id="section-28">
+        <li id="section-35">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-28">&#182;</a>
+                <a class="pilcrow" href="#section-35">&#182;</a>
               </div>
               <p>Test the main RegExp.</p>
 
@@ -594,11 +728,11 @@ the begin of query string.</p>
         </li>
         
         
-        <li id="section-29">
+        <li id="section-36">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-29">&#182;</a>
+                <a class="pilcrow" href="#section-36">&#182;</a>
               </div>
               <p>Apply the parameter constraints.</p>
 
@@ -606,120 +740,9 @@ the begin of query string.</p>
             
             <div class="content"><div class='highlight'><pre>    constraints = <span class="property">@options</span>.constraints
     <span class="keyword">if</span> constraints
-      params = <span class="property">@extractParams</span> path
-      <span class="keyword">for</span> own name, constraint <span class="keyword">of</span> constraints
-        <span class="keyword">return</span> <span class="literal">false</span> <span class="keyword">unless</span> constraint.test(params[name])
+      <span class="keyword">return</span> <span class="property">@testConstraints</span> <span class="property">@extractParams</span> path
 
-    <span class="keyword">return</span> <span class="literal">true</span></pre></div></div>
-            
-        </li>
-        
-        
-        <li id="section-30">
-            <div class="annotation">
-              
-              <div class="pilwrap ">
-                <a class="pilcrow" href="#section-30">&#182;</a>
-              </div>
-              <p>The handler called by Backbone.History when the route matches.
-It is also called by Router#route which might pass options.</p>
-
-            </div>
-            
-            <div class="content"><div class='highlight'><pre>  handler: (path, options) =&gt;
-    options = <span class="keyword">if</span> options <span class="keyword">then</span> _.clone(options) <span class="keyword">else</span> {}</pre></div></div>
-            
-        </li>
-        
-        
-        <li id="section-31">
-            <div class="annotation">
-              
-              <div class="pilwrap ">
-                <a class="pilcrow" href="#section-31">&#182;</a>
-              </div>
-              <p>If no query string was passed, use the current.</p>
-
-            </div>
-            
-            <div class="content"><div class='highlight'><pre>    query = options.query ? <span class="property">@getCurrentQuery</span>()</pre></div></div>
-            
-        </li>
-        
-        
-        <li id="section-32">
-            <div class="annotation">
-              
-              <div class="pilwrap ">
-                <a class="pilcrow" href="#section-32">&#182;</a>
-              </div>
-              <p>Build params hash.</p>
-
-            </div>
-            
-            <div class="content"><div class='highlight'><pre>    params = <span class="property">@buildParams</span> path, query</pre></div></div>
-            
-        </li>
-        
-        
-        <li id="section-33">
-            <div class="annotation">
-              
-              <div class="pilwrap ">
-                <a class="pilcrow" href="#section-33">&#182;</a>
-              </div>
-              <p>Construct a route object to forward to the match event.</p>
-
-            </div>
-            
-            <div class="content"><div class='highlight'><pre>    route = {path, <span class="property">@action</span>, <span class="property">@controller</span>, <span class="property">@name</span>, query}</pre></div></div>
-            
-        </li>
-        
-        
-        <li id="section-34">
-            <div class="annotation">
-              
-              <div class="pilwrap ">
-                <a class="pilcrow" href="#section-34">&#182;</a>
-              </div>
-              <p>Remove the query string from routing options.</p>
-
-            </div>
-            
-            <div class="content"><div class='highlight'><pre>    <span class="keyword">delete</span> options.query</pre></div></div>
-            
-        </li>
-        
-        
-        <li id="section-35">
-            <div class="annotation">
-              
-              <div class="pilwrap ">
-                <a class="pilcrow" href="#section-35">&#182;</a>
-              </div>
-              <p>Publish a global event passing the route and the params.
-Original options hash forwarded to allow further forwarding to backbone.</p>
-
-            </div>
-            
-            <div class="content"><div class='highlight'><pre>    <span class="property">@publishEvent</span> <span class="string">'router:match'</span>, route, params, options</pre></div></div>
-            
-        </li>
-        
-        
-        <li id="section-36">
-            <div class="annotation">
-              
-              <div class="pilwrap ">
-                <a class="pilcrow" href="#section-36">&#182;</a>
-              </div>
-              <p>Returns the query string for the current document.</p>
-
-            </div>
-            
-            <div class="content"><div class='highlight'><pre>  getCurrentQuery: -&gt;
-    location.search.substring <span class="number">1</span></pre></div></div>
+    <span class="literal">true</span></pre></div></div>
             
         </li>
         
@@ -730,12 +753,13 @@ Original options hash forwarded to allow further forwarding to backbone.</p>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-37">&#182;</a>
               </div>
-              <p>Create a proper Rails-like params hash, not an array like Backbone.</p>
+              <p>The handler called by Backbone.History when the route matches.
+It is also called by Router#route which might pass options.</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>  buildParams: (path, query) -&gt;
-    _.extend {},</pre></div></div>
+            <div class="content"><div class='highlight'><pre>  handler: (pathParams, options) =&gt;
+    options = <span class="keyword">if</span> options <span class="keyword">then</span> _.clone options <span class="keyword">else</span> {}</pre></div></div>
             
         </li>
         
@@ -746,11 +770,23 @@ Original options hash forwarded to allow further forwarding to backbone.</p>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-38">&#182;</a>
               </div>
-              <p>Add params from query string.</p>
+              <p>pathDesc may be either an object with params for reversing or a simple URL.</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>      <span class="property">@extractQueryParams</span>(query),</pre></div></div>
+            <div class="content"><div class='highlight'><pre>    <span class="keyword">if</span> <span class="keyword">typeof</span> pathParams <span class="keyword">is</span> <span class="string">'object'</span>
+      query = utils.queryParams.stringify options.query
+      params = pathParams
+      path = <span class="property">@reverse</span> params
+    <span class="keyword">else</span>
+      [path, query] = pathParams.split <span class="string">'?'</span>
+      <span class="keyword">if</span> <span class="keyword">not</span> query?
+        query = <span class="string">''</span>
+      <span class="keyword">else</span>
+        options.query = utils.queryParams.parse query
+      params = <span class="property">@extractParams</span> path
+
+    actionParams = _.extend {}, params, <span class="property">@options</span>.params</pre></div></div>
             
         </li>
         
@@ -761,11 +797,11 @@ Original options hash forwarded to allow further forwarding to backbone.</p>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-39">&#182;</a>
               </div>
-              <p>Add named params from pattern matches.</p>
+              <p>Construct a route object to forward to the match event.</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>      <span class="property">@extractParams</span>(path),</pre></div></div>
+            <div class="content"><div class='highlight'><pre>    route = {path, <span class="property">@action</span>, <span class="property">@controller</span>, <span class="property">@name</span>, query}</pre></div></div>
             
         </li>
         
@@ -776,12 +812,12 @@ Original options hash forwarded to allow further forwarding to backbone.</p>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-40">&#182;</a>
               </div>
-              <p>Add additional params from options as they might
-overwrite params extracted from URL.</p>
+              <p>Publish a global event passing the route and the params.
+Original options hash forwarded to allow further forwarding to backbone.</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>      <span class="property">@options</span>.params</pre></div></div>
+            <div class="content"><div class='highlight'><pre>    <span class="property">@publishEvent</span> <span class="string">'router:match'</span>, route, actionParams, options</pre></div></div>
             
         </li>
         
@@ -830,83 +866,6 @@ overwrite params extracted from URL.</p>
             <div class="content"><div class='highlight'><pre>    <span class="keyword">for</span> match, index <span class="keyword">in</span> matches.slice(<span class="number">1</span>)
       paramName = <span class="keyword">if</span> <span class="property">@paramNames</span>.length <span class="keyword">then</span> <span class="property">@paramNames</span>[index] <span class="keyword">else</span> index
       params[paramName] = match
-
-    params</pre></div></div>
-            
-        </li>
-        
-        
-        <li id="section-44">
-            <div class="annotation">
-              
-              <div class="pilwrap ">
-                <a class="pilcrow" href="#section-44">&#182;</a>
-              </div>
-              <p>Extract parameters from the query string.</p>
-
-            </div>
-            
-            <div class="content"><div class='highlight'><pre>  extractQueryParams: (query) -&gt;
-    params = {}
-    <span class="keyword">return</span> params <span class="keyword">unless</span> query
-    pairs = query.split <span class="string">'&amp;'</span>
-    <span class="keyword">for</span> pair <span class="keyword">in</span> pairs
-      <span class="keyword">continue</span> <span class="keyword">unless</span> pair.length
-      [field, value] = pair.split <span class="string">'='</span>
-      <span class="keyword">continue</span> <span class="keyword">unless</span> field.length
-      field = decodeURIComponent field
-      value = decodeURIComponent value
-      current = params[field]
-      <span class="keyword">if</span> current</pre></div></div>
-            
-        </li>
-        
-        
-        <li id="section-45">
-            <div class="annotation">
-              
-              <div class="pilwrap ">
-                <a class="pilcrow" href="#section-45">&#182;</a>
-              </div>
-              <p>Handle multiple params with same name:
-Aggregate them in an array.</p>
-
-            </div>
-            
-            <div class="content"><div class='highlight'><pre>        <span class="keyword">if</span> current.push</pre></div></div>
-            
-        </li>
-        
-        
-        <li id="section-46">
-            <div class="annotation">
-              
-              <div class="pilwrap ">
-                <a class="pilcrow" href="#section-46">&#182;</a>
-              </div>
-              <p>Add the existing array.</p>
-
-            </div>
-            
-            <div class="content"><div class='highlight'><pre>          current.push value
-        <span class="keyword">else</span></pre></div></div>
-            
-        </li>
-        
-        
-        <li id="section-47">
-            <div class="annotation">
-              
-              <div class="pilwrap ">
-                <a class="pilcrow" href="#section-47">&#182;</a>
-              </div>
-              <p>Create a new array.</p>
-
-            </div>
-            
-            <div class="content"><div class='highlight'><pre>          params[field] = [current, value]
-      <span class="keyword">else</span>
-        params[field] = value
 
     params</pre></div></div>
             

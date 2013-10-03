@@ -64,6 +64,11 @@
               </a>
             
               
+              <a class="source" href="history.html">
+                history.coffee
+              </a>
+            
+              
               <a class="source" href="route.html">
                 route.coffee
               </a>
@@ -274,8 +279,9 @@ using ECMAScript 5 property descriptors.</p>
             
             <div class="content"><div class='highlight'><pre>  getPrototypeChain: (object) -&gt;
     chain = [object.constructor.prototype]
-    chain.push object <span class="keyword">while</span> object = object.constructor?.__super__
-    chain</pre></div></div>
+    <span class="keyword">while</span> object = object.constructor?.__super__ ? object.constructor?.superclass
+      chain.push object
+    chain.reverse()</pre></div></div>
             
         </li>
         
@@ -298,7 +304,7 @@ object1, it will get [object1prop, object2prop].</p>
       value = proto[property]
       <span class="keyword">if</span> value <span class="keyword">and</span> value <span class="keyword">not</span> <span class="keyword">in</span> result
         result.push value
-    result.reverse()</pre></div></div>
+    result</pre></div></div>
             
         </li>
         
@@ -383,7 +389,7 @@ object1, it will get [object1prop, object2prop].</p>
               <div class="pilwrap for-h2">
                 <a class="pilcrow" href="#section-15">&#182;</a>
               </div>
-              <h2>Finish</h2>
+              <h2>Query parameters Helpers</h2>
 
             </div>
             
@@ -396,11 +402,10 @@ object1, it will get [object1prop, object2prop].</p>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-16">&#182;</a>
               </div>
-              <p>Seal the utils object.</p>
-
+              
             </div>
             
-            <div class="content"><div class='highlight'><pre>Object.seal? utils</pre></div></div>
+            <div class="content"><div class='highlight'><pre>  queryParams:</pre></div></div>
             
         </li>
         
@@ -410,6 +415,137 @@ object1, it will get [object1prop, object2prop].</p>
               
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-17">&#182;</a>
+              </div>
+              <p>Returns a query string from a hash</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    stringify: (queryParams) -&gt;
+      query = <span class="string">''</span>
+      <span class="function"><span class="title">stringifyKeyValuePair</span></span> = (encodedKey, value) -&gt;
+        <span class="keyword">if</span> value? <span class="keyword">then</span> <span class="string">'&amp;'</span> + encodedKey + <span class="string">'='</span> + encodeURIComponent value <span class="keyword">else</span> <span class="string">''</span>
+      <span class="keyword">for</span> own key, value <span class="keyword">of</span> queryParams
+        encodedKey = encodeURIComponent key
+        <span class="keyword">if</span> _.isArray value
+          <span class="keyword">for</span> arrParam <span class="keyword">in</span> value
+            query += stringifyKeyValuePair encodedKey, arrParam
+        <span class="keyword">else</span>
+          query += stringifyKeyValuePair encodedKey, value
+      query <span class="keyword">and</span> query.substring <span class="number">1</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-18">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-18">&#182;</a>
+              </div>
+              <p>Returns a hash with query parameters from a query string</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    parse: (queryString) -&gt;
+      params = {}
+      <span class="keyword">return</span> params <span class="keyword">unless</span> queryString
+      pairs = queryString.split <span class="string">'&amp;'</span>
+      <span class="keyword">for</span> pair <span class="keyword">in</span> pairs
+        <span class="keyword">continue</span> <span class="keyword">unless</span> pair.length
+        [field, value] = pair.split <span class="string">'='</span>
+        <span class="keyword">continue</span> <span class="keyword">unless</span> field.length
+        field = decodeURIComponent field
+        value = decodeURIComponent value
+        current = params[field]
+        <span class="keyword">if</span> current</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-19">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-19">&#182;</a>
+              </div>
+              <p>Handle multiple params with same name:
+Aggregate them in an array.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>          <span class="keyword">if</span> current.push</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-20">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-20">&#182;</a>
+              </div>
+              <p>Add the existing array.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>            current.push value
+          <span class="keyword">else</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-21">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-21">&#182;</a>
+              </div>
+              <p>Create a new array.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>            params[field] = [current, value]
+        <span class="keyword">else</span>
+          params[field] = value
+
+      params</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-22">
+            <div class="annotation">
+              
+              <div class="pilwrap for-h2">
+                <a class="pilcrow" href="#section-22">&#182;</a>
+              </div>
+              <h2>Finish</h2>
+
+            </div>
+            
+        </li>
+        
+        
+        <li id="section-23">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-23">&#182;</a>
+              </div>
+              <p>Seal the utils object.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>Object.seal? utils</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-24">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-24">&#182;</a>
               </div>
               <p>Return our creation.</p>
 

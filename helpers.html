@@ -64,6 +64,11 @@
               </a>
             
               
+              <a class="source" href="history.html">
+                history.coffee
+              </a>
+            
+              
               <a class="source" href="route.html">
                 route.coffee
               </a>
@@ -173,8 +178,8 @@ helpers =</pre></div></div>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>  reverse: (routeName, params) -&gt;
-    url = <span class="literal">null</span></pre></div></div>
+            <div class="content"><div class='highlight'><pre>  reverse: (criteria, params, query) -&gt;
+    mediator.execute <span class="string">'router:reverse'</span>, criteria, params, query</pre></div></div>
             
         </li>
         
@@ -185,13 +190,12 @@ helpers =</pre></div></div>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-4">&#182;</a>
               </div>
-              <p>Don&#39;t worry, this callback happens synchronously.</p>
+              <p>Redirects to URL, route name or controller and action pair.</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>    mediator.publish <span class="string">'!router:reverse'</span>, routeName, params, (result) -&gt;
-      url = result
-    url
+            <div class="content"><div class='highlight'><pre>  redirectTo: (pathDesc, params, options) -&gt;
+    mediator.execute <span class="string">'router:route'</span>, pathDesc, params, options
 
 module.exports = helpers</pre></div></div>
             

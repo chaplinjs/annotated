@@ -64,6 +64,11 @@
               </a>
             
               
+              <a class="source" href="history.html">
+                history.coffee
+              </a>
+            
+              
               <a class="source" href="route.html">
                 route.coffee
               </a>
@@ -145,6 +150,7 @@
 
 _ = require <span class="string">'underscore'</span>
 Backbone = require <span class="string">'backbone'</span>
+mediator = require <span class="string">'chaplin/mediator'</span>
 utils = require <span class="string">'chaplin/lib/utils'</span>
 Composition = require <span class="string">'chaplin/lib/composition'</span>
 EventBroker = require <span class="string">'chaplin/lib/event_broker'</span></pre></div></div>
@@ -260,8 +266,8 @@ composed view is disposed.</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>    <span class="property">@subscribeEvent</span> <span class="string">'!composer:compose'</span>, <span class="property">@compose</span>
-    <span class="property">@subscribeEvent</span> <span class="string">'!composer:retrieve'</span>, <span class="property">@retrieve</span>
+            <div class="content"><div class='highlight'><pre>    mediator.setHandler <span class="string">'composer:compose'</span>, <span class="property">@compose</span>, <span class="keyword">this</span>
+    mediator.setHandler <span class="string">'composer:retrieve'</span>, <span class="property">@retrieve</span>, <span class="keyword">this</span>
     <span class="property">@subscribeEvent</span> <span class="string">'dispatcher:dispatch'</span>, <span class="property">@cleanup</span></pre></div></div>
             
         </li>
@@ -503,7 +509,9 @@ property is false</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>    current = <span class="property">@compositions</span>[name]</pre></div></div>
+            <div class="content"><div class='highlight'><pre>    current = <span class="property">@compositions</span>[name]
+
+    isPromise = <span class="literal">false</span></pre></div></div>
             
         </li>
         
@@ -550,7 +558,8 @@ property is false</p>
             </div>
             
             <div class="content"><div class='highlight'><pre>      current.dispose() <span class="keyword">if</span> current
-      composition.compose composition.options
+      returned = composition.compose composition.options
+      isPromise = (<span class="keyword">typeof</span> returned?.<span class="keyword">then</span> <span class="keyword">is</span> <span class="string">'function'</span>)
       composition.stale <span class="literal">false</span>
       <span class="property">@compositions</span>[name] = composition</pre></div></div>
             
@@ -567,7 +576,10 @@ property is false</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>    <span class="property">@compositions</span>[name]</pre></div></div>
+            <div class="content"><div class='highlight'><pre>    <span class="keyword">if</span> isPromise
+      returned
+    <span class="keyword">else</span>
+      <span class="property">@compositions</span>[name].item</pre></div></div>
             
         </li>
         
@@ -578,15 +590,13 @@ property is false</p>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-26">&#182;</a>
               </div>
-              <p>Retrieves an active composition using the compose method and a passed
-callback.</p>
+              <p>Retrieves an active composition using the compose method.</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>  retrieve: (name, callback) -&gt;
+            <div class="content"><div class='highlight'><pre>  retrieve: (name) -&gt;
     active = <span class="property">@compositions</span>[name]
-    item = (<span class="keyword">if</span> active <span class="keyword">and</span> <span class="keyword">not</span> active.stale() <span class="keyword">then</span> active.item <span class="keyword">else</span> <span class="literal">undefined</span>)
-    callback item</pre></div></div>
+    (<span class="keyword">if</span> active <span class="keyword">and</span> <span class="keyword">not</span> active.stale() <span class="keyword">then</span> active.item <span class="keyword">else</span> <span class="literal">undefined</span>)</pre></div></div>
             
         </li>
         
@@ -658,7 +668,9 @@ on the next controller startup unless they are re-composed).</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>    <span class="property">@unsubscribeAllEvents</span>()</pre></div></div>
+            <div class="content"><div class='highlight'><pre>    <span class="property">@unsubscribeAllEvents</span>()
+
+    mediator.removeHandlers <span class="keyword">this</span></pre></div></div>
             
         </li>
         

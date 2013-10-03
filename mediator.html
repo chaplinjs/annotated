@@ -64,6 +64,11 @@
               </a>
             
               
+              <a class="source" href="history.html">
+                history.coffee
+              </a>
+            
+              
               <a class="source" href="route.html">
                 route.coffee
               </a>
@@ -144,6 +149,7 @@
             <div class="content"><div class='highlight'><pre><span class="string">'use strict'</span>
 
 Backbone = require <span class="string">'backbone'</span>
+_ = require <span class="string">'underscore'</span>
 support = require <span class="string">'chaplin/lib/support'</span>
 utils = require <span class="string">'chaplin/lib/utils'</span></pre></div></div>
             
@@ -238,11 +244,13 @@ mediator.publish     = Backbone.Events.trigger</pre></div></div>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-7">&#182;</a>
               </div>
-              <p>Make properties readonly.</p>
+              <p>Request / Response
+--–---------------</p>
+<p>Like pub / sub, but with one handler. Similar to OOP message passing.</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>utils.readonly mediator, <span class="string">'subscribe'</span>, <span class="string">'unsubscribe'</span>, <span class="string">'publish'</span></pre></div></div>
+            <div class="content"><div class='highlight'><pre>handlers = mediator._handlers = {}</pre></div></div>
             
         </li>
         
@@ -250,12 +258,14 @@ mediator.publish     = Backbone.Events.trigger</pre></div></div>
         <li id="section-8">
             <div class="annotation">
               
-              <div class="pilwrap for-h2">
+              <div class="pilwrap ">
                 <a class="pilcrow" href="#section-8">&#182;</a>
               </div>
-              <h2>Sealing the mediator</h2>
+              <p>Sets a handler function for requests.</p>
 
             </div>
+            
+            <div class="content"><div class='highlight'><pre>mediator.<span class="function"><span class="title">setHandler</span></span> = (name, method, instance) -&gt;</pre></div></div>
             
         </li>
         
@@ -265,6 +275,102 @@ mediator.publish     = Backbone.Events.trigger</pre></div></div>
               
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-9">&#182;</a>
+              </div>
+              <p>bound = if instance then _.bind(method, instance) else method</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  handlers[name] = {instance, method}</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-10">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-10">&#182;</a>
+              </div>
+              <p>Retrieves a handler function and executes it.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>mediator.<span class="function"><span class="title">execute</span></span> = (nameOrObj, args...) -&gt;
+  silent = <span class="literal">false</span>
+  <span class="keyword">if</span> <span class="keyword">typeof</span> nameOrObj <span class="keyword">is</span> <span class="string">'object'</span>
+    silent = nameOrObj.silent
+    name = nameOrObj.name
+  <span class="keyword">else</span>
+    name = nameOrObj
+  handler = handlers[name]
+  <span class="keyword">if</span> handler
+    handler.method.apply handler.instance, args
+  <span class="keyword">else</span> <span class="keyword">if</span> <span class="keyword">not</span> silent
+    <span class="keyword">throw</span> <span class="keyword">new</span> Error <span class="string">"mediator.execute: <span class="subst">#{name}</span> handler is not defined"</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-11">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-11">&#182;</a>
+              </div>
+              <p>Removes handlers from storage.
+Can take no args, list of handler names or instance which had bound handlers.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>mediator.<span class="function"><span class="title">removeHandlers</span></span> = (instanceOrNames) -&gt;
+  <span class="keyword">unless</span> instanceOrNames
+    mediator._handlers = {}
+
+  <span class="keyword">if</span> _.isArray(instanceOrNames)
+    <span class="keyword">for</span> name <span class="keyword">in</span> instanceOrNames
+      <span class="keyword">delete</span> handlers[name]
+  <span class="keyword">else</span>
+    <span class="keyword">for</span> name, handler <span class="keyword">of</span> handlers <span class="keyword">when</span> handler.instance <span class="keyword">is</span> instanceOrNames
+      <span class="keyword">delete</span> handlers[name]
+  <span class="keyword">return</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-12">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-12">&#182;</a>
+              </div>
+              <p>Make properties readonly.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>utils.readonly mediator,
+  <span class="string">'subscribe'</span>, <span class="string">'unsubscribe'</span>, <span class="string">'publish'</span>, <span class="string">'setHandler'</span>, <span class="string">'execute'</span>, <span class="string">'removeHandlers'</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-13">
+            <div class="annotation">
+              
+              <div class="pilwrap for-h2">
+                <a class="pilcrow" href="#section-13">&#182;</a>
+              </div>
+              <h2>Sealing the mediator</h2>
+
+            </div>
+            
+        </li>
+        
+        
+        <li id="section-14">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-14">&#182;</a>
               </div>
               <p>After adding all needed properties, you should seal the mediator
 using this method.</p>
@@ -276,11 +382,11 @@ using this method.</p>
         </li>
         
         
-        <li id="section-10">
+        <li id="section-15">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-10">&#182;</a>
+                <a class="pilcrow" href="#section-15">&#182;</a>
               </div>
               <p>Prevent extensions and make all properties non-configurable.</p>
 
@@ -292,11 +398,11 @@ using this method.</p>
         </li>
         
         
-        <li id="section-11">
+        <li id="section-16">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-11">&#182;</a>
+                <a class="pilcrow" href="#section-16">&#182;</a>
               </div>
               <p>Make the method readonly.</p>
 
@@ -307,11 +413,11 @@ using this method.</p>
         </li>
         
         
-        <li id="section-12">
+        <li id="section-17">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-12">&#182;</a>
+                <a class="pilcrow" href="#section-17">&#182;</a>
               </div>
               <p>Return our creation.</p>
 
