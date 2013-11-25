@@ -148,13 +148,13 @@
             
             <div class="content"><div class='highlight'><pre><span class="string">'use strict'</span>
 
-_ = require <span class="string">'underscore'</span>
-Backbone = require <span class="string">'backbone'</span>
-mediator = require <span class="string">'chaplin/mediator'</span>
-helpers = require <span class="string">'chaplin/lib/helpers'</span>
-utils = require <span class="string">'chaplin/lib/utils'</span>
-EventBroker = require <span class="string">'chaplin/lib/event_broker'</span>
-View = require <span class="string">'chaplin/views/view'</span></pre></div></div>
+_ = <span class="built_in">require</span> <span class="string">'underscore'</span>
+Backbone = <span class="built_in">require</span> <span class="string">'backbone'</span>
+mediator = <span class="built_in">require</span> <span class="string">'chaplin/mediator'</span>
+helpers = <span class="built_in">require</span> <span class="string">'chaplin/lib/helpers'</span>
+utils = <span class="built_in">require</span> <span class="string">'chaplin/lib/utils'</span>
+EventBroker = <span class="built_in">require</span> <span class="string">'chaplin/lib/event_broker'</span>
+View = <span class="built_in">require</span> <span class="string">'chaplin/views/view'</span></pre></div></div>
             
         </li>
         
@@ -171,7 +171,7 @@ View = require <span class="string">'chaplin/views/view'</span></pre></div></div
             
             <div class="content"><div class='highlight'><pre>$ = Backbone.$
 
-module.exports = <span class="class"><span class="keyword">class</span> <span class="title">Layout</span> <span class="keyword">extends</span> <span class="title">View</span></span></pre></div></div>
+module.<span class="built_in">exports</span> = <span class="class"><span class="keyword">class</span> <span class="title">Layout</span> <span class="keyword">extends</span> <span class="title">View</span></span></pre></div></div>
             
         </li>
         
@@ -186,7 +186,7 @@ module.exports = <span class="class"><span class="keyword">class</span> <span cl
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>  el: <span class="string">'body'</span></pre></div></div>
+            <div class="content"><div class='highlight'><pre>  <span class="attribute">el</span>: <span class="string">'body'</span></pre></div></div>
             
         </li>
         
@@ -201,7 +201,7 @@ module.exports = <span class="class"><span class="keyword">class</span> <span cl
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>  keepElement: <span class="literal">true</span></pre></div></div>
+            <div class="content"><div class='highlight'><pre>  <span class="attribute">keepElement</span>: <span class="literal">true</span></pre></div></div>
             
         </li>
         
@@ -218,7 +218,7 @@ and passed as an option.</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>  title: <span class="string">''</span></pre></div></div>
+            <div class="content"><div class='highlight'><pre>  <span class="attribute">title</span>: <span class="string">''</span></pre></div></div>
             
         </li>
         
@@ -226,10 +226,10 @@ and passed as an option.</p>
         <li id="section-6">
             <div class="annotation">
               
-              <div class="pilwrap for-h2">
+              <div class="pilwrap ">
                 <a class="pilcrow" href="#section-6">&#182;</a>
               </div>
-              <h2>Regions</h2>
+              <h2 id="regions">Regions</h2>
 
             </div>
             
@@ -246,22 +246,22 @@ and passed as an option.</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>  globalRegions: <span class="literal">null</span>
+            <div class="content"><div class='highlight'><pre>  <span class="attribute">globalRegions</span>: <span class="literal">null</span>
 
-  listen:
+  <span class="attribute">listen</span>:
     <span class="string">'beforeControllerDispose mediator'</span>: <span class="string">'scroll'</span>
 
-  constructor: (options = {}) -&gt;
+  <span class="attribute">constructor</span>: <span class="function"><span class="params">(options = {})</span> -&gt;</span>
     <span class="property">@globalRegions</span> = []
     <span class="property">@title</span> = options.title
     <span class="property">@regions</span> = options.regions <span class="keyword">if</span> options.regions
     <span class="property">@settings</span> = _.defaults options,
-      titleTemplate: _.template(
-        <span class="string">"&lt;% if (subtitle) { %&gt;&lt;%= subtitle %&gt; \u2013 &lt;% } %&gt;&lt;%= title %&gt;"</span>
-      )
-      openExternalToBlank: <span class="literal">false</span>
-      routeLinks: <span class="string">'a, .go-to'</span>
-      skipRouting: <span class="string">'.noscript'</span></pre></div></div>
+      <span class="attribute">titleTemplate</span>: <span class="function"><span class="params">(data)</span> -&gt;</span>
+        st = <span class="keyword">if</span> data.subtitle <span class="keyword">then</span> <span class="string">"<span class="subst">#{data.subtitle}</span> \u2013 "</span> <span class="keyword">else</span> <span class="string">''</span>
+        st + data.title
+      <span class="attribute">openExternalToBlank</span>: <span class="literal">false</span>
+      <span class="attribute">routeLinks</span>: <span class="string">'a, .go-to'</span>
+      <span class="attribute">skipRouting</span>: <span class="string">'.noscript'</span></pre></div></div>
             
         </li>
         
@@ -276,7 +276,7 @@ and passed as an option.</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>      scrollTo: [<span class="number">0</span>, <span class="number">0</span>]
+            <div class="content"><div class='highlight'><pre>      <span class="attribute">scrollTo</span>: [<span class="number">0</span>, <span class="number">0</span>]
 
     mediator.setHandler <span class="string">'region:show'</span>, <span class="property">@showRegion</span>, <span class="keyword">this</span>
     mediator.setHandler <span class="string">'region:register'</span>, <span class="property">@registerRegionHandler</span>, <span class="keyword">this</span>
@@ -307,10 +307,10 @@ and passed as an option.</p>
         <li id="section-10">
             <div class="annotation">
               
-              <div class="pilwrap for-h2">
+              <div class="pilwrap ">
                 <a class="pilcrow" href="#section-10">&#182;</a>
               </div>
-              <h2>Controller startup and disposal</h2>
+              <h2 id="controller-startup-and-disposal">Controller startup and disposal</h2>
 
             </div>
             
@@ -327,7 +327,7 @@ and passed as an option.</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>  scroll: (controller) -&gt;</pre></div></div>
+            <div class="content"><div class='highlight'><pre>  <span class="attribute">scroll</span>: <span class="function"><span class="params">(controller)</span> -&gt;</span></pre></div></div>
             
         </li>
         
@@ -361,7 +361,7 @@ Get the title from the title property of the current controller.</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>  adjustTitle: (subtitle = <span class="string">''</span>) -&gt;
+            <div class="content"><div class='highlight'><pre>  <span class="attribute">adjustTitle</span>: <span class="function"><span class="params">(subtitle = <span class="string">''</span>)</span> -&gt;</span>
     title = <span class="property">@settings</span>.titleTemplate {<span class="property">@title</span>, subtitle}</pre></div></div>
             
         </li>
@@ -377,7 +377,7 @@ Get the title from the title property of the current controller.</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>    setTimeout =&gt;
+            <div class="content"><div class='highlight'><pre>    setTimeout<span class="function"> =&gt;</span>
       document.title = title
       <span class="property">@publishEvent</span> <span class="string">'adjustTitle'</span>, subtitle, title
     , <span class="number">50</span>
@@ -389,10 +389,10 @@ Get the title from the title property of the current controller.</p>
         <li id="section-15">
             <div class="annotation">
               
-              <div class="pilwrap for-h2">
+              <div class="pilwrap ">
                 <a class="pilcrow" href="#section-15">&#182;</a>
               </div>
-              <h2>Automatic routing of internal links</h2>
+              <h2 id="automatic-routing-of-internal-links">Automatic routing of internal links</h2>
 
             </div>
             
@@ -408,15 +408,22 @@ Get the title from the title property of the current controller.</p>
               
             </div>
             
-            <div class="content"><div class='highlight'><pre>  startLinkRouting: -&gt;
+            <div class="content"><div class='highlight'><pre>  <span class="attribute">startLinkRouting</span>:<span class="function"> -&gt;</span>
     route = <span class="property">@settings</span>.routeLinks
-    <span class="property">@$el</span>.<span class="literal">on</span> <span class="string">'click'</span>, route, <span class="property">@openLink</span> <span class="keyword">if</span> route
+    <span class="keyword">return</span> <span class="keyword">unless</span> route
+    <span class="keyword">if</span> $
+      <span class="property">@$el</span>.<span class="literal">on</span> <span class="string">'click'</span>, route, <span class="property">@openLink</span>
+    <span class="keyword">else</span>
+      <span class="property">@delegate</span> <span class="string">'click'</span>, route, <span class="property">@openLink</span>
 
-  stopLinkRouting: -&gt;
+  <span class="attribute">stopLinkRouting</span>:<span class="function"> -&gt;</span>
     route = <span class="property">@settings</span>.routeLinks
-    <span class="property">@$el</span>.<span class="literal">off</span> <span class="string">'click'</span>, route <span class="keyword">if</span> route
+    <span class="keyword">if</span> $
+      <span class="property">@$el</span>.<span class="literal">off</span> <span class="string">'click'</span>, route <span class="keyword">if</span> route
+    <span class="keyword">else</span>
+      <span class="property">@undelegate</span> <span class="string">'click'</span>, route, <span class="property">@openLink</span>
 
-  isExternalLink: (link) -&gt;
+  <span class="attribute">isExternalLink</span>: <span class="function"><span class="params">(link)</span> -&gt;</span>
     link.target <span class="keyword">is</span> <span class="string">'_blank'</span> <span class="keyword">or</span>
     link.rel <span class="keyword">is</span> <span class="string">'external'</span> <span class="keyword">or</span>
     link.protocol <span class="keyword">not</span> <span class="keyword">in</span> [<span class="string">'http:'</span>, <span class="string">'https:'</span>, <span class="string">'file:'</span>] <span class="keyword">or</span>
@@ -435,11 +442,10 @@ Get the title from the title property of the current controller.</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>  openLink: (event) =&gt;
+            <div class="content"><div class='highlight'><pre>  <span class="attribute">openLink</span>: <span class="function"><span class="params">(event)</span> =&gt;</span>
     <span class="keyword">return</span> <span class="keyword">if</span> utils.modifierKeyPressed(event)
 
-    el = event.currentTarget
-    $el = $(el)
+    el = <span class="keyword">if</span> $ <span class="keyword">then</span> event.currentTarget <span class="keyword">else</span> event.delegateTarget
     isAnchor = el.nodeName <span class="keyword">is</span> <span class="string">'A'</span></pre></div></div>
             
         </li>
@@ -455,7 +461,7 @@ Get the title from the title property of the current controller.</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>    href = $el.attr(<span class="string">'href'</span>) <span class="keyword">or</span> $el.data(<span class="string">'href'</span>) <span class="keyword">or</span> <span class="literal">null</span></pre></div></div>
+            <div class="content"><div class='highlight'><pre>    href = el.getAttribute(<span class="string">'href'</span>) <span class="keyword">or</span> el.getAttribute(<span class="string">'data-href'</span>) <span class="keyword">or</span> <span class="literal">null</span></pre></div></div>
             
         </li>
         
@@ -519,7 +525,7 @@ but it doesn’t make sense to route it.</p>
             <div class="content"><div class='highlight'><pre>    skipRouting = <span class="property">@settings</span>.skipRouting
     type = <span class="keyword">typeof</span> skipRouting
     <span class="keyword">return</span> <span class="keyword">if</span> type <span class="keyword">is</span> <span class="string">'function'</span> <span class="keyword">and</span> <span class="keyword">not</span> skipRouting(href, el) <span class="keyword">or</span>
-      type <span class="keyword">is</span> <span class="string">'string'</span> <span class="keyword">and</span> $el.<span class="keyword">is</span> skipRouting</pre></div></div>
+      type <span class="keyword">is</span> <span class="string">'string'</span> <span class="keyword">and</span> (<span class="keyword">if</span> $ <span class="keyword">then</span> $(el).<span class="keyword">is</span>(skipRouting) <span class="keyword">else</span> Backbone.utils.matchesSelector el, skipRouting)</pre></div></div>
             
         </li>
         
@@ -568,7 +574,7 @@ but it doesn’t make sense to route it.</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>    helpers.redirectTo url: href</pre></div></div>
+            <div class="content"><div class='highlight'><pre>    helpers.redirectTo <span class="attribute">url</span>: href</pre></div></div>
             
         </li>
         
@@ -592,10 +598,10 @@ but it doesn’t make sense to route it.</p>
         <li id="section-27">
             <div class="annotation">
               
-              <div class="pilwrap for-h2">
+              <div class="pilwrap ">
                 <a class="pilcrow" href="#section-27">&#182;</a>
               </div>
-              <h2>Region management</h2>
+              <h2 id="region-management">Region management</h2>
 
             </div>
             
@@ -613,7 +619,7 @@ Register a single view region or all regions exposed.</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>  registerRegionHandler: (instance, name, selector) -&gt;
+            <div class="content"><div class='highlight'><pre>  <span class="attribute">registerRegionHandler</span>: <span class="function"><span class="params">(instance, name, selector)</span> -&gt;</span>
     <span class="keyword">if</span> name?
       <span class="property">@registerGlobalRegion</span> instance, name, selector
     <span class="keyword">else</span>
@@ -632,7 +638,7 @@ Register a single view region or all regions exposed.</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>  registerGlobalRegion: (instance, name, selector) -&gt;</pre></div></div>
+            <div class="content"><div class='highlight'><pre>  <span class="attribute">registerGlobalRegion</span>: <span class="function"><span class="params">(instance, name, selector)</span> -&gt;</span></pre></div></div>
             
         </li>
         
@@ -679,7 +685,7 @@ Simply register all regions exposed by it.</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>  registerGlobalRegions: (instance) -&gt;</pre></div></div>
+            <div class="content"><div class='highlight'><pre>  <span class="attribute">registerGlobalRegions</span>: <span class="function"><span class="params">(instance)</span> -&gt;</span></pre></div></div>
             
         </li>
         
@@ -730,7 +736,7 @@ Unregisters single named region or all view regions.</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>  unregisterRegionHandler: (instance, name) -&gt;
+            <div class="content"><div class='highlight'><pre>  <span class="attribute">unregisterRegionHandler</span>: <span class="function"><span class="params">(instance, name)</span> -&gt;</span>
     <span class="keyword">if</span> name?
       <span class="property">@unregisterGlobalRegion</span> instance, name
     <span class="keyword">else</span>
@@ -749,10 +755,11 @@ Unregisters single named region or all view regions.</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>  unregisterGlobalRegion: (instance, name) -&gt;
+            <div class="content"><div class='highlight'><pre>  <span class="attribute">unregisterGlobalRegion</span>: <span class="function"><span class="params">(instance, name)</span> -&gt;</span>
     cid = instance.cid
-    <span class="property">@globalRegions</span> = _.filter <span class="property">@globalRegions</span>, (region) -&gt;
-      region.instance.cid <span class="keyword">isnt</span> cid <span class="keyword">or</span> region.name <span class="keyword">isnt</span> name</pre></div></div>
+    <span class="property">@globalRegions</span> = (region <span class="keyword">for</span> region <span class="keyword">in</span> <span class="property">@globalRegions</span> <span class="keyword">when</span> (
+      region.instance.cid <span class="keyword">isnt</span> cid <span class="keyword">or</span> region.name <span class="keyword">isnt</span> name
+    ))</pre></div></div>
             
         </li>
         
@@ -767,9 +774,10 @@ Unregisters single named region or all view regions.</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>  unregisterGlobalRegions: (instance) -&gt;
-    <span class="property">@globalRegions</span> = _.filter <span class="property">@globalRegions</span>, (region) -&gt;
-      region.instance.cid <span class="keyword">isnt</span> instance.cid</pre></div></div>
+            <div class="content"><div class='highlight'><pre>  <span class="attribute">unregisterGlobalRegions</span>: <span class="function"><span class="params">(instance)</span> -&gt;</span>
+    <span class="property">@globalRegions</span> = (region <span class="keyword">for</span> region <span class="keyword">in</span> <span class="property">@globalRegions</span> <span class="keyword">when</span> (
+      region.instance.cid <span class="keyword">isnt</span> instance.cid
+    ))</pre></div></div>
             
         </li>
         
@@ -784,9 +792,9 @@ Unregisters single named region or all view regions.</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>  regionByName: (name) -&gt;
-    _.find <span class="property">@globalRegions</span>, (region) -&gt;
-      region.name <span class="keyword">is</span> name <span class="keyword">and</span> <span class="keyword">not</span> region.instance.stale</pre></div></div>
+            <div class="content"><div class='highlight'><pre>  <span class="attribute">regionByName</span>: <span class="function"><span class="params">(name)</span> -&gt;</span>
+    <span class="keyword">for</span> reg <span class="keyword">in</span> <span class="property">@globalRegions</span> <span class="keyword">when</span> reg.name <span class="keyword">is</span> name <span class="keyword">and</span> <span class="keyword">not</span> reg.instance.stale
+      <span class="keyword">return</span> reg</pre></div></div>
             
         </li>
         
@@ -802,7 +810,7 @@ attempt to fulfill it.</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>  showRegion: (name, instance) -&gt;</pre></div></div>
+            <div class="content"><div class='highlight'><pre>  <span class="attribute">showRegion</span>: <span class="function"><span class="params">(name, instance)</span> -&gt;</span></pre></div></div>
             
         </li>
         
@@ -848,12 +856,18 @@ attempt to fulfill it.</p>
             </div>
             
             <div class="content"><div class='highlight'><pre>    instance.container = <span class="keyword">if</span> region.selector <span class="keyword">is</span> <span class="string">''</span>
-      region.instance.$el
+      <span class="keyword">if</span> $
+        region.instance.$el
+      <span class="keyword">else</span>
+        region.instance.el
     <span class="keyword">else</span>
       <span class="keyword">if</span> region.instance.noWrap
-        $(region.instance.container).find region.selector
+        <span class="keyword">if</span> $
+          $(region.instance.container).find region.selector
+        <span class="keyword">else</span>
+          region.instance.container.querySelector region.selector
       <span class="keyword">else</span>
-        region.instance.$ region.selector</pre></div></div>
+        region.instance[<span class="keyword">if</span> $ <span class="keyword">then</span> <span class="string">'$'</span> <span class="keyword">else</span> <span class="string">'find'</span>] region.selector</pre></div></div>
             
         </li>
         
@@ -861,10 +875,10 @@ attempt to fulfill it.</p>
         <li id="section-43">
             <div class="annotation">
               
-              <div class="pilwrap for-h2">
+              <div class="pilwrap ">
                 <a class="pilcrow" href="#section-43">&#182;</a>
               </div>
-              <h2>Disposal</h2>
+              <h2 id="disposal">Disposal</h2>
 
             </div>
             
@@ -880,7 +894,7 @@ attempt to fulfill it.</p>
               
             </div>
             
-            <div class="content"><div class='highlight'><pre>  dispose: -&gt;
+            <div class="content"><div class='highlight'><pre>  <span class="attribute">dispose</span>:<span class="function"> -&gt;</span>
     <span class="keyword">return</span> <span class="keyword">if</span> <span class="property">@disposed</span></pre></div></div>
             
         </li>

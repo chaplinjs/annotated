@@ -148,13 +148,13 @@
             
             <div class="content"><div class='highlight'><pre><span class="string">'use strict'</span>
 
-_ = require <span class="string">'underscore'</span>
-Backbone = require <span class="string">'backbone'</span>
-EventBroker = require <span class="string">'chaplin/lib/event_broker'</span>
-helpers = require <span class="string">'chaplin/lib/helpers'</span>
-mediator = require <span class="string">'chaplin/mediator'</span>
+_ = <span class="built_in">require</span> <span class="string">'underscore'</span>
+Backbone = <span class="built_in">require</span> <span class="string">'backbone'</span>
+EventBroker = <span class="built_in">require</span> <span class="string">'chaplin/lib/event_broker'</span>
+helpers = <span class="built_in">require</span> <span class="string">'chaplin/lib/helpers'</span>
+mediator = <span class="built_in">require</span> <span class="string">'chaplin/mediator'</span>
 
-module.exports = <span class="class"><span class="keyword">class</span> <span class="title">Controller</span></span></pre></div></div>
+module.<span class="built_in">exports</span> = <span class="class"><span class="keyword">class</span> <span class="title">Controller</span></span></pre></div></div>
             
         </li>
         
@@ -187,7 +187,7 @@ module.exports = <span class="class"><span class="keyword">class</span> <span cl
             <div class="content"><div class='highlight'><pre>  _.extend <span class="property">@prototype</span>, Backbone.Events
   _.extend <span class="property">@prototype</span>, EventBroker
 
-  view: <span class="literal">null</span></pre></div></div>
+  <span class="attribute">view</span>: <span class="literal">null</span></pre></div></div>
             
         </li>
         
@@ -203,12 +203,12 @@ was called in the current action.</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>  redirected: <span class="literal">false</span>
+            <div class="content"><div class='highlight'><pre>  <span class="attribute">redirected</span>: <span class="literal">false</span>
 
-  constructor: -&gt;
+  <span class="attribute">constructor</span>:<span class="function"> -&gt;</span>
     <span class="property">@initialize</span> arguments...
 
-  initialize: -&gt;</pre></div></div>
+  <span class="attribute">initialize</span>:<span class="function"> -&gt;</span></pre></div></div>
             
         </li>
         
@@ -223,7 +223,7 @@ was called in the current action.</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>  beforeAction: -&gt;</pre></div></div>
+            <div class="content"><div class='highlight'><pre>  <span class="attribute">beforeAction</span>:<span class="function"> -&gt;</span></pre></div></div>
             
         </li>
         
@@ -239,7 +239,7 @@ was called in the current action.</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>  adjustTitle: (subtitle) -&gt;
+            <div class="content"><div class='highlight'><pre>  <span class="attribute">adjustTitle</span>: <span class="function"><span class="params">(subtitle)</span> -&gt;</span>
     mediator.execute <span class="string">'adjustTitle'</span>, subtitle</pre></div></div>
             
         </li>
@@ -248,10 +248,10 @@ was called in the current action.</p>
         <li id="section-7">
             <div class="annotation">
               
-              <div class="pilwrap for-h2">
+              <div class="pilwrap ">
                 <a class="pilcrow" href="#section-7">&#182;</a>
               </div>
-              <h2>Composer</h2>
+              <h2 id="composer">Composer</h2>
 
             </div>
             
@@ -269,7 +269,7 @@ composer for information on parameters, etc.</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>  compose: (name) -&gt;
+            <div class="content"><div class='highlight'><pre>  <span class="attribute">compose</span>: <span class="function"><span class="params">(name)</span> -&gt;</span>
     method = <span class="keyword">if</span> arguments.length <span class="keyword">is</span> <span class="number">1</span> <span class="keyword">then</span> <span class="string">'retrieve'</span> <span class="keyword">else</span> <span class="string">'compose'</span>
     mediator.execute <span class="string">"composer:<span class="subst">#{method}</span>"</span>, arguments...</pre></div></div>
             
@@ -279,10 +279,10 @@ composer for information on parameters, etc.</p>
         <li id="section-9">
             <div class="annotation">
               
-              <div class="pilwrap for-h2">
+              <div class="pilwrap ">
                 <a class="pilcrow" href="#section-9">&#182;</a>
               </div>
-              <h2>Redirection</h2>
+              <h2 id="redirection">Redirection</h2>
 
             </div>
             
@@ -299,7 +299,7 @@ composer for information on parameters, etc.</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>  redirectTo: (pathDesc, params, options) -&gt;
+            <div class="content"><div class='highlight'><pre>  <span class="attribute">redirectTo</span>: <span class="function"><span class="params">(pathDesc, params, options)</span> -&gt;</span>
     <span class="property">@redirected</span> = <span class="literal">true</span>
     helpers.redirectTo pathDesc, params, options</pre></div></div>
             
@@ -309,10 +309,10 @@ composer for information on parameters, etc.</p>
         <li id="section-11">
             <div class="annotation">
               
-              <div class="pilwrap for-h2">
+              <div class="pilwrap ">
                 <a class="pilcrow" href="#section-11">&#182;</a>
               </div>
-              <h2>Disposal</h2>
+              <h2 id="disposal">Disposal</h2>
 
             </div>
             
@@ -328,9 +328,9 @@ composer for information on parameters, etc.</p>
               
             </div>
             
-            <div class="content"><div class='highlight'><pre>  disposed: <span class="literal">false</span>
+            <div class="content"><div class='highlight'><pre>  <span class="attribute">disposed</span>: <span class="literal">false</span>
 
-  dispose: -&gt;
+  <span class="attribute">dispose</span>:<span class="function"> -&gt;</span>
     <span class="keyword">return</span> <span class="keyword">if</span> <span class="property">@disposed</span></pre></div></div>
             
         </li>

@@ -154,10 +154,10 @@
         <li id="section-2">
             <div class="annotation">
               
-              <div class="pilwrap for-h2">
+              <div class="pilwrap ">
                 <a class="pilcrow" href="#section-2">&#182;</a>
               </div>
-              <h2>Feature detection</h2>
+              <h2 id="feature-detection">Feature detection</h2>
 
             </div>
             
@@ -189,13 +189,13 @@
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>  propertyDescriptors: <span class="keyword">do</span> -&gt;
+            <div class="content"><div class='highlight'><pre>  <span class="attribute">propertyDescriptors</span>: <span class="keyword">do</span><span class="function"> -&gt;</span>
     <span class="keyword">unless</span> <span class="keyword">typeof</span> Object.defineProperty <span class="keyword">is</span> <span class="string">'function'</span> <span class="keyword">and</span>
     <span class="keyword">typeof</span> Object.defineProperties <span class="keyword">is</span> <span class="string">'function'</span>
       <span class="keyword">return</span> <span class="literal">false</span>
     <span class="keyword">try</span>
       o = {}
-      Object.defineProperty o, <span class="string">'foo'</span>, value: <span class="string">'bar'</span>
+      Object.defineProperty o, <span class="string">'foo'</span>, <span class="attribute">value</span>: <span class="string">'bar'</span>
       <span class="keyword">return</span> o.foo <span class="keyword">is</span> <span class="string">'bar'</span>
     <span class="keyword">catch</span> error
       <span class="keyword">return</span> <span class="literal">false</span></pre></div></div>
@@ -213,7 +213,7 @@
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>module.exports = support</pre></div></div>
+            <div class="content"><div class='highlight'><pre>module.<span class="built_in">exports</span> = support</pre></div></div>
             
         </li>
         

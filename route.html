@@ -148,13 +148,13 @@
             
             <div class="content"><div class='highlight'><pre><span class="string">'use strict'</span>
 
-_ = require <span class="string">'underscore'</span>
-Backbone = require <span class="string">'backbone'</span>
-EventBroker = require <span class="string">'chaplin/lib/event_broker'</span>
-Controller = require <span class="string">'chaplin/controllers/controller'</span>
-utils = require <span class="string">'chaplin/lib/utils'</span>
+_ = <span class="built_in">require</span> <span class="string">'underscore'</span>
+Backbone = <span class="built_in">require</span> <span class="string">'backbone'</span>
+EventBroker = <span class="built_in">require</span> <span class="string">'chaplin/lib/event_broker'</span>
+Controller = <span class="built_in">require</span> <span class="string">'chaplin/controllers/controller'</span>
+utils = <span class="built_in">require</span> <span class="string">'chaplin/lib/utils'</span>
 
-module.exports = <span class="class"><span class="keyword">class</span> <span class="title">Route</span></span></pre></div></div>
+module.<span class="built_in">exports</span> = <span class="class"><span class="keyword">class</span> <span class="title">Route</span></span></pre></div></div>
             
         </li>
         
@@ -215,7 +215,7 @@ e.g. new Route &#39;/users/:id&#39;, &#39;users&#39;, &#39;show&#39;, { some: &#
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>  constructor: (<span class="property">@pattern</span>, <span class="property">@controller</span>, <span class="property">@action</span>, options) -&gt;</pre></div></div>
+            <div class="content"><div class='highlight'><pre>  <span class="attribute">constructor</span>: <span class="function"><span class="params">(<span class="property">@pattern</span>, <span class="property">@controller</span>, <span class="property">@action</span>, options)</span> -&gt;</span></pre></div></div>
             
         </li>
         
@@ -230,9 +230,9 @@ e.g. new Route &#39;/users/:id&#39;, &#39;users&#39;, &#39;show&#39;, { some: &#
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>    if _.isRegExp @pattern
-      throw new Error 'Route: RegExps are not supported.
-        Use strings with :names and `constraints` option of route'</pre></div></div>
+            <div class="content"><div class='highlight'><pre>    <span class="keyword">if</span> <span class="keyword">typeof</span> <span class="property">@pattern</span> <span class="keyword">isnt</span> <span class="string">'string'</span>
+      <span class="keyword">throw</span> <span class="keyword">new</span> Error <span class="string">'Route: RegExps are not supported.
+        Use strings with :names and `constraints` option of route'</span></pre></div></div>
             
         </li>
         
@@ -247,7 +247,7 @@ e.g. new Route &#39;/users/:id&#39;, &#39;users&#39;, &#39;show&#39;, { some: &#
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>    <span class="property">@options</span> = <span class="keyword">if</span> options <span class="keyword">then</span> _.clone(options) <span class="keyword">else</span> {}</pre></div></div>
+            <div class="content"><div class='highlight'><pre>    <span class="property">@options</span> = <span class="keyword">if</span> options <span class="keyword">then</span> _.extend({}, options) <span class="keyword">else</span> {}</pre></div></div>
             
         </li>
         
@@ -323,7 +323,7 @@ e.g. new Route &#39;/users/:id&#39;, &#39;users&#39;, &#39;show&#39;, { some: &#
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>    <span class="keyword">if</span> _.has Controller.prototype, <span class="property">@action</span>
+            <div class="content"><div class='highlight'><pre>    <span class="keyword">if</span> <span class="property">@action</span> <span class="keyword">of</span> Controller.prototype
       <span class="keyword">throw</span> <span class="keyword">new</span> Error <span class="string">'Route: You should not use existing controller '</span> +
         <span class="string">'properties as action names'</span>
 
@@ -357,7 +357,7 @@ e.g. new Route &#39;/users/:id&#39;, &#39;users&#39;, &#39;show&#39;, { some: &#
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>  matches: (criteria) -&gt;
+            <div class="content"><div class='highlight'><pre>  <span class="attribute">matches</span>: <span class="function"><span class="params">(criteria)</span> -&gt;</span>
     <span class="keyword">if</span> <span class="keyword">typeof</span> criteria <span class="keyword">is</span> <span class="string">'string'</span>
       criteria <span class="keyword">is</span> <span class="property">@name</span>
     <span class="keyword">else</span>
@@ -382,7 +382,7 @@ e.g. new Route &#39;/users/:id&#39;, &#39;users&#39;, &#39;show&#39;, { some: &#
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>  reverse: (params, query) -&gt;
+            <div class="content"><div class='highlight'><pre>  <span class="attribute">reverse</span>: <span class="function"><span class="params">(params, query)</span> -&gt;</span>
     params = <span class="property">@normalizeParams</span> params
     <span class="keyword">return</span> <span class="literal">false</span> <span class="keyword">if</span> params <span class="keyword">is</span> <span class="literal">false</span>
 
@@ -407,7 +407,9 @@ Iterate and replace params in pattern.</p>
       value = params[name]
       url = url.replace <span class="regexp">///[:*]<span class="comment">#{name}///g, value</span>
 
-    return url unless query</pre></div></div>
+    return url unless query
+
+</span></pre></div></div>
             
         </li>
         
@@ -441,8 +443,8 @@ Iterate and replace params in pattern.</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>  normalizeParams: (params) -&gt;
-    <span class="keyword">if</span> _.isArray params</pre></div></div>
+            <div class="content"><div class='highlight'><pre>  <span class="attribute">normalizeParams</span>: <span class="function"><span class="params">(params)</span> -&gt;</span>
+    <span class="keyword">if</span> utils.isArray params</pre></div></div>
             
         </li>
         
@@ -513,7 +515,7 @@ Iterate and replace params in pattern.</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>  testConstraints: (params) -&gt;</pre></div></div>
+            <div class="content"><div class='highlight'><pre>  <span class="attribute">testConstraints</span>: <span class="function"><span class="params">(params)</span> -&gt;</span></pre></div></div>
             
         </li>
         
@@ -548,7 +550,7 @@ Iterate and replace params in pattern.</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>  testParams: (params) -&gt;</pre></div></div>
+            <div class="content"><div class='highlight'><pre>  <span class="attribute">testParams</span>: <span class="function"><span class="params">(params)</span> -&gt;</span></pre></div></div>
             
         </li>
         
@@ -582,7 +584,7 @@ uses to determine if the current url is a match.</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>  createRegExp: -&gt;
+            <div class="content"><div class='highlight'><pre>  <span class="attribute">createRegExp</span>:<span class="function"> -&gt;</span>
     pattern = <span class="property">@pattern</span></pre></div></div>
             
         </li>
@@ -631,7 +633,8 @@ the begin of query string.</p>
             
             <div class="content"><div class='highlight'><pre>    <span class="property">@regExp</span> = <span class="regexp">///^<span class="comment">#{pattern}(?=\?|$)///</span>
 
-  addParamName: (match, paramName) =&gt;</pre></div></div>
+  addParamName: (match, paramName) =&gt;
+</span></pre></div></div>
             
         </li>
         
@@ -707,7 +710,7 @@ the begin of query string.</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>  test: (path) -&gt;</pre></div></div>
+            <div class="content"><div class='highlight'><pre>  <span class="attribute">test</span>: <span class="function"><span class="params">(path)</span> -&gt;</span></pre></div></div>
             
         </li>
         
@@ -758,8 +761,8 @@ It is also called by Router#route which might pass options.</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>  handler: (pathParams, options) =&gt;
-    options = <span class="keyword">if</span> options <span class="keyword">then</span> _.clone options <span class="keyword">else</span> {}</pre></div></div>
+            <div class="content"><div class='highlight'><pre>  <span class="attribute">handler</span>: <span class="function"><span class="params">(pathParams, options)</span> =&gt;</span>
+    options = <span class="keyword">if</span> options <span class="keyword">then</span> _.extend {}, options <span class="keyword">else</span> {}</pre></div></div>
             
         </li>
         
@@ -832,7 +835,7 @@ Original options hash forwarded to allow further forwarding to backbone.</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>  extractParams: (path) -&gt;
+            <div class="content"><div class='highlight'><pre>  <span class="attribute">extractParams</span>: <span class="function"><span class="params">(path)</span> -&gt;</span>
     params = {}</pre></div></div>
             
         </li>

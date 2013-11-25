@@ -148,7 +148,7 @@
             
             <div class="content"><div class='highlight'><pre><span class="string">'use strict'</span>
 
-mediator = require <span class="string">'chaplin/mediator'</span>
+mediator = <span class="built_in">require</span> <span class="string">'chaplin/mediator'</span>
 
 helpers =</pre></div></div>
             
@@ -158,10 +158,10 @@ helpers =</pre></div></div>
         <li id="section-2">
             <div class="annotation">
               
-              <div class="pilwrap for-h2">
+              <div class="pilwrap ">
                 <a class="pilcrow" href="#section-2">&#182;</a>
               </div>
-              <h2>Routing Helpers</h2>
+              <h2 id="routing-helpers">Routing Helpers</h2>
 
             </div>
             
@@ -178,7 +178,7 @@ helpers =</pre></div></div>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>  reverse: (criteria, params, query) -&gt;
+            <div class="content"><div class='highlight'><pre>  <span class="attribute">reverse</span>: <span class="function"><span class="params">(criteria, params, query)</span> -&gt;</span>
     mediator.execute <span class="string">'router:reverse'</span>, criteria, params, query</pre></div></div>
             
         </li>
@@ -194,10 +194,10 @@ helpers =</pre></div></div>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>  redirectTo: (pathDesc, params, options) -&gt;
+            <div class="content"><div class='highlight'><pre>  <span class="attribute">redirectTo</span>: <span class="function"><span class="params">(pathDesc, params, options)</span> -&gt;</span>
     mediator.execute <span class="string">'router:route'</span>, pathDesc, params, options
 
-module.exports = helpers</pre></div></div>
+module.<span class="built_in">exports</span> = helpers</pre></div></div>
             
         </li>
         

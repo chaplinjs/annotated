@@ -148,12 +148,12 @@
             
             <div class="content"><div class='highlight'><pre><span class="string">'use strict'</span>
 
-_ = require <span class="string">'underscore'</span>
-Backbone = require <span class="string">'backbone'</span>
-mediator = require <span class="string">'chaplin/mediator'</span>
-utils = require <span class="string">'chaplin/lib/utils'</span>
-Composition = require <span class="string">'chaplin/lib/composition'</span>
-EventBroker = require <span class="string">'chaplin/lib/event_broker'</span></pre></div></div>
+_ = <span class="built_in">require</span> <span class="string">'underscore'</span>
+Backbone = <span class="built_in">require</span> <span class="string">'backbone'</span>
+mediator = <span class="built_in">require</span> <span class="string">'chaplin/mediator'</span>
+utils = <span class="built_in">require</span> <span class="string">'chaplin/lib/utils'</span>
+Composition = <span class="built_in">require</span> <span class="string">'chaplin/lib/composition'</span>
+EventBroker = <span class="built_in">require</span> <span class="string">'chaplin/lib/event_broker'</span></pre></div></div>
             
         </li>
         
@@ -161,10 +161,10 @@ EventBroker = require <span class="string">'chaplin/lib/event_broker'</span></pr
         <li id="section-2">
             <div class="annotation">
               
-              <div class="pilwrap for-h2">
+              <div class="pilwrap ">
                 <a class="pilcrow" href="#section-2">&#182;</a>
               </div>
-              <h2>Composer</h2>
+              <h2 id="composer">Composer</h2>
 
             </div>
             
@@ -186,7 +186,7 @@ composed view is disposed.</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>module.exports = <span class="class"><span class="keyword">class</span> <span class="title">Composer</span></span></pre></div></div>
+            <div class="content"><div class='highlight'><pre>module.<span class="built_in">exports</span> = <span class="class"><span class="keyword">class</span> <span class="title">Composer</span></span></pre></div></div>
             
         </li>
         
@@ -231,12 +231,12 @@ composed view is disposed.</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>  compositions: <span class="literal">null</span>
+            <div class="content"><div class='highlight'><pre>  <span class="attribute">compositions</span>: <span class="literal">null</span>
 
-  constructor: -&gt;
+  <span class="attribute">constructor</span>:<span class="function"> -&gt;</span>
     <span class="property">@initialize</span> arguments...
 
-  initialize: (options = {}) -&gt;</pre></div></div>
+  <span class="attribute">initialize</span>: <span class="function"><span class="params">(options = {})</span> -&gt;</span></pre></div></div>
             
         </li>
         
@@ -310,7 +310,7 @@ Gives complete control over the composition process.</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>  compose: (name, second, third) -&gt;</pre></div></div>
+            <div class="content"><div class='highlight'><pre>  <span class="attribute">compose</span>: <span class="function"><span class="params">(name, second, third)</span> -&gt;</span></pre></div></div>
             
         </li>
         
@@ -342,7 +342,7 @@ is an obj or the second parameter&#39;s prototype has a dispose method</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>      <span class="keyword">if</span> third <span class="keyword">or</span> second::dispose</pre></div></div>
+            <div class="content"><div class='highlight'><pre>      <span class="keyword">if</span> third <span class="keyword">or</span> <span class="attribute">second</span>::dispose</pre></div></div>
             
         </li>
         
@@ -358,9 +358,9 @@ is an obj or the second parameter&#39;s prototype has a dispose method</p>
             </div>
             
             <div class="content"><div class='highlight'><pre>        <span class="keyword">if</span> second.prototype <span class="keyword">instanceof</span> Composition
-          <span class="keyword">return</span> <span class="property">@_compose</span> name, composition: second, options: third
+          <span class="keyword">return</span> <span class="property">@_compose</span> name, <span class="attribute">composition</span>: second, <span class="attribute">options</span>: third
         <span class="keyword">else</span>
-          <span class="keyword">return</span> <span class="property">@_compose</span> name, options: third, compose: -&gt;</pre></div></div>
+          <span class="keyword">return</span> <span class="property">@_compose</span> name, <span class="attribute">options</span>: third, <span class="attribute">compose</span>:<span class="function"> -&gt;</span></pre></div></div>
             
         </li>
         
@@ -410,7 +410,7 @@ property is false</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>      <span class="keyword">return</span> <span class="property">@_compose</span> name, compose: second</pre></div></div>
+            <div class="content"><div class='highlight'><pre>      <span class="keyword">return</span> <span class="property">@_compose</span> name, <span class="attribute">compose</span>: second</pre></div></div>
             
         </li>
         
@@ -426,7 +426,7 @@ property is false</p>
             </div>
             
             <div class="content"><div class='highlight'><pre>    <span class="keyword">if</span> <span class="keyword">typeof</span> third <span class="keyword">is</span> <span class="string">'function'</span>
-      <span class="keyword">return</span> <span class="property">@_compose</span> name, compose: third, options: second</pre></div></div>
+      <span class="keyword">return</span> <span class="property">@_compose</span> name, <span class="attribute">compose</span>: third, <span class="attribute">options</span>: second</pre></div></div>
             
         </li>
         
@@ -443,7 +443,7 @@ property is false</p>
             
             <div class="content"><div class='highlight'><pre>    <span class="keyword">return</span> <span class="property">@_compose</span> name, second
 
-  _compose: (name, options) -&gt;</pre></div></div>
+  <span class="attribute">_compose</span>: <span class="function"><span class="params">(name, options)</span> -&gt;</span></pre></div></div>
             
         </li>
         
@@ -594,7 +594,7 @@ property is false</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>  retrieve: (name) -&gt;
+            <div class="content"><div class='highlight'><pre>  <span class="attribute">retrieve</span>: <span class="function"><span class="params">(name)</span> -&gt;</span>
     active = <span class="property">@compositions</span>[name]
     (<span class="keyword">if</span> active <span class="keyword">and</span> <span class="keyword">not</span> active.stale() <span class="keyword">then</span> active.item <span class="keyword">else</span> <span class="literal">undefined</span>)</pre></div></div>
             
@@ -612,7 +612,7 @@ marked stale without being re-composed.</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>  cleanup: -&gt;</pre></div></div>
+            <div class="content"><div class='highlight'><pre>  <span class="attribute">cleanup</span>:<span class="function"> -&gt;</span></pre></div></div>
             
         </li>
         
@@ -652,7 +652,7 @@ on the next controller startup unless they are re-composed).</p>
             
             <div class="content"><div class='highlight'><pre>    <span class="keyword">return</span>
 
-  dispose: -&gt;
+  <span class="attribute">dispose</span>:<span class="function"> -&gt;</span>
     <span class="keyword">return</span> <span class="keyword">if</span> <span class="property">@disposed</span></pre></div></div>
             
         </li>

@@ -148,13 +148,13 @@
             
             <div class="content"><div class='highlight'><pre><span class="string">'use strict'</span>
 
-_ = require <span class="string">'underscore'</span>
-Backbone = require <span class="string">'backbone'</span>
-mediator = require <span class="string">'chaplin/mediator'</span>
-EventBroker = require <span class="string">'chaplin/lib/event_broker'</span>
-History = require <span class="string">'chaplin/lib/history'</span>
-Route = require <span class="string">'chaplin/lib/route'</span>
-utils = require <span class="string">'chaplin/lib/utils'</span></pre></div></div>
+_ = <span class="built_in">require</span> <span class="string">'underscore'</span>
+Backbone = <span class="built_in">require</span> <span class="string">'backbone'</span>
+mediator = <span class="built_in">require</span> <span class="string">'chaplin/mediator'</span>
+EventBroker = <span class="built_in">require</span> <span class="string">'chaplin/lib/event_broker'</span>
+History = <span class="built_in">require</span> <span class="string">'chaplin/lib/history'</span>
+Route = <span class="built_in">require</span> <span class="string">'chaplin/lib/route'</span>
+utils = <span class="built_in">require</span> <span class="string">'chaplin/lib/utils'</span></pre></div></div>
             
         </li>
         
@@ -171,7 +171,7 @@ instance and registers routes on it.</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>module.exports = <span class="class"><span class="keyword">class</span> <span class="title">Router</span> # <span class="title">This</span> <span class="title">class</span> <span class="title">does</span> <span class="title">not</span> <span class="title">extend</span> <span class="title">Backbone</span>.<span class="title">Router</span>.</span></pre></div></div>
+            <div class="content"><div class='highlight'><pre>module.<span class="built_in">exports</span> = <span class="class"><span class="keyword">class</span> <span class="title">Router</span> # <span class="title">This</span> <span class="title">class</span> <span class="title">does</span> <span class="title">not</span> <span class="title">extend</span> <span class="title">Backbone</span>.<span class="title">Router</span>.</span></pre></div></div>
             
         </li>
         
@@ -203,7 +203,7 @@ instance and registers routes on it.</p>
             
             <div class="content"><div class='highlight'><pre>  _.extend <span class="property">@prototype</span>, EventBroker
 
-  constructor: (<span class="property">@options</span> = {}) -&gt;</pre></div></div>
+  <span class="attribute">constructor</span>: <span class="function"><span class="params">(<span class="property">@options</span> = {})</span> -&gt;</span></pre></div></div>
             
         </li>
         
@@ -221,8 +221,8 @@ Disable it for file:// schema.</p>
             
             <div class="content"><div class='highlight'><pre>    isWebFile = window.location.protocol <span class="keyword">isnt</span> <span class="string">'file:'</span>
     _.defaults <span class="property">@options</span>,
-      pushState: isWebFile
-      root: <span class="string">'/'</span></pre></div></div>
+      <span class="attribute">pushState</span>: isWebFile
+      <span class="attribute">root</span>: <span class="string">'/'</span></pre></div></div>
             
         </li>
         
@@ -237,25 +237,25 @@ Disable it for file:// schema.</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>    @removeRoot = new RegExp('^' + utils.escapeRegExp(@options.root) + '(#)?')
+            <div class="content"><div class='highlight'><pre>    <span class="property">@removeRoot</span> = <span class="keyword">new</span> RegExp(<span class="string">'^'</span> + utils.escapeRegExp(<span class="property">@options</span>.root) + <span class="string">'(#)?'</span>)
 
-    @subscribeEvent '!router:route', @oldEventError
-    @subscribeEvent '!router:routeByName', @oldEventError
-    @subscribeEvent '!router:changeURL', @oldURLEventError
+    <span class="property">@subscribeEvent</span> <span class="string">'!router:route'</span>, <span class="property">@oldEventError</span>
+    <span class="property">@subscribeEvent</span> <span class="string">'!router:routeByName'</span>, <span class="property">@oldEventError</span>
+    <span class="property">@subscribeEvent</span> <span class="string">'!router:changeURL'</span>, <span class="property">@oldURLEventError</span>
 
-    mediator.setHandler 'router:route', @route, this
-    mediator.setHandler 'router:reverse', @reverse, this
-    mediator.setHandler 'router:changeURL', @changeURL, this
+    mediator.setHandler <span class="string">'router:route'</span>, <span class="property">@route</span>, <span class="keyword">this</span>
+    mediator.setHandler <span class="string">'router:reverse'</span>, <span class="property">@reverse</span>, <span class="keyword">this</span>
+    mediator.setHandler <span class="string">'router:changeURL'</span>, <span class="property">@changeURL</span>, <span class="keyword">this</span>
 
-    @createHistory()
+    <span class="property">@createHistory</span>()
 
-  oldEventError: -&gt;
-    throw new Error '!router:route and !router:routeByName events were removed.
-  Use `Chaplin.helpers.redirectTo`'
+  <span class="attribute">oldEventError</span>:<span class="function"> -&gt;</span>
+    <span class="keyword">throw</span> <span class="keyword">new</span> Error <span class="string">'!router:route and !router:routeByName events were removed.
+  Use `Chaplin.helpers.redirectTo`'</span>
 
-  oldURLEventError: -&gt;
-    throw new Error '!router:changeURL event was removed.
-  Use mediator.execute("router:changeURL")'</pre></div></div>
+  <span class="attribute">oldURLEventError</span>:<span class="function"> -&gt;</span>
+    <span class="keyword">throw</span> <span class="keyword">new</span> Error <span class="string">'!router:changeURL event was removed.
+  Use mediator.execute("router:changeURL")'</span></pre></div></div>
             
         </li>
         
@@ -270,10 +270,10 @@ Disable it for file:// schema.</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>  createHistory: -&gt;
+            <div class="content"><div class='highlight'><pre>  <span class="attribute">createHistory</span>:<span class="function"> -&gt;</span>
     Backbone.history = <span class="keyword">new</span> History()
 
-  startHistory: -&gt;</pre></div></div>
+  <span class="attribute">startHistory</span>:<span class="function"> -&gt;</span></pre></div></div>
             
         </li>
         
@@ -304,7 +304,7 @@ This should be called after all routes have been registered.</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>  stopHistory: -&gt;
+            <div class="content"><div class='highlight'><pre>  <span class="attribute">stopHistory</span>:<span class="function"> -&gt;</span>
     Backbone.history.stop() <span class="keyword">if</span> Backbone.History.started</pre></div></div>
             
         </li>
@@ -316,13 +316,13 @@ This should be called after all routes have been registered.</p>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-10">&#182;</a>
               </div>
-              <p>Connect an address with a controller action.
-Creates a route on the Backbone.History instance.</p>
+              <p>Search through backbone history handlers.</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>  match: (pattern, target, options = {}) =&gt;
-    <span class="keyword">if</span> arguments.length <span class="keyword">is</span> <span class="number">2</span> <span class="keyword">and</span> <span class="keyword">typeof</span> target <span class="keyword">is</span> <span class="string">'object'</span></pre></div></div>
+            <div class="content"><div class='highlight'><pre>  <span class="attribute">findHandler</span>: <span class="function"><span class="params">(predicate)</span> -&gt;</span>
+    <span class="keyword">for</span> handler <span class="keyword">in</span> Backbone.history.handlers <span class="keyword">when</span> predicate handler
+      <span class="keyword">return</span> handler</pre></div></div>
             
         </li>
         
@@ -332,6 +332,23 @@ Creates a route on the Backbone.History instance.</p>
               
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-11">&#182;</a>
+              </div>
+              <p>Connect an address with a controller action.
+Creates a route on the Backbone.History instance.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  <span class="attribute">match</span>: <span class="function"><span class="params">(pattern, target, options = {})</span> =&gt;</span>
+    <span class="keyword">if</span> arguments.length <span class="keyword">is</span> <span class="number">2</span> <span class="keyword">and</span> <span class="keyword">typeof</span> target <span class="keyword">is</span> <span class="string">'object'</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-12">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-12">&#182;</a>
               </div>
               <p>Handles cases like <code>match &#39;url&#39;, controller: &#39;c&#39;, action: &#39;a&#39;</code>.</p>
 
@@ -347,11 +364,11 @@ Creates a route on the Backbone.History instance.</p>
         </li>
         
         
-        <li id="section-12">
+        <li id="section-13">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-12">&#182;</a>
+                <a class="pilcrow" href="#section-13">&#182;</a>
               </div>
               <p>Handles <code>match &#39;url&#39;, &#39;c#a&#39;</code>.</p>
 
@@ -365,11 +382,11 @@ Creates a route on the Backbone.History instance.</p>
         </li>
         
         
-        <li id="section-13">
+        <li id="section-14">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-13">&#182;</a>
+                <a class="pilcrow" href="#section-14">&#182;</a>
               </div>
               <p>Separate target into controller and controller action.</p>
 
@@ -380,11 +397,11 @@ Creates a route on the Backbone.History instance.</p>
         </li>
         
         
-        <li id="section-14">
+        <li id="section-15">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-14">&#182;</a>
+                <a class="pilcrow" href="#section-15">&#182;</a>
               </div>
               <p>Create the route.</p>
 
@@ -395,11 +412,11 @@ Creates a route on the Backbone.History instance.</p>
         </li>
         
         
-        <li id="section-15">
+        <li id="section-16">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-15">&#182;</a>
+                <a class="pilcrow" href="#section-16">&#182;</a>
               </div>
               <p>Register the route at the Backbone.History instance.
 Don’t use Backbone.history.route here because it calls
@@ -409,27 +426,8 @@ we’re appending the route at the end.</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>    Backbone.history.handlers.push {route, callback: route.handler}
+            <div class="content"><div class='highlight'><pre>    Backbone.history.handlers.push {route, <span class="attribute">callback</span>: route.handler}
     route</pre></div></div>
-            
-        </li>
-        
-        
-        <li id="section-16">
-            <div class="annotation">
-              
-              <div class="pilwrap ">
-                <a class="pilcrow" href="#section-16">&#182;</a>
-              </div>
-              <p>Route a given URL path manually. Returns whether a route matched.
-This looks quite like Backbone.History::loadUrl but it
-accepts an absolute URL with a leading slash (e.g. /foo)
-and passes the routing options to the callback function.</p>
-
-            </div>
-            
-            <div class="content"><div class='highlight'><pre>  route: (pathDesc, params, options) -&gt;
-    params = <span class="keyword">if</span> params <span class="keyword">then</span> _.clone(params) <span class="keyword">else</span> {}</pre></div></div>
             
         </li>
         
@@ -440,11 +438,18 @@ and passes the routing options to the callback function.</p>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-17">&#182;</a>
               </div>
-              <p>Try to extract an URL from the pathDesc if it&#39;s a hash.</p>
+              <p>Route a given URL path manually. Returns whether a route matched.
+This looks quite like Backbone.History::loadUrl but it
+accepts an absolute URL with a leading slash (e.g. /foo)
+and passes the routing options to the callback function.</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>    path = pathDesc.url <span class="keyword">if</span> <span class="keyword">typeof</span> pathDesc <span class="keyword">is</span> <span class="string">'object'</span></pre></div></div>
+            <div class="content"><div class='highlight'><pre>  <span class="attribute">route</span>: <span class="function"><span class="params">(pathDesc, params, options)</span> -&gt;</span>
+    params = <span class="keyword">if</span> params
+      <span class="keyword">if</span> utils.isArray(params) <span class="keyword">then</span> params.slice() <span class="keyword">else</span> _.extend {}, params
+    <span class="keyword">else</span>
+      {}</pre></div></div>
             
         </li>
         
@@ -454,6 +459,21 @@ and passes the routing options to the callback function.</p>
               
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-18">&#182;</a>
+              </div>
+              <p>Try to extract an URL from the pathDesc if it&#39;s a hash.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    path = pathDesc.url <span class="keyword">if</span> <span class="keyword">typeof</span> pathDesc <span class="keyword">is</span> <span class="string">'object'</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-19">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-19">&#182;</a>
               </div>
               <p>Accept path to be given via URL wrapped in object,
 or implicitly via route name, or explicitly via object.</p>
@@ -465,11 +485,11 @@ or implicitly via route name, or explicitly via object.</p>
         </li>
         
         
-        <li id="section-19">
+        <li id="section-20">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-19">&#182;</a>
+                <a class="pilcrow" href="#section-20">&#182;</a>
               </div>
               <p>Remove leading subdir and hash or slash.</p>
 
@@ -480,35 +500,17 @@ or implicitly via route name, or explicitly via object.</p>
         </li>
         
         
-        <li id="section-20">
-            <div class="annotation">
-              
-              <div class="pilwrap ">
-                <a class="pilcrow" href="#section-20">&#182;</a>
-              </div>
-              <p>Find a matching route.</p>
-
-            </div>
-            
-            <div class="content"><div class='highlight'><pre>      handler = _.find Backbone.history.handlers, (handler) -&gt; handler.route.test path</pre></div></div>
-            
-        </li>
-        
-        
         <li id="section-21">
             <div class="annotation">
               
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-21">&#182;</a>
               </div>
-              <p>Options is the second argument in this case.</p>
+              <p>Find a matching route.</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>      options = params
-      params = <span class="literal">null</span>
-    <span class="keyword">else</span>
-      options = <span class="keyword">if</span> options <span class="keyword">then</span> _.clone(options) <span class="keyword">else</span> {}</pre></div></div>
+            <div class="content"><div class='highlight'><pre>      handler = <span class="property">@findHandler</span> <span class="function"><span class="params">(handler)</span> -&gt;</span> handler.route.test path</pre></div></div>
             
         </li>
         
@@ -519,17 +521,14 @@ or implicitly via route name, or explicitly via object.</p>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-22">&#182;</a>
               </div>
-              <p>Find a route using a passed via pathDesc string route name.</p>
+              <p>Options is the second argument in this case.</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>      handler = _.find Backbone.history.handlers, (handler) -&gt;
-        <span class="keyword">if</span> handler.route.matches pathDesc
-          params = handler.route.normalizeParams(params)
-          <span class="keyword">return</span> <span class="literal">true</span> <span class="keyword">if</span> params
-        <span class="literal">false</span>
-
-    <span class="keyword">if</span> handler</pre></div></div>
+            <div class="content"><div class='highlight'><pre>      options = params
+      params = <span class="literal">null</span>
+    <span class="keyword">else</span>
+      options = <span class="keyword">if</span> options <span class="keyword">then</span> _.extend {}, options <span class="keyword">else</span> {}</pre></div></div>
             
         </li>
         
@@ -540,16 +539,17 @@ or implicitly via route name, or explicitly via object.</p>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-23">&#182;</a>
               </div>
-              <p>Update the URL programmatically after routing.</p>
+              <p>Find a route using a passed via pathDesc string route name.</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>      _.defaults options, changeURL: <span class="literal">true</span>
+            <div class="content"><div class='highlight'><pre>      handler = <span class="property">@findHandler</span> <span class="function"><span class="params">(handler)</span> -&gt;</span>
+        <span class="keyword">if</span> handler.route.matches pathDesc
+          params = handler.route.normalizeParams(params)
+          <span class="keyword">return</span> <span class="literal">true</span> <span class="keyword">if</span> params
+        <span class="literal">false</span>
 
-      handler.callback path <span class="keyword">or</span> params, options
-      <span class="literal">true</span>
-    <span class="keyword">else</span>
-      <span class="keyword">throw</span> <span class="keyword">new</span> Error <span class="string">'Router#route: request was not routed'</span></pre></div></div>
+    <span class="keyword">if</span> handler</pre></div></div>
             
         </li>
         
@@ -560,20 +560,16 @@ or implicitly via route name, or explicitly via object.</p>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-24">&#182;</a>
               </div>
-              <p>Find the URL for given criteria using the registered routes and
-provided parameters. The criteria may be just the name of a route
-or an object containing the name, controller, and/or action.
-Warning: this is usually <strong>hot</strong> code in terms of performance.
-Returns the URL string or false.</p>
+              <p>Update the URL programmatically after routing.</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>  reverse: (criteria, params, query) -&gt;
-    root = <span class="property">@options</span>.root
+            <div class="content"><div class='highlight'><pre>      _.defaults options, <span class="attribute">changeURL</span>: <span class="literal">true</span>
 
-    <span class="keyword">if</span> params? <span class="keyword">and</span> <span class="keyword">typeof</span> params <span class="keyword">isnt</span> <span class="string">'object'</span>
-      <span class="keyword">throw</span> <span class="keyword">new</span> TypeError <span class="string">'Router#reverse: params must be an array or an '</span> +
-        <span class="string">'object'</span></pre></div></div>
+      handler.callback path <span class="keyword">or</span> params, options
+      <span class="literal">true</span>
+    <span class="keyword">else</span>
+      <span class="keyword">throw</span> <span class="keyword">new</span> Error <span class="string">'Router#route: request was not routed'</span></pre></div></div>
             
         </li>
         
@@ -583,6 +579,30 @@ Returns the URL string or false.</p>
               
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-25">&#182;</a>
+              </div>
+              <p>Find the URL for given criteria using the registered routes and
+provided parameters. The criteria may be just the name of a route
+or an object containing the name, controller, and/or action.
+Warning: this is usually <strong>hot</strong> code in terms of performance.
+Returns the URL string or false.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  <span class="attribute">reverse</span>: <span class="function"><span class="params">(criteria, params, query)</span> -&gt;</span>
+    root = <span class="property">@options</span>.root
+
+    <span class="keyword">if</span> params? <span class="keyword">and</span> <span class="keyword">typeof</span> params <span class="keyword">isnt</span> <span class="string">'object'</span>
+      <span class="keyword">throw</span> <span class="keyword">new</span> TypeError <span class="string">'Router#reverse: params must be an array or an '</span> +
+        <span class="string">'object'</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-26">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-26">&#182;</a>
               </div>
               <p>First filter the route handlers to those that are of the same name.</p>
 
@@ -594,11 +614,11 @@ Returns the URL string or false.</p>
         </li>
         
         
-        <li id="section-26">
+        <li id="section-27">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-26">&#182;</a>
+                <a class="pilcrow" href="#section-27">&#182;</a>
               </div>
               <p>Attempt to reverse using the provided parameter hash.</p>
 
@@ -609,11 +629,11 @@ Returns the URL string or false.</p>
         </li>
         
         
-        <li id="section-27">
+        <li id="section-28">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-27">&#182;</a>
+                <a class="pilcrow" href="#section-28">&#182;</a>
               </div>
               <p>Return the url if we got a valid one; else we continue on.</p>
 
@@ -626,11 +646,11 @@ Returns the URL string or false.</p>
         </li>
         
         
-        <li id="section-28">
+        <li id="section-29">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-28">&#182;</a>
+                <a class="pilcrow" href="#section-29">&#182;</a>
               </div>
               <p>We didn&#39;t get anything.</p>
 
@@ -641,34 +661,18 @@ Returns the URL string or false.</p>
         </li>
         
         
-        <li id="section-29">
-            <div class="annotation">
-              
-              <div class="pilwrap ">
-                <a class="pilcrow" href="#section-29">&#182;</a>
-              </div>
-              <p>Change the current URL, add a history entry.</p>
-
-            </div>
-            
-            <div class="content"><div class='highlight'><pre>  changeURL: (url, options = {}) -&gt;
-    navigateOptions =</pre></div></div>
-            
-        </li>
-        
-        
         <li id="section-30">
             <div class="annotation">
               
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-30">&#182;</a>
               </div>
-              <p>Do not trigger or replace per default.</p>
+              <p>Change the current URL, add a history entry.</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>      trigger: options.trigger <span class="keyword">is</span> <span class="literal">true</span>
-      replace: options.replace <span class="keyword">is</span> <span class="literal">true</span></pre></div></div>
+            <div class="content"><div class='highlight'><pre>  <span class="attribute">changeURL</span>: <span class="function"><span class="params">(url, options = {})</span> -&gt;</span>
+    navigateOptions =</pre></div></div>
             
         </li>
         
@@ -679,11 +683,12 @@ Returns the URL string or false.</p>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-31">&#182;</a>
               </div>
-              <p>Navigate to the passed URL and forward options to Backbone.</p>
+              <p>Do not trigger or replace per default.</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>    Backbone.history.navigate url, navigateOptions</pre></div></div>
+            <div class="content"><div class='highlight'><pre>      <span class="attribute">trigger</span>: options.trigger <span class="keyword">is</span> <span class="literal">true</span>
+      <span class="attribute">replace</span>: options.replace <span class="keyword">is</span> <span class="literal">true</span></pre></div></div>
             
         </li>
         
@@ -691,12 +696,14 @@ Returns the URL string or false.</p>
         <li id="section-32">
             <div class="annotation">
               
-              <div class="pilwrap for-h2">
+              <div class="pilwrap ">
                 <a class="pilcrow" href="#section-32">&#182;</a>
               </div>
-              <h2>Disposal</h2>
+              <p>Navigate to the passed URL and forward options to Backbone.</p>
 
             </div>
+            
+            <div class="content"><div class='highlight'><pre>    Backbone.history.navigate url, navigateOptions</pre></div></div>
             
         </li>
         
@@ -707,13 +714,9 @@ Returns the URL string or false.</p>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-33">&#182;</a>
               </div>
-              
-            </div>
-            
-            <div class="content"><div class='highlight'><pre>  disposed: <span class="literal">false</span>
+              <h2 id="disposal">Disposal</h2>
 
-  dispose: -&gt;
-    <span class="keyword">return</span> <span class="keyword">if</span> <span class="property">@disposed</span></pre></div></div>
+            </div>
             
         </li>
         
@@ -723,6 +726,23 @@ Returns the URL string or false.</p>
               
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-34">&#182;</a>
+              </div>
+              
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  <span class="attribute">disposed</span>: <span class="literal">false</span>
+
+  <span class="attribute">dispose</span>:<span class="function"> -&gt;</span>
+    <span class="keyword">return</span> <span class="keyword">if</span> <span class="property">@disposed</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-35">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-35">&#182;</a>
               </div>
               <p>Stop Backbone.History instance and remove it.</p>
 
@@ -738,11 +758,11 @@ Returns the URL string or false.</p>
         </li>
         
         
-        <li id="section-35">
+        <li id="section-36">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-35">&#182;</a>
+                <a class="pilcrow" href="#section-36">&#182;</a>
               </div>
               <p>Finished.</p>
 
@@ -753,11 +773,11 @@ Returns the URL string or false.</p>
         </li>
         
         
-        <li id="section-36">
+        <li id="section-37">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-36">&#182;</a>
+                <a class="pilcrow" href="#section-37">&#182;</a>
               </div>
               <p>You’re frozen when your heart’s not open.</p>
 

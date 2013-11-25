@@ -1,0 +1,452 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+  <title>history.coffee</title>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <meta name="viewport" content="width=device-width, target-densitydpi=160dpi, initial-scale=1.0; maximum-scale=1.0; user-scalable=0;">
+  <link rel="stylesheet" media="all" href="docco.css" />
+</head>
+<body>
+  <div id="container">
+    <div id="background"></div>
+    
+      <ul id="jump_to">
+        <li>
+          <a class="large" href="javascript:void(0);">Jump To &hellip;</a>
+          <a class="small" href="javascript:void(0);">+</a>
+          <div id="jump_wrapper">
+          <div id="jump_page">
+            
+              
+              <a class="source" href="chaplin.html">
+                chaplin.coffee
+              </a>
+            
+              
+              <a class="source" href="application.html">
+                application.coffee
+              </a>
+            
+              
+              <a class="source" href="composer.html">
+                composer.coffee
+              </a>
+            
+              
+              <a class="source" href="controller.html">
+                controller.coffee
+              </a>
+            
+              
+              <a class="source" href="dispatcher.html">
+                dispatcher.coffee
+              </a>
+            
+              
+              <a class="source" href="composition.html">
+                composition.coffee
+              </a>
+            
+              
+              <a class="source" href="delayer.html">
+                delayer.coffee
+              </a>
+            
+              
+              <a class="source" href="event_broker.html">
+                event_broker.coffee
+              </a>
+            
+              
+              <a class="source" href="helpers.html">
+                helpers.coffee
+              </a>
+            
+              
+              <a class="source" href="history.html">
+                history.coffee
+              </a>
+            
+              
+              <a class="source" href="route.html">
+                route.coffee
+              </a>
+            
+              
+              <a class="source" href="router.html">
+                router.coffee
+              </a>
+            
+              
+              <a class="source" href="support.html">
+                support.coffee
+              </a>
+            
+              
+              <a class="source" href="sync_machine.html">
+                sync_machine.coffee
+              </a>
+            
+              
+              <a class="source" href="utils.html">
+                utils.coffee
+              </a>
+            
+              
+              <a class="source" href="mediator.html">
+                mediator.coffee
+              </a>
+            
+              
+              <a class="source" href="collection.html">
+                collection.coffee
+              </a>
+            
+              
+              <a class="source" href="model.html">
+                model.coffee
+              </a>
+            
+              
+              <a class="source" href="collection_view.html">
+                collection_view.coffee
+              </a>
+            
+              
+              <a class="source" href="layout.html">
+                layout.coffee
+              </a>
+            
+              
+              <a class="source" href="view.html">
+                view.coffee
+              </a>
+            
+          </div>
+        </li>
+      </ul>
+    
+    <ul class="sections">
+        
+          <li id="title">
+              <div class="annotation">
+                  <h1>history.coffee</h1>
+              </div>
+          </li>
+        
+        
+        
+        <li id="section-1">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-1">&#182;</a>
+              </div>
+              
+            </div>
+            
+            <div class="content"><div class='highlight'><pre><span class="string">'use strict'</span>
+
+_ = <span class="built_in">require</span> <span class="string">'underscore'</span>
+Backbone = <span class="built_in">require</span> <span class="string">'backbone'</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-2">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-2">&#182;</a>
+              </div>
+              <p>Cached regex for stripping a leading hash/slash and trailing space.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>routeStripper = <span class="regexp">/^[#\/]|\s+$/g</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-3">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-3">&#182;</a>
+              </div>
+              <p>Cached regex for stripping leading and trailing slashes.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>rootStripper = <span class="regexp">/^\/+|\/+$/g</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-4">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-4">&#182;</a>
+              </div>
+              <p>Cached regex for detecting MSIE.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>isExplorer = <span class="regexp">/msie [\w.]+/</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-5">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-5">&#182;</a>
+              </div>
+              <p>Cached regex for removing a trailing slash.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>trailingSlash = <span class="regexp">/\/</span>$/</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-6">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-6">&#182;</a>
+              </div>
+              <p>Patched Backbone.History with a basic query strings support</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre><span class="class"><span class="keyword">class</span> <span class="title">History</span> <span class="keyword">extends</span> <span class="title">Backbone</span>.<span class="title">History</span></span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-7">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-7">&#182;</a>
+              </div>
+              <p>Get the cross-browser normalized URL fragment, either from the URL,
+the hash, or the override.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  <span class="attribute">getFragment</span>: <span class="function"><span class="params">(fragment, forcePushState)</span> -&gt;</span>
+    <span class="keyword">if</span> <span class="keyword">not</span> fragment?
+      <span class="keyword">if</span> <span class="property">@_hasPushState</span> <span class="keyword">or</span> <span class="keyword">not</span> <span class="property">@_wantsHashChange</span> <span class="keyword">or</span> forcePushState</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-8">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-8">&#182;</a>
+              </div>
+              <p>CHANGED: Make fragment include query string.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>        fragment = <span class="property">@location</span>.pathname + <span class="property">@location</span>.search
+        root = <span class="property">@root</span>.replace trailingSlash, <span class="string">''</span>
+        fragment = fragment.substr root.length <span class="keyword">unless</span> fragment.indexOf root
+      <span class="keyword">else</span>
+        fragment = <span class="property">@getHash</span>()
+
+    fragment.replace routeStripper, <span class="string">''</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-9">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-9">&#182;</a>
+              </div>
+              <p>Start the hash change handling, returning <code>true</code> if the current URL matches
+an existing route, and <code>false</code> otherwise.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  <span class="attribute">start</span>: <span class="function"><span class="params">(options)</span> -&gt;</span>
+    <span class="keyword">throw</span> <span class="keyword">new</span> Error <span class="string">'Backbone.history has already been started'</span> <span class="keyword">if</span> Backbone.History.started
+    Backbone.History.started = <span class="literal">true</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-10">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-10">&#182;</a>
+              </div>
+              <p>Figure out the initial configuration. Do we need an iframe?
+Is pushState desired ... is it available?</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    <span class="property">@options</span>          = _.extend {}, {<span class="attribute">root</span>: <span class="string">'/'</span>}, <span class="property">@options</span>, options
+    <span class="property">@root</span>             = <span class="property">@options</span>.root
+    <span class="property">@_wantsHashChange</span> = <span class="property">@options</span>.hashChange <span class="keyword">isnt</span> <span class="literal">false</span>
+    <span class="property">@_wantsPushState</span>  = Boolean <span class="property">@options</span>.pushState
+    <span class="property">@_hasPushState</span>    = Boolean (<span class="property">@options</span>.pushState <span class="keyword">and</span> <span class="property">@history</span> <span class="keyword">and</span> <span class="property">@history</span>.pushState)
+    fragment          = <span class="property">@getFragment</span>()</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-11">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-11">&#182;</a>
+              </div>
+              <p>Normalize root to always include a leading and trailing slash.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    <span class="property">@root</span> = (<span class="string">'/'</span> + <span class="property">@root</span> + <span class="string">'/'</span>).replace rootStripper, <span class="string">'/'</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-12">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-12">&#182;</a>
+              </div>
+              <p>Depending on whether we&#39;re using pushState or hashes, and whether
+&#39;onhashchange&#39; is supported, determine how we check the URL state.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    <span class="keyword">if</span> (<span class="property">@_hasPushState</span>)
+      Backbone.$(<span class="built_in">window</span>).<span class="literal">on</span> <span class="string">'popstate'</span>, <span class="property">@checkUrl</span>
+    <span class="keyword">else</span> <span class="keyword">if</span> <span class="property">@_wantsHashChange</span> <span class="keyword">and</span> <span class="string">'onhashchange'</span> <span class="keyword">of</span> <span class="built_in">window</span>
+      Backbone.$(<span class="built_in">window</span>).<span class="literal">on</span> <span class="string">'hashchange'</span>, <span class="property">@checkUrl</span>
+    <span class="keyword">else</span> <span class="keyword">if</span> <span class="property">@_wantsHashChange</span>
+      <span class="property">@_checkUrlInterval</span> = setInterval <span class="property">@checkUrl</span>, <span class="property">@interval</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-13">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-13">&#182;</a>
+              </div>
+              <p>Determine if we need to change the base url, for a pushState link
+opened by a non-pushState browser.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    <span class="property">@fragment</span> = fragment
+    loc = <span class="property">@location</span>
+    atRoot = loc.pathname.replace(<span class="regexp">/[^\/]$/</span>, <span class="string">'$&amp;/'</span>) <span class="keyword">is</span> <span class="property">@root</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-14">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-14">&#182;</a>
+              </div>
+              <p>If we&#39;ve started off with a route from a <code>pushState</code>-enabled browser,
+but we&#39;re currently in a browser that doesn&#39;t support it...</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    <span class="keyword">if</span> <span class="property">@_wantsHashChange</span> <span class="keyword">and</span> <span class="property">@_wantsPushState</span> <span class="keyword">and</span> <span class="keyword">not</span> <span class="property">@_hasPushState</span> <span class="keyword">and</span> <span class="keyword">not</span> atRoot</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-15">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-15">&#182;</a>
+              </div>
+              <p>CHANGED: Prevent query string from being added before hash.
+So, it will appear only after #, as it has been already included
+into @fragment</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>      <span class="property">@fragment</span> = <span class="property">@getFragment</span> <span class="literal">null</span>, <span class="literal">true</span>
+      <span class="property">@location</span>.replace <span class="property">@root</span> + <span class="string">'#'</span> + <span class="property">@fragment</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-16">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-16">&#182;</a>
+              </div>
+              <p>Return immediately as browser will do redirect to new url</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>      <span class="keyword">return</span> <span class="literal">true</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-17">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-17">&#182;</a>
+              </div>
+              <p>Or if we&#39;ve started out with a hash-based route, but we&#39;re currently
+in a browser where it could be <code>pushState</code>-based instead...</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    <span class="keyword">else</span> <span class="keyword">if</span> <span class="property">@_wantsPushState</span> <span class="keyword">and</span> <span class="property">@_hasPushState</span> <span class="keyword">and</span> atRoot <span class="keyword">and</span> loc.hash
+      <span class="property">@fragment</span> = <span class="property">@getHash</span>().replace routeStripper, <span class="string">''</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-18">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-18">&#182;</a>
+              </div>
+              <p>CHANGED: It&#39;s no longer needed to add loc.search at the end,
+as query params have been already included into @fragment</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>      <span class="property">@history</span>.replaceState {}, document.title, <span class="property">@root</span> + <span class="property">@fragment</span>
+
+    <span class="property">@loadUrl</span>() <span class="keyword">if</span> <span class="keyword">not</span> <span class="property">@options</span>.silent
+
+module.<span class="built_in">exports</span> = <span class="keyword">if</span> Backbone.$ <span class="keyword">then</span> History <span class="keyword">else</span> Backbone.History</pre></div></div>
+            
+        </li>
+        
+    </ul>
+  </div>
+</body>
+</html>

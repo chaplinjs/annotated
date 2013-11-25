@@ -148,9 +148,10 @@
             
             <div class="content"><div class='highlight'><pre><span class="string">'use strict'</span>
 
-_ = require <span class="string">'underscore'</span>
-Backbone = require <span class="string">'backbone'</span>
-View = require <span class="string">'chaplin/views/view'</span></pre></div></div>
+_ = <span class="built_in">require</span> <span class="string">'underscore'</span>
+Backbone = <span class="built_in">require</span> <span class="string">'backbone'</span>
+View = <span class="built_in">require</span> <span class="string">'chaplin/views/view'</span>
+utils = <span class="built_in">require</span> <span class="string">'chaplin/lib/utils'</span></pre></div></div>
             
         </li>
         
@@ -165,7 +166,55 @@ View = require <span class="string">'chaplin/views/view'</span></pre></div></div
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>$ = Backbone.$</pre></div></div>
+            <div class="content"><div class='highlight'><pre>$ = Backbone.$
+
+<span class="function"><span class="title">filterChildren</span> = <span class="params">(nodeList, selector)</span> -&gt;</span>
+  <span class="keyword">return</span> nodeList <span class="keyword">unless</span> selector
+  <span class="keyword">for</span> node <span class="keyword">in</span> nodeList <span class="keyword">when</span> Backbone.utils.matchesSelector node, selector
+    node
+
+toggleElement = <span class="keyword">do</span><span class="function"> -&gt;</span>
+  <span class="keyword">if</span> $
+    <span class="function"><span class="params">(elem, visible)</span> -&gt;</span> elem.toggle visible
+  <span class="keyword">else</span>
+    <span class="function"><span class="params">(elem, visible)</span> -&gt;</span>
+      elem.style.display = (<span class="keyword">if</span> visible <span class="keyword">then</span> <span class="string">''</span> <span class="keyword">else</span> <span class="string">'none'</span>)
+
+addClass = <span class="keyword">do</span><span class="function"> -&gt;</span>
+  <span class="keyword">if</span> $
+    <span class="function"><span class="params">(elem, cls)</span> -&gt;</span> elem.addClass cls
+  <span class="keyword">else</span>
+    <span class="function"><span class="params">(elem, cls)</span> -&gt;</span> elem.classList.add cls
+
+startAnimation = <span class="keyword">do</span><span class="function"> -&gt;</span>
+  <span class="keyword">if</span> $
+    <span class="function"><span class="params">(elem, useCssAnimation, cls)</span> -&gt;</span>
+      <span class="keyword">if</span> useCssAnimation
+        addClass elem, cls
+      <span class="keyword">else</span>
+        elem.css <span class="string">'opacity'</span>, <span class="number">0</span>
+  <span class="keyword">else</span>
+    <span class="function"><span class="params">(elem, useCssAnimation, cls)</span> -&gt;</span>
+      <span class="keyword">if</span> useCssAnimation
+        addClass elem, cls
+      <span class="keyword">else</span>
+        elem.style.opacity = <span class="number">0</span>
+
+endAnimation = <span class="keyword">do</span><span class="function"> -&gt;</span>
+  <span class="keyword">if</span> $
+    <span class="function"><span class="params">(elem, duration)</span> -&gt;</span> elem.animate {<span class="attribute">opacity</span>: <span class="number">1</span>}, duration
+  <span class="keyword">else</span>
+    <span class="function"><span class="params">(elem, duration)</span> -&gt;</span>
+      elem.style.transition = <span class="string">"opacity <span class="subst">#{(duration / <span class="number">1000</span>)}</span>s"</span>
+      elem.opacity = <span class="number">1</span>
+
+insertView = <span class="keyword">do</span><span class="function"> -&gt;</span>
+  <span class="keyword">if</span> $
+    <span class="function"><span class="params">(list, viewEl, position, length, itemSelector)</span> -&gt;</span>
+      insertInMiddle = (<span class="number">0</span> &lt; position &lt; length)
+      <span class="function"><span class="title">isEnd</span> = <span class="params">(length)</span> -&gt;</span> length <span class="keyword">is</span> <span class="number">0</span> <span class="keyword">or</span> position <span class="keyword">is</span> length
+
+      <span class="keyword">if</span> insertInMiddle <span class="keyword">or</span> itemSelector</pre></div></div>
             
         </li>
         
@@ -176,14 +225,12 @@ View = require <span class="string">'chaplin/views/view'</span></pre></div></div
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-3">&#182;</a>
               </div>
-              <p>General class for rendering Collections.
-Derive this class and declare at least <code>itemView</code> or override
-<code>initItemView</code>. <code>initItemView</code> gets an item model and should instantiate
-and return a corresponding item view.</p>
+              <p>Get the children which originate from item views.</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>module.exports = <span class="class"><span class="keyword">class</span> <span class="title">CollectionView</span> <span class="keyword">extends</span> <span class="title">View</span></span></pre></div></div>
+            <div class="content"><div class='highlight'><pre>        children = list.children itemSelector
+        childrenLength = children.length</pre></div></div>
             
         </li>
         
@@ -191,12 +238,15 @@ and return a corresponding item view.</p>
         <li id="section-4">
             <div class="annotation">
               
-              <div class="pilwrap for-h1">
+              <div class="pilwrap ">
                 <a class="pilcrow" href="#section-4">&#182;</a>
               </div>
-              <h1>Configuration options</h1>
+              <p>Check if it needs to be inserted.</p>
 
             </div>
+            
+            <div class="content"><div class='highlight'><pre>        <span class="keyword">unless</span> children[position] <span class="keyword">is</span> viewEl
+          <span class="keyword">if</span> isEnd childrenLength</pre></div></div>
             
         </li>
         
@@ -207,13 +257,12 @@ and return a corresponding item view.</p>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-5">&#182;</a>
               </div>
-              <p>These options may be overwritten in derived classes.</p>
-<p>A class of item in collection.
-This property has to be overridden by a derived class.</p>
+              <p>Insert at the end.</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>  itemView: <span class="literal">null</span></pre></div></div>
+            <div class="content"><div class='highlight'><pre>            list.append viewEl
+          <span class="keyword">else</span></pre></div></div>
             
         </li>
         
@@ -221,12 +270,26 @@ This property has to be overridden by a derived class.</p>
         <li id="section-6">
             <div class="annotation">
               
-              <div class="pilwrap for-h2">
+              <div class="pilwrap ">
                 <a class="pilcrow" href="#section-6">&#182;</a>
               </div>
-              <h2>Automatic rendering</h2>
+              <p>Insert at the right position.</p>
 
             </div>
+            
+            <div class="content"><div class='highlight'><pre>            <span class="keyword">if</span> position <span class="keyword">is</span> <span class="number">0</span>
+              children.eq(position).before viewEl
+            <span class="keyword">else</span>
+              children.eq(position - <span class="number">1</span>).after viewEl
+      <span class="keyword">else</span>
+        method = <span class="keyword">if</span> isEnd length <span class="keyword">then</span> <span class="string">'append'</span> <span class="keyword">else</span> <span class="string">'prepend'</span>
+        list[method] viewEl
+  <span class="keyword">else</span>
+    <span class="function"><span class="params">(list, viewEl, position, length, itemSelector)</span> -&gt;</span>
+      insertInMiddle = (<span class="number">0</span> &lt; position &lt; length)
+      <span class="function"><span class="title">isEnd</span> = <span class="params">(length)</span> -&gt;</span> length <span class="keyword">is</span> <span class="number">0</span> <span class="keyword">or</span> position <span class="keyword">is</span> length
+
+      <span class="keyword">if</span> insertInMiddle <span class="keyword">or</span> itemSelector</pre></div></div>
             
         </li>
         
@@ -237,12 +300,12 @@ This property has to be overridden by a derived class.</p>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-7">&#182;</a>
               </div>
-              <p>Per default, render the view itself and all items on creation.</p>
+              <p>Get the children which originate from item views.</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>  autoRender: <span class="literal">true</span>
-  renderItems: <span class="literal">true</span></pre></div></div>
+            <div class="content"><div class='highlight'><pre>        children = filterChildren list.children, itemSelector
+        childrenLength = children.length</pre></div></div>
             
         </li>
         
@@ -250,12 +313,15 @@ This property has to be overridden by a derived class.</p>
         <li id="section-8">
             <div class="annotation">
               
-              <div class="pilwrap for-h2">
+              <div class="pilwrap ">
                 <a class="pilcrow" href="#section-8">&#182;</a>
               </div>
-              <h2>Animation</h2>
+              <p>Check if it needs to be inserted.</p>
 
             </div>
+            
+            <div class="content"><div class='highlight'><pre>        <span class="keyword">unless</span> children[position] <span class="keyword">is</span> viewEl
+          <span class="keyword">if</span> isEnd childrenLength</pre></div></div>
             
         </li>
         
@@ -266,12 +332,12 @@ This property has to be overridden by a derived class.</p>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-9">&#182;</a>
               </div>
-              <p>When new items are added, their views are faded in.
-Animation duration in milliseconds (set to 0 to disable fade in)</p>
+              <p>Insert at the end.</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>  animationDuration: <span class="number">500</span></pre></div></div>
+            <div class="content"><div class='highlight'><pre>            list.appendChild viewEl
+          <span class="keyword">else</span> <span class="keyword">if</span> position <span class="keyword">is</span> <span class="number">0</span></pre></div></div>
             
         </li>
         
@@ -282,13 +348,21 @@ Animation duration in milliseconds (set to 0 to disable fade in)</p>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-10">&#182;</a>
               </div>
-              <p>By default, fading in is done by javascript function which can be
-slow on mobile devices. CSS animations are faster,
-but require user’s manual definitions.</p>
+              <p>Insert at the right position.</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>  useCssAnimation: <span class="literal">false</span></pre></div></div>
+            <div class="content"><div class='highlight'><pre>            list.insertBefore viewEl, children[position]
+          <span class="keyword">else</span>
+            last = children[position - <span class="number">1</span>]
+            <span class="keyword">if</span> list.lastChild <span class="keyword">is</span> last
+              list.appendChild viewEl
+            <span class="keyword">else</span>
+              list.insertBefore viewEl, last.nextElementSibling
+      <span class="keyword">else</span> <span class="keyword">if</span> isEnd length
+        list.appendChild viewEl
+      <span class="keyword">else</span>
+        list.insertBefore viewEl, list.firstChild</pre></div></div>
             
         </li>
         
@@ -299,12 +373,14 @@ but require user’s manual definitions.</p>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-11">&#182;</a>
               </div>
-              <p>CSS classes that will be used when hiding / showing child views.</p>
+              <p>General class for rendering Collections.
+Derive this class and declare at least <code>itemView</code> or override
+<code>initItemView</code>. <code>initItemView</code> gets an item model and should instantiate
+and return a corresponding item view.</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>  animationStartClass: <span class="string">'animated-item-view'</span>
-  animationEndClass: <span class="string">'animated-item-view-end'</span></pre></div></div>
+            <div class="content"><div class='highlight'><pre>module.<span class="built_in">exports</span> = <span class="class"><span class="keyword">class</span> <span class="title">CollectionView</span> <span class="keyword">extends</span> <span class="title">View</span></span></pre></div></div>
             
         </li>
         
@@ -312,10 +388,10 @@ but require user’s manual definitions.</p>
         <li id="section-12">
             <div class="annotation">
               
-              <div class="pilwrap for-h2">
+              <div class="pilwrap ">
                 <a class="pilcrow" href="#section-12">&#182;</a>
               </div>
-              <h2>Selectors and elements</h2>
+              <h1 id="configuration-options">Configuration options</h1>
 
             </div>
             
@@ -328,13 +404,13 @@ but require user’s manual definitions.</p>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-13">&#182;</a>
               </div>
-              <p>A collection view may have a template and use one of its child elements
-as the container of the item views. If you specify <code>listSelector</code>, the
-item views will be appended to this element. If empty, $el is used.</p>
+              <p>These options may be overwritten in derived classes.</p>
+<p>A class of item in collection.
+This property has to be overridden by a derived class.</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>  listSelector: <span class="literal">null</span></pre></div></div>
+            <div class="content"><div class='highlight'><pre>  <span class="attribute">itemView</span>: <span class="literal">null</span></pre></div></div>
             
         </li>
         
@@ -345,11 +421,9 @@ item views will be appended to this element. If empty, $el is used.</p>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-14">&#182;</a>
               </div>
-              <p>The actual element which is fetched using <code>listSelector</code></p>
+              <h2 id="automatic-rendering">Automatic rendering</h2>
 
             </div>
-            
-            <div class="content"><div class='highlight'><pre>  $list: <span class="literal">null</span></pre></div></div>
             
         </li>
         
@@ -360,11 +434,12 @@ item views will be appended to this element. If empty, $el is used.</p>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-15">&#182;</a>
               </div>
-              <p>Selector for a fallback element which is shown if the collection is empty.</p>
+              <p>Per default, render the view itself and all items on creation.</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>  fallbackSelector: <span class="literal">null</span></pre></div></div>
+            <div class="content"><div class='highlight'><pre>  <span class="attribute">autoRender</span>: <span class="literal">true</span>
+  <span class="attribute">renderItems</span>: <span class="literal">true</span></pre></div></div>
             
         </li>
         
@@ -375,11 +450,9 @@ item views will be appended to this element. If empty, $el is used.</p>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-16">&#182;</a>
               </div>
-              <p>The actual element which is fetched using <code>fallbackSelector</code></p>
+              <h2 id="animation">Animation</h2>
 
             </div>
-            
-            <div class="content"><div class='highlight'><pre>  $fallback: <span class="literal">null</span></pre></div></div>
             
         </li>
         
@@ -390,12 +463,12 @@ item views will be appended to this element. If empty, $el is used.</p>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-17">&#182;</a>
               </div>
-              <p>Selector for a loading indicator element which is shown
-while the collection is syncing.</p>
+              <p>When new items are added, their views are faded in.
+Animation duration in milliseconds (set to 0 to disable fade in)</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>  loadingSelector: <span class="literal">null</span></pre></div></div>
+            <div class="content"><div class='highlight'><pre>  <span class="attribute">animationDuration</span>: <span class="number">500</span></pre></div></div>
             
         </li>
         
@@ -406,11 +479,13 @@ while the collection is syncing.</p>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-18">&#182;</a>
               </div>
-              <p>The actual element which is fetched using <code>loadingSelector</code></p>
+              <p>By default, fading in is done by javascript function which can be
+slow on mobile devices. CSS animations are faster,
+but require user’s manual definitions.</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>  $loading: <span class="literal">null</span></pre></div></div>
+            <div class="content"><div class='highlight'><pre>  <span class="attribute">useCssAnimation</span>: <span class="literal">false</span></pre></div></div>
             
         </li>
         
@@ -421,13 +496,12 @@ while the collection is syncing.</p>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-19">&#182;</a>
               </div>
-              <p>Selector which identifies child elements belonging to collection
-If empty, all children of $list are considered.
-Not null, because of Zepto bug <a href="https://github.com/madrobby/zepto/pull/768">https://github.com/madrobby/zepto/pull/768</a>.</p>
+              <p>CSS classes that will be used when hiding / showing child views.</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>  itemSelector: <span class="literal">undefined</span></pre></div></div>
+            <div class="content"><div class='highlight'><pre>  <span class="attribute">animationStartClass</span>: <span class="string">'animated-item-view'</span>
+  <span class="attribute">animationEndClass</span>: <span class="string">'animated-item-view-end'</span></pre></div></div>
             
         </li>
         
@@ -435,10 +509,10 @@ Not null, because of Zepto bug <a href="https://github.com/madrobby/zepto/pull/7
         <li id="section-20">
             <div class="annotation">
               
-              <div class="pilwrap for-h2">
+              <div class="pilwrap ">
                 <a class="pilcrow" href="#section-20">&#182;</a>
               </div>
-              <h2>Filtering</h2>
+              <h2 id="selectors-and-elements">Selectors and elements</h2>
 
             </div>
             
@@ -451,11 +525,13 @@ Not null, because of Zepto bug <a href="https://github.com/madrobby/zepto/pull/7
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-21">&#182;</a>
               </div>
-              <p>The filter function, if any.</p>
+              <p>A collection view may have a template and use one of its child elements
+as the container of the item views. If you specify <code>listSelector</code>, the
+item views will be appended to this element. If empty, $el is used.</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>  filterer: <span class="literal">null</span></pre></div></div>
+            <div class="content"><div class='highlight'><pre>  <span class="attribute">listSelector</span>: <span class="literal">null</span></pre></div></div>
             
         </li>
         
@@ -466,13 +542,11 @@ Not null, because of Zepto bug <a href="https://github.com/madrobby/zepto/pull/7
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-22">&#182;</a>
               </div>
-              <p>A function that will be executed after each filter.
-Hides excluded items by default.</p>
+              <p>The actual element which is fetched using <code>listSelector</code></p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>  filterCallback: (view, included) -&gt;
-    view.$el.stop(<span class="literal">true</span>, <span class="literal">true</span>).toggle included</pre></div></div>
+            <div class="content"><div class='highlight'><pre>  <span class="attribute">$list</span>: <span class="literal">null</span></pre></div></div>
             
         </li>
         
@@ -480,12 +554,14 @@ Hides excluded items by default.</p>
         <li id="section-23">
             <div class="annotation">
               
-              <div class="pilwrap for-h2">
+              <div class="pilwrap ">
                 <a class="pilcrow" href="#section-23">&#182;</a>
               </div>
-              <h2>View lists</h2>
+              <p>Selector for a fallback element which is shown if the collection is empty.</p>
 
             </div>
+            
+            <div class="content"><div class='highlight'><pre>  <span class="attribute">fallbackSelector</span>: <span class="literal">null</span></pre></div></div>
             
         </li>
         
@@ -496,11 +572,11 @@ Hides excluded items by default.</p>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-24">&#182;</a>
               </div>
-              <p>Track a list of the visible views.</p>
+              <p>The actual element which is fetched using <code>fallbackSelector</code></p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>  visibleItems: <span class="literal">null</span></pre></div></div>
+            <div class="content"><div class='highlight'><pre>  <span class="attribute">$fallback</span>: <span class="literal">null</span></pre></div></div>
             
         </li>
         
@@ -508,12 +584,15 @@ Hides excluded items by default.</p>
         <li id="section-25">
             <div class="annotation">
               
-              <div class="pilwrap for-h2">
+              <div class="pilwrap ">
                 <a class="pilcrow" href="#section-25">&#182;</a>
               </div>
-              <h2>Constructor</h2>
+              <p>Selector for a loading indicator element which is shown
+while the collection is syncing.</p>
 
             </div>
+            
+            <div class="content"><div class='highlight'><pre>  <span class="attribute">loadingSelector</span>: <span class="literal">null</span></pre></div></div>
             
         </li>
         
@@ -524,12 +603,11 @@ Hides excluded items by default.</p>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-26">&#182;</a>
               </div>
-              
+              <p>The actual element which is fetched using <code>loadingSelector</code></p>
+
             </div>
             
-            <div class="content"><div class='highlight'><pre>  optionNames: View::optionNames.concat [<span class="string">'renderItems'</span>, <span class="string">'itemView'</span>]
-
-  constructor: (options) -&gt;</pre></div></div>
+            <div class="content"><div class='highlight'><pre>  <span class="attribute">$loading</span>: <span class="literal">null</span></pre></div></div>
             
         </li>
         
@@ -540,13 +618,13 @@ Hides excluded items by default.</p>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-27">&#182;</a>
               </div>
-              <p>Initialize list for visible items.</p>
+              <p>Selector which identifies child elements belonging to collection
+If empty, all children of $list are considered.
+Not null, because of Zepto bug <a href="https://github.com/madrobby/zepto/pull/768">https://github.com/madrobby/zepto/pull/768</a>.</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>    <span class="property">@visibleItems</span> = []
-
-    <span class="keyword">super</span></pre></div></div>
+            <div class="content"><div class='highlight'><pre>  <span class="attribute">itemSelector</span>: <span class="literal">undefined</span></pre></div></div>
             
         </li>
         
@@ -554,10 +632,10 @@ Hides excluded items by default.</p>
         <li id="section-28">
             <div class="annotation">
               
-              <div class="pilwrap for-h2">
+              <div class="pilwrap ">
                 <a class="pilcrow" href="#section-28">&#182;</a>
               </div>
-              <h2>Initialization</h2>
+              <h2 id="filtering">Filtering</h2>
 
             </div>
             
@@ -570,10 +648,11 @@ Hides excluded items by default.</p>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-29">&#182;</a>
               </div>
-              
+              <p>The filter function, if any.</p>
+
             </div>
             
-            <div class="content"><div class='highlight'><pre>  initialize: (options = {}) -&gt;</pre></div></div>
+            <div class="content"><div class='highlight'><pre>  <span class="attribute">filterer</span>: <span class="literal">null</span></pre></div></div>
             
         </li>
         
@@ -584,12 +663,14 @@ Hides excluded items by default.</p>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-30">&#182;</a>
               </div>
-              <p>Don&#39;t call super; the base view&#39;s initialize is a no-op.</p>
-<p>Start observing the collection.</p>
+              <p>A function that will be executed after each filter.
+Hides excluded items by default.</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>    <span class="property">@addCollectionListeners</span>()</pre></div></div>
+            <div class="content"><div class='highlight'><pre>  <span class="attribute">filterCallback</span>: <span class="function"><span class="params">(view, included)</span> -&gt;</span>
+    view.$el.stop(<span class="literal">true</span>, <span class="literal">true</span>) <span class="keyword">if</span> $
+    toggleElement (<span class="keyword">if</span> $ <span class="keyword">then</span> view.$el <span class="keyword">else</span> view.el), included</pre></div></div>
             
         </li>
         
@@ -600,11 +681,9 @@ Hides excluded items by default.</p>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-31">&#182;</a>
               </div>
-              <p>Apply a filter if one provided.</p>
+              <h2 id="view-lists">View lists</h2>
 
             </div>
-            
-            <div class="content"><div class='highlight'><pre>    <span class="property">@filter</span> options.filterer <span class="keyword">if</span> options.filterer?</pre></div></div>
             
         </li>
         
@@ -615,14 +694,11 @@ Hides excluded items by default.</p>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-32">&#182;</a>
               </div>
-              <p>Binding of collection listeners.</p>
+              <p>Track a list of the visible views.</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>  addCollectionListeners: -&gt;
-    <span class="property">@listenTo</span> <span class="property">@collection</span>, <span class="string">'add'</span>, <span class="property">@itemAdded</span>
-    <span class="property">@listenTo</span> <span class="property">@collection</span>, <span class="string">'remove'</span>, <span class="property">@itemRemoved</span>
-    <span class="property">@listenTo</span> <span class="property">@collection</span>, <span class="string">'reset sort'</span>, <span class="property">@itemsReset</span></pre></div></div>
+            <div class="content"><div class='highlight'><pre>  <span class="attribute">visibleItems</span>: <span class="literal">null</span></pre></div></div>
             
         </li>
         
@@ -630,10 +706,10 @@ Hides excluded items by default.</p>
         <li id="section-33">
             <div class="annotation">
               
-              <div class="pilwrap for-h2">
+              <div class="pilwrap ">
                 <a class="pilcrow" href="#section-33">&#182;</a>
               </div>
-              <h2>Rendering</h2>
+              <h2 id="constructor">Constructor</h2>
 
             </div>
             
@@ -646,12 +722,12 @@ Hides excluded items by default.</p>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-34">&#182;</a>
               </div>
-              <p>Override View#getTemplateData, don’t serialize collection items here.</p>
-
+              
             </div>
             
-            <div class="content"><div class='highlight'><pre>  getTemplateData: -&gt;
-    templateData = {length: <span class="property">@collection</span>.length}</pre></div></div>
+            <div class="content"><div class='highlight'><pre>  <span class="attribute">optionNames</span>: <span class="attribute">View</span>::optionNames.concat [<span class="string">'renderItems'</span>, <span class="string">'itemView'</span>]
+
+  <span class="attribute">constructor</span>: <span class="function"><span class="params">(options)</span> -&gt;</span></pre></div></div>
             
         </li>
         
@@ -661,6 +737,128 @@ Hides excluded items by default.</p>
               
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-35">&#182;</a>
+              </div>
+              <p>Initialize list for visible items.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    <span class="property">@visibleItems</span> = []
+
+    <span class="keyword">super</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-36">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-36">&#182;</a>
+              </div>
+              <h2 id="initialization">Initialization</h2>
+
+            </div>
+            
+        </li>
+        
+        
+        <li id="section-37">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-37">&#182;</a>
+              </div>
+              
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  <span class="attribute">initialize</span>: <span class="function"><span class="params">(options = {})</span> -&gt;</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-38">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-38">&#182;</a>
+              </div>
+              <p>Don&#39;t call super; the base view&#39;s initialize is a no-op.</p>
+<p>Start observing the collection.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    <span class="property">@addCollectionListeners</span>()</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-39">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-39">&#182;</a>
+              </div>
+              <p>Apply a filter if one provided.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    <span class="property">@filter</span> options.filterer <span class="keyword">if</span> options.filterer?</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-40">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-40">&#182;</a>
+              </div>
+              <p>Binding of collection listeners.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  <span class="attribute">addCollectionListeners</span>:<span class="function"> -&gt;</span>
+    <span class="property">@listenTo</span> <span class="property">@collection</span>, <span class="string">'add'</span>, <span class="property">@itemAdded</span>
+    <span class="property">@listenTo</span> <span class="property">@collection</span>, <span class="string">'remove'</span>, <span class="property">@itemRemoved</span>
+    <span class="property">@listenTo</span> <span class="property">@collection</span>, <span class="string">'reset sort'</span>, <span class="property">@itemsReset</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-41">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-41">&#182;</a>
+              </div>
+              <h2 id="rendering">Rendering</h2>
+
+            </div>
+            
+        </li>
+        
+        
+        <li id="section-42">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-42">&#182;</a>
+              </div>
+              <p>Override View#getTemplateData, don’t serialize collection items here.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  <span class="attribute">getTemplateData</span>:<span class="function"> -&gt;</span>
+    templateData = {<span class="attribute">length</span>: <span class="property">@collection</span>.length}</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-43">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-43">&#182;</a>
               </div>
               <p>If the collection is a SyncMachine, add a <code>synced</code> flag.</p>
 
@@ -674,141 +872,18 @@ Hides excluded items by default.</p>
         </li>
         
         
-        <li id="section-36">
+        <li id="section-44">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-36">&#182;</a>
+                <a class="pilcrow" href="#section-44">&#182;</a>
               </div>
               <p>In contrast to normal views, a template is not mandatory
 for CollectionViews. Provide an empty <code>getTemplateFunction</code>.</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>  getTemplateFunction: -&gt;</pre></div></div>
-            
-        </li>
-        
-        
-        <li id="section-37">
-            <div class="annotation">
-              
-              <div class="pilwrap ">
-                <a class="pilcrow" href="#section-37">&#182;</a>
-              </div>
-              <p>Main render method (should be called only once)</p>
-
-            </div>
-            
-            <div class="content"><div class='highlight'><pre>  render: -&gt;
-    <span class="keyword">super</span></pre></div></div>
-            
-        </li>
-        
-        
-        <li id="section-38">
-            <div class="annotation">
-              
-              <div class="pilwrap ">
-                <a class="pilcrow" href="#section-38">&#182;</a>
-              </div>
-              <p>Set the $list property with the actual list container.</p>
-
-            </div>
-            
-            <div class="content"><div class='highlight'><pre>    <span class="property">@$list</span> = <span class="keyword">if</span> <span class="property">@listSelector</span> <span class="keyword">then</span> <span class="property">@$</span>(<span class="property">@listSelector</span>) <span class="keyword">else</span> <span class="property">@$el</span>
-
-    <span class="property">@initFallback</span>()
-    <span class="property">@initLoadingIndicator</span>()</pre></div></div>
-            
-        </li>
-        
-        
-        <li id="section-39">
-            <div class="annotation">
-              
-              <div class="pilwrap ">
-                <a class="pilcrow" href="#section-39">&#182;</a>
-              </div>
-              <p>Render all items.</p>
-
-            </div>
-            
-            <div class="content"><div class='highlight'><pre>    <span class="property">@renderAllItems</span>() <span class="keyword">if</span> <span class="property">@renderItems</span></pre></div></div>
-            
-        </li>
-        
-        
-        <li id="section-40">
-            <div class="annotation">
-              
-              <div class="pilwrap for-h2">
-                <a class="pilcrow" href="#section-40">&#182;</a>
-              </div>
-              <h2>Adding / Removing</h2>
-
-            </div>
-            
-        </li>
-        
-        
-        <li id="section-41">
-            <div class="annotation">
-              
-              <div class="pilwrap ">
-                <a class="pilcrow" href="#section-41">&#182;</a>
-              </div>
-              <p>When an item is added, create a new view and insert it.</p>
-
-            </div>
-            
-            <div class="content"><div class='highlight'><pre>  itemAdded: (item, collection, options) =&gt;
-    <span class="property">@insertView</span> item, <span class="property">@renderItem</span>(item), options.at</pre></div></div>
-            
-        </li>
-        
-        
-        <li id="section-42">
-            <div class="annotation">
-              
-              <div class="pilwrap ">
-                <a class="pilcrow" href="#section-42">&#182;</a>
-              </div>
-              <p>When an item is removed, remove the corresponding view from DOM and caches.</p>
-
-            </div>
-            
-            <div class="content"><div class='highlight'><pre>  itemRemoved: (item) =&gt;
-    <span class="property">@removeViewForItem</span> item</pre></div></div>
-            
-        </li>
-        
-        
-        <li id="section-43">
-            <div class="annotation">
-              
-              <div class="pilwrap ">
-                <a class="pilcrow" href="#section-43">&#182;</a>
-              </div>
-              <p>When all items are resetted, render all anew.</p>
-
-            </div>
-            
-            <div class="content"><div class='highlight'><pre>  itemsReset: =&gt;
-    <span class="property">@renderAllItems</span>()</pre></div></div>
-            
-        </li>
-        
-        
-        <li id="section-44">
-            <div class="annotation">
-              
-              <div class="pilwrap for-h2">
-                <a class="pilcrow" href="#section-44">&#182;</a>
-              </div>
-              <h2>Fallback message when the collection is empty</h2>
-
-            </div>
+            <div class="content"><div class='highlight'><pre>  <span class="attribute">getTemplateFunction</span>:<span class="function"> -&gt;</span></pre></div></div>
             
         </li>
         
@@ -819,11 +894,12 @@ for CollectionViews. Provide an empty <code>getTemplateFunction</code>.</p>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-45">&#182;</a>
               </div>
-              
+              <p>Main render method (should be called only once)</p>
+
             </div>
             
-            <div class="content"><div class='highlight'><pre>  initFallback: -&gt;
-    <span class="keyword">return</span> <span class="keyword">unless</span> <span class="property">@fallbackSelector</span></pre></div></div>
+            <div class="content"><div class='highlight'><pre>  <span class="attribute">render</span>:<span class="function"> -&gt;</span>
+    <span class="keyword">super</span></pre></div></div>
             
         </li>
         
@@ -834,11 +910,17 @@ for CollectionViews. Provide an empty <code>getTemplateFunction</code>.</p>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-46">&#182;</a>
               </div>
-              <p>Set the $fallback property.</p>
+              <p>Set the $list property with the actual list container.</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>    <span class="property">@$fallback</span> = <span class="property">@$</span>(<span class="property">@fallbackSelector</span>)</pre></div></div>
+            <div class="content"><div class='highlight'><pre>    <span class="keyword">if</span> $
+      <span class="property">@$list</span> = <span class="keyword">if</span> <span class="property">@listSelector</span> <span class="keyword">then</span> <span class="property">@$</span>(<span class="property">@listSelector</span>) <span class="keyword">else</span> <span class="property">@$el</span>
+    <span class="keyword">else</span>
+      <span class="property">@list</span> = <span class="keyword">if</span> <span class="property">@listSelector</span> <span class="keyword">then</span> <span class="property">@find</span>(<span class="property">@listSelector</span>) <span class="keyword">else</span> <span class="property">@el</span>
+
+    <span class="property">@initFallback</span>()
+    <span class="property">@initLoadingIndicator</span>()</pre></div></div>
             
         </li>
         
@@ -849,11 +931,11 @@ for CollectionViews. Provide an empty <code>getTemplateFunction</code>.</p>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-47">&#182;</a>
               </div>
-              <p>Listen for visible items changes.</p>
+              <p>Render all items.</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>    <span class="property">@on</span> <span class="string">'visibilityChange'</span>, <span class="property">@toggleFallback</span></pre></div></div>
+            <div class="content"><div class='highlight'><pre>    <span class="property">@renderAllItems</span>() <span class="keyword">if</span> <span class="property">@renderItems</span></pre></div></div>
             
         </li>
         
@@ -864,11 +946,9 @@ for CollectionViews. Provide an empty <code>getTemplateFunction</code>.</p>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-48">&#182;</a>
               </div>
-              <p>Listen for sync events on the collection.</p>
+              <h2 id="adding-removing">Adding / Removing</h2>
 
             </div>
-            
-            <div class="content"><div class='highlight'><pre>    <span class="property">@listenTo</span> <span class="property">@collection</span>, <span class="string">'syncStateChange'</span>, <span class="property">@toggleFallback</span></pre></div></div>
             
         </li>
         
@@ -879,11 +959,12 @@ for CollectionViews. Provide an empty <code>getTemplateFunction</code>.</p>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-49">&#182;</a>
               </div>
-              <p>Set visibility initially.</p>
+              <p>When an item is added, create a new view and insert it.</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>    <span class="property">@toggleFallback</span>()</pre></div></div>
+            <div class="content"><div class='highlight'><pre>  <span class="attribute">itemAdded</span>: <span class="function"><span class="params">(item, collection, options)</span> =&gt;</span>
+    <span class="property">@insertView</span> item, <span class="property">@renderItem</span>(item), options.at</pre></div></div>
             
         </li>
         
@@ -894,13 +975,12 @@ for CollectionViews. Provide an empty <code>getTemplateFunction</code>.</p>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-50">&#182;</a>
               </div>
-              <p>Show fallback if no item is visible and the collection is synced.</p>
+              <p>When an item is removed, remove the corresponding view from DOM and caches.</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>  toggleFallback: =&gt;
-    visible = <span class="property">@visibleItems</span>.length <span class="keyword">is</span> <span class="number">0</span> <span class="keyword">and</span> (
-      <span class="keyword">if</span> <span class="keyword">typeof</span> <span class="property">@collection</span>.isSynced <span class="keyword">is</span> <span class="string">'function'</span></pre></div></div>
+            <div class="content"><div class='highlight'><pre>  <span class="attribute">itemRemoved</span>: <span class="function"><span class="params">(item)</span> =&gt;</span>
+    <span class="property">@removeViewForItem</span> item</pre></div></div>
             
         </li>
         
@@ -910,6 +990,130 @@ for CollectionViews. Provide an empty <code>getTemplateFunction</code>.</p>
               
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-51">&#182;</a>
+              </div>
+              <p>When all items are resetted, render all anew.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  <span class="attribute">itemsReset</span>:<span class="function"> =&gt;</span>
+    <span class="property">@renderAllItems</span>()</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-52">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-52">&#182;</a>
+              </div>
+              <h2 id="fallback-message-when-the-collection-is-empty">Fallback message when the collection is empty</h2>
+
+            </div>
+            
+        </li>
+        
+        
+        <li id="section-53">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-53">&#182;</a>
+              </div>
+              
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  <span class="attribute">initFallback</span>:<span class="function"> -&gt;</span>
+    <span class="keyword">return</span> <span class="keyword">unless</span> <span class="property">@fallbackSelector</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-54">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-54">&#182;</a>
+              </div>
+              <p>Set the $fallback property.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    <span class="keyword">if</span> $
+      <span class="property">@$fallback</span> = <span class="property">@$</span> <span class="property">@fallbackSelector</span>
+    <span class="keyword">else</span>
+      <span class="property">@fallback</span> = <span class="property">@find</span> <span class="property">@fallbackSelector</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-55">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-55">&#182;</a>
+              </div>
+              <p>Listen for visible items changes.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    <span class="property">@on</span> <span class="string">'visibilityChange'</span>, <span class="property">@toggleFallback</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-56">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-56">&#182;</a>
+              </div>
+              <p>Listen for sync events on the collection.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    <span class="property">@listenTo</span> <span class="property">@collection</span>, <span class="string">'syncStateChange'</span>, <span class="property">@toggleFallback</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-57">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-57">&#182;</a>
+              </div>
+              <p>Set visibility initially.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    <span class="property">@toggleFallback</span>()</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-58">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-58">&#182;</a>
+              </div>
+              <p>Show fallback if no item is visible and the collection is synced.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  <span class="attribute">toggleFallback</span>:<span class="function"> =&gt;</span>
+    visible = <span class="property">@visibleItems</span>.length <span class="keyword">is</span> <span class="number">0</span> <span class="keyword">and</span> (
+      <span class="keyword">if</span> <span class="keyword">typeof</span> <span class="property">@collection</span>.isSynced <span class="keyword">is</span> <span class="string">'function'</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-59">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-59">&#182;</a>
               </div>
               <p>Collection is a SyncMachine.</p>
 
@@ -921,11 +1125,11 @@ for CollectionViews. Provide an empty <code>getTemplateFunction</code>.</p>
         </li>
         
         
-        <li id="section-52">
+        <li id="section-60">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-52">&#182;</a>
+                <a class="pilcrow" href="#section-60">&#182;</a>
               </div>
               <p>Assume it is synced.</p>
 
@@ -933,43 +1137,43 @@ for CollectionViews. Provide an empty <code>getTemplateFunction</code>.</p>
             
             <div class="content"><div class='highlight'><pre>        <span class="literal">true</span>
     )
-    <span class="property">@$fallback</span>.toggle visible</pre></div></div>
+    toggleElement (<span class="keyword">if</span> $ <span class="keyword">then</span> <span class="property">@$fallback</span> <span class="keyword">else</span> <span class="property">@fallback</span>), visible</pre></div></div>
             
         </li>
         
         
-        <li id="section-53">
+        <li id="section-61">
             <div class="annotation">
               
-              <div class="pilwrap for-h2">
-                <a class="pilcrow" href="#section-53">&#182;</a>
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-61">&#182;</a>
               </div>
-              <h2>Loading indicator</h2>
+              <h2 id="loading-indicator">Loading indicator</h2>
 
             </div>
             
         </li>
         
         
-        <li id="section-54">
+        <li id="section-62">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-54">&#182;</a>
+                <a class="pilcrow" href="#section-62">&#182;</a>
               </div>
               
             </div>
             
-            <div class="content"><div class='highlight'><pre>  initLoadingIndicator: -&gt;</pre></div></div>
+            <div class="content"><div class='highlight'><pre>  <span class="attribute">initLoadingIndicator</span>:<span class="function"> -&gt;</span></pre></div></div>
             
         </li>
         
         
-        <li id="section-55">
+        <li id="section-63">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-55">&#182;</a>
+                <a class="pilcrow" href="#section-63">&#182;</a>
               </div>
               <p>The loading indicator only works for Collections
 which are SyncMachines.</p>
@@ -982,26 +1186,29 @@ which are SyncMachines.</p>
         </li>
         
         
-        <li id="section-56">
+        <li id="section-64">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-56">&#182;</a>
+                <a class="pilcrow" href="#section-64">&#182;</a>
               </div>
               <p>Set the $loading property.</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>    <span class="property">@$loading</span> = <span class="property">@$</span>(<span class="property">@loadingSelector</span>)</pre></div></div>
+            <div class="content"><div class='highlight'><pre>    <span class="keyword">if</span> $
+      <span class="property">@$loading</span> = <span class="property">@$</span> <span class="property">@loadingSelector</span>
+    <span class="keyword">else</span>
+      <span class="property">@loading</span> = <span class="property">@find</span> <span class="property">@loadingSelector</span></pre></div></div>
             
         </li>
         
         
-        <li id="section-57">
+        <li id="section-65">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-57">&#182;</a>
+                <a class="pilcrow" href="#section-65">&#182;</a>
               </div>
               <p>Listen for sync events on the collection.</p>
 
@@ -1012,11 +1219,11 @@ which are SyncMachines.</p>
         </li>
         
         
-        <li id="section-58">
+        <li id="section-66">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-58">&#182;</a>
+                <a class="pilcrow" href="#section-66">&#182;</a>
               </div>
               <p>Set visibility initially.</p>
 
@@ -1024,16 +1231,16 @@ which are SyncMachines.</p>
             
             <div class="content"><div class='highlight'><pre>    <span class="property">@toggleLoadingIndicator</span>()
 
-  toggleLoadingIndicator: -&gt;</pre></div></div>
+  <span class="attribute">toggleLoadingIndicator</span>:<span class="function"> -&gt;</span></pre></div></div>
             
         </li>
         
         
-        <li id="section-59">
+        <li id="section-67">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-59">&#182;</a>
+                <a class="pilcrow" href="#section-67">&#182;</a>
               </div>
               <p>Only show the loading indicator if the collection is empty.
 Otherwise loading more items in order to append them would
@@ -1044,35 +1251,35 @@ disable the check.</p>
             </div>
             
             <div class="content"><div class='highlight'><pre>    visible = <span class="property">@collection</span>.length <span class="keyword">is</span> <span class="number">0</span> <span class="keyword">and</span> <span class="property">@collection</span>.isSyncing()
-    <span class="property">@$loading</span>.toggle visible</pre></div></div>
+    toggleElement (<span class="keyword">if</span> $ <span class="keyword">then</span> <span class="property">@$loading</span> <span class="keyword">else</span> <span class="property">@loading</span>), visible</pre></div></div>
             
         </li>
         
         
-        <li id="section-60">
+        <li id="section-68">
             <div class="annotation">
               
-              <div class="pilwrap for-h2">
-                <a class="pilcrow" href="#section-60">&#182;</a>
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-68">&#182;</a>
               </div>
-              <h2>Filtering</h2>
+              <h2 id="filtering">Filtering</h2>
 
             </div>
             
         </li>
         
         
-        <li id="section-61">
+        <li id="section-69">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-61">&#182;</a>
+                <a class="pilcrow" href="#section-69">&#182;</a>
               </div>
               <p>Filters only child item views from all current subviews.</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>  getItemViews: -&gt;
+            <div class="content"><div class='highlight'><pre>  <span class="attribute">getItemViews</span>:<span class="function"> -&gt;</span>
     itemViews = {}
     <span class="keyword">if</span> <span class="property">@subviews</span>.length &gt; <span class="number">0</span>
       <span class="keyword">for</span> name, view <span class="keyword">of</span> <span class="property">@subviewsByName</span> <span class="keyword">when</span> name.slice(<span class="number">0</span>, <span class="number">9</span>) <span class="keyword">is</span> <span class="string">'itemView:'</span>
@@ -1082,11 +1289,11 @@ disable the check.</p>
         </li>
         
         
-        <li id="section-62">
+        <li id="section-70">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-62">&#182;</a>
+                <a class="pilcrow" href="#section-70">&#182;</a>
               </div>
               <p>Applies a filter to the collection view.
 Expects an iterator function as first parameter
@@ -1096,16 +1303,16 @@ show/hide the view or mark it otherwise as filtered.</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>  filter: (filterer, filterCallback) -&gt;</pre></div></div>
+            <div class="content"><div class='highlight'><pre>  <span class="attribute">filter</span>: <span class="function"><span class="params">(filterer, filterCallback)</span> -&gt;</span></pre></div></div>
             
         </li>
         
         
-        <li id="section-63">
+        <li id="section-71">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-63">&#182;</a>
+                <a class="pilcrow" href="#section-71">&#182;</a>
               </div>
               <p>Save the filterer and filterCallback functions.</p>
 
@@ -1113,32 +1320,38 @@ show/hide the view or mark it otherwise as filtered.</p>
             
             <div class="content"><div class='highlight'><pre>    <span class="property">@filterer</span> = filterer
     <span class="property">@filterCallback</span> = filterCallback <span class="keyword">if</span> filterCallback
-    filterCallback ?= <span class="property">@filterCallback</span></pre></div></div>
+    filterCallback ?= <span class="property">@filterCallback</span>
+
+    hasItemViews = <span class="keyword">do</span><span class="function"> =&gt;</span>
+      <span class="keyword">if</span> <span class="property">@subviews</span>.length &gt; <span class="number">0</span>
+        <span class="keyword">for</span> name <span class="keyword">of</span> <span class="property">@subviewsByName</span> <span class="keyword">when</span> name.slice(<span class="number">0</span>, <span class="number">9</span>) <span class="keyword">is</span> <span class="string">'itemView:'</span>
+          <span class="keyword">return</span> <span class="literal">true</span>
+      <span class="literal">false</span></pre></div></div>
             
         </li>
         
         
-        <li id="section-64">
+        <li id="section-72">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-64">&#182;</a>
+                <a class="pilcrow" href="#section-72">&#182;</a>
               </div>
               <p>Show/hide existing views.</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>    <span class="keyword">unless</span> _.isEmpty <span class="property">@getItemViews</span>()
+            <div class="content"><div class='highlight'><pre>    <span class="keyword">if</span> hasItemViews
       <span class="keyword">for</span> item, index <span class="keyword">in</span> <span class="property">@collection</span>.models</pre></div></div>
             
         </li>
         
         
-        <li id="section-65">
+        <li id="section-73">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-65">&#182;</a>
+                <a class="pilcrow" href="#section-73">&#182;</a>
               </div>
               <p>Apply filter to the item.</p>
 
@@ -1152,11 +1365,11 @@ show/hide the view or mark it otherwise as filtered.</p>
         </li>
         
         
-        <li id="section-66">
+        <li id="section-74">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-66">&#182;</a>
+                <a class="pilcrow" href="#section-74">&#182;</a>
               </div>
               <p>Show/hide the view accordingly.</p>
 
@@ -1167,11 +1380,11 @@ show/hide the view or mark it otherwise as filtered.</p>
         </li>
         
         
-        <li id="section-67">
+        <li id="section-75">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-67">&#182;</a>
+                <a class="pilcrow" href="#section-75">&#182;</a>
               </div>
               <p>A view has not been created for this item yet.</p>
 
@@ -1184,11 +1397,11 @@ show/hide the view or mark it otherwise as filtered.</p>
         </li>
         
         
-        <li id="section-68">
+        <li id="section-76">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-68">&#182;</a>
+                <a class="pilcrow" href="#section-76">&#182;</a>
               </div>
               <p>Show/hide or mark the view accordingly.</p>
 
@@ -1199,11 +1412,11 @@ show/hide the view or mark it otherwise as filtered.</p>
         </li>
         
         
-        <li id="section-69">
+        <li id="section-77">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-69">&#182;</a>
+                <a class="pilcrow" href="#section-77">&#182;</a>
               </div>
               <p>Update visibleItems list, but do not trigger an event immediately.</p>
 
@@ -1214,11 +1427,11 @@ show/hide the view or mark it otherwise as filtered.</p>
         </li>
         
         
-        <li id="section-70">
+        <li id="section-78">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-70">&#182;</a>
+                <a class="pilcrow" href="#section-78">&#182;</a>
               </div>
               <p>Trigger a combined <code>visibilityChange</code> event.</p>
 
@@ -1229,40 +1442,40 @@ show/hide the view or mark it otherwise as filtered.</p>
         </li>
         
         
-        <li id="section-71">
+        <li id="section-79">
             <div class="annotation">
               
-              <div class="pilwrap for-h2">
-                <a class="pilcrow" href="#section-71">&#182;</a>
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-79">&#182;</a>
               </div>
-              <h2>Item view rendering</h2>
+              <h2 id="item-view-rendering">Item view rendering</h2>
 
             </div>
             
         </li>
         
         
-        <li id="section-72">
+        <li id="section-80">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-72">&#182;</a>
+                <a class="pilcrow" href="#section-80">&#182;</a>
               </div>
               <p>Render and insert all items.</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>  renderAllItems: =&gt;
+            <div class="content"><div class='highlight'><pre>  <span class="attribute">renderAllItems</span>:<span class="function"> =&gt;</span>
     items = <span class="property">@collection</span>.models</pre></div></div>
             
         </li>
         
         
-        <li id="section-73">
+        <li id="section-81">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-73">&#182;</a>
+                <a class="pilcrow" href="#section-81">&#182;</a>
               </div>
               <p>Reset visible items.</p>
 
@@ -1273,11 +1486,11 @@ show/hide the view or mark it otherwise as filtered.</p>
         </li>
         
         
-        <li id="section-74">
+        <li id="section-82">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-74">&#182;</a>
+                <a class="pilcrow" href="#section-82">&#182;</a>
               </div>
               <p>Collect remaining views.</p>
 
@@ -1291,11 +1504,11 @@ show/hide the view or mark it otherwise as filtered.</p>
         </li>
         
         
-        <li id="section-75">
+        <li id="section-83">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-75">&#182;</a>
+                <a class="pilcrow" href="#section-83">&#182;</a>
               </div>
               <p>View remains.</p>
 
@@ -1306,11 +1519,11 @@ show/hide the view or mark it otherwise as filtered.</p>
         </li>
         
         
-        <li id="section-76">
+        <li id="section-84">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-76">&#182;</a>
+                <a class="pilcrow" href="#section-84">&#182;</a>
               </div>
               <p>Remove old views of items not longer in the list.</p>
 
@@ -1321,11 +1534,11 @@ show/hide the view or mark it otherwise as filtered.</p>
         </li>
         
         
-        <li id="section-77">
+        <li id="section-85">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-77">&#182;</a>
+                <a class="pilcrow" href="#section-85">&#182;</a>
               </div>
               <p>Remove the view.</p>
 
@@ -1336,11 +1549,11 @@ show/hide the view or mark it otherwise as filtered.</p>
         </li>
         
         
-        <li id="section-78">
+        <li id="section-86">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-78">&#182;</a>
+                <a class="pilcrow" href="#section-86">&#182;</a>
               </div>
               <p>Re-insert remaining items; render and insert new items.</p>
 
@@ -1351,11 +1564,11 @@ show/hide the view or mark it otherwise as filtered.</p>
         </li>
         
         
-        <li id="section-79">
+        <li id="section-87">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-79">&#182;</a>
+                <a class="pilcrow" href="#section-87">&#182;</a>
               </div>
               <p>Check if view was already created.</p>
 
@@ -1367,11 +1580,11 @@ show/hide the view or mark it otherwise as filtered.</p>
         </li>
         
         
-        <li id="section-80">
+        <li id="section-88">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-80">&#182;</a>
+                <a class="pilcrow" href="#section-88">&#182;</a>
               </div>
               <p>Re-insert the view.</p>
 
@@ -1383,11 +1596,11 @@ show/hide the view or mark it otherwise as filtered.</p>
         </li>
         
         
-        <li id="section-81">
+        <li id="section-89">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-81">&#182;</a>
+                <a class="pilcrow" href="#section-89">&#182;</a>
               </div>
               <p>Create a new view, render and insert it.</p>
 
@@ -1398,11 +1611,11 @@ show/hide the view or mark it otherwise as filtered.</p>
         </li>
         
         
-        <li id="section-82">
+        <li id="section-90">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-82">&#182;</a>
+                <a class="pilcrow" href="#section-90">&#182;</a>
               </div>
               <p>If no view was created, trigger <code>visibilityChange</code> event manually.</p>
 
@@ -1413,26 +1626,26 @@ show/hide the view or mark it otherwise as filtered.</p>
         </li>
         
         
-        <li id="section-83">
+        <li id="section-91">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-83">&#182;</a>
+                <a class="pilcrow" href="#section-91">&#182;</a>
               </div>
               <p>Instantiate and render an item using the <code>viewsByCid</code> hash as a cache.</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>  renderItem: (item) -&gt;</pre></div></div>
+            <div class="content"><div class='highlight'><pre>  <span class="attribute">renderItem</span>: <span class="function"><span class="params">(item)</span> -&gt;</span></pre></div></div>
             
         </li>
         
         
-        <li id="section-84">
+        <li id="section-92">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-84">&#182;</a>
+                <a class="pilcrow" href="#section-92">&#182;</a>
               </div>
               <p>Get the existing view.</p>
 
@@ -1443,11 +1656,11 @@ show/hide the view or mark it otherwise as filtered.</p>
         </li>
         
         
-        <li id="section-85">
+        <li id="section-93">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-85">&#182;</a>
+                <a class="pilcrow" href="#section-93">&#182;</a>
               </div>
               <p>Instantiate a new view if necessary.</p>
 
@@ -1459,11 +1672,11 @@ show/hide the view or mark it otherwise as filtered.</p>
         </li>
         
         
-        <li id="section-86">
+        <li id="section-94">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-86">&#182;</a>
+                <a class="pilcrow" href="#section-94">&#182;</a>
               </div>
               <p>Save the view in the subviews.</p>
 
@@ -1474,11 +1687,11 @@ show/hide the view or mark it otherwise as filtered.</p>
         </li>
         
         
-        <li id="section-87">
+        <li id="section-95">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-87">&#182;</a>
+                <a class="pilcrow" href="#section-95">&#182;</a>
               </div>
               <p>Render in any case.</p>
 
@@ -1491,11 +1704,11 @@ show/hide the view or mark it otherwise as filtered.</p>
         </li>
         
         
-        <li id="section-88">
+        <li id="section-96">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-88">&#182;</a>
+                <a class="pilcrow" href="#section-96">&#182;</a>
               </div>
               <p>Returns an instance of the view class. Override this
 method to use several item view constructors depending
@@ -1503,9 +1716,9 @@ on the model type or data.</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>  initItemView: (model) -&gt;
+            <div class="content"><div class='highlight'><pre>  <span class="attribute">initItemView</span>: <span class="function"><span class="params">(model)</span> -&gt;</span>
     <span class="keyword">if</span> <span class="property">@itemView</span>
-      <span class="keyword">new</span> <span class="property">@itemView</span> {model, autoRender: <span class="literal">false</span>}
+      <span class="keyword">new</span> <span class="property">@itemView</span> {<span class="attribute">autoRender</span>: <span class="literal">false</span>, model}
     <span class="keyword">else</span>
       <span class="keyword">throw</span> <span class="keyword">new</span> Error <span class="string">'The CollectionView#itemView property '</span> +
         <span class="string">'must be defined or the initItemView() must be overridden.'</span></pre></div></div>
@@ -1513,27 +1726,27 @@ on the model type or data.</p>
         </li>
         
         
-        <li id="section-89">
+        <li id="section-97">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-89">&#182;</a>
+                <a class="pilcrow" href="#section-97">&#182;</a>
               </div>
               <p>Inserts a view into the list at the proper position.</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>  insertView: (item, view, position, enableAnimation = <span class="literal">true</span>) -&gt;
+            <div class="content"><div class='highlight'><pre>  <span class="attribute">insertView</span>: <span class="function"><span class="params">(item, view, position, enableAnimation = <span class="literal">true</span>)</span> -&gt;</span>
     enableAnimation = <span class="literal">false</span> <span class="keyword">if</span> <span class="property">@animationDuration</span> <span class="keyword">is</span> <span class="number">0</span></pre></div></div>
             
         </li>
         
         
-        <li id="section-90">
+        <li id="section-98">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-90">&#182;</a>
+                <a class="pilcrow" href="#section-98">&#182;</a>
               </div>
               <p>Get the insertion offset if not given.</p>
 
@@ -1545,11 +1758,11 @@ on the model type or data.</p>
         </li>
         
         
-        <li id="section-91">
+        <li id="section-99">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-91">&#182;</a>
+                <a class="pilcrow" href="#section-99">&#182;</a>
               </div>
               <p>Is the item included in the filter?</p>
 
@@ -1563,159 +1776,17 @@ on the model type or data.</p>
         </li>
         
         
-        <li id="section-92">
-            <div class="annotation">
-              
-              <div class="pilwrap ">
-                <a class="pilcrow" href="#section-92">&#182;</a>
-              </div>
-              <p>Get the view’s top element.</p>
-
-            </div>
-            
-            <div class="content"><div class='highlight'><pre>    viewEl = view.el
-    $viewEl = view.$el</pre></div></div>
-            
-        </li>
-        
-        
-        <li id="section-93">
-            <div class="annotation">
-              
-              <div class="pilwrap ">
-                <a class="pilcrow" href="#section-93">&#182;</a>
-              </div>
-              <p>Start animation.</p>
-
-            </div>
-            
-            <div class="content"><div class='highlight'><pre>    <span class="keyword">if</span> included <span class="keyword">and</span> enableAnimation
-      <span class="keyword">if</span> <span class="property">@useCssAnimation</span>
-        $viewEl.addClass <span class="property">@animationStartClass</span>
-      <span class="keyword">else</span>
-        $viewEl.css <span class="string">'opacity'</span>, <span class="number">0</span></pre></div></div>
-            
-        </li>
-        
-        
-        <li id="section-94">
-            <div class="annotation">
-              
-              <div class="pilwrap ">
-                <a class="pilcrow" href="#section-94">&#182;</a>
-              </div>
-              <p>Hide or mark the view if it’s filtered.</p>
-
-            </div>
-            
-            <div class="content"><div class='highlight'><pre>    <span class="property">@filterCallback</span> view, included <span class="keyword">if</span> <span class="property">@filterer</span>
-
-    length = <span class="property">@collection</span>.length
-    insertInMiddle = (<span class="number">0</span> &lt; position &lt; length)
-    <span class="function"><span class="title">isEnd</span></span> = (length) -&gt; length <span class="keyword">is</span> <span class="number">0</span> <span class="keyword">or</span> position <span class="keyword">is</span> length</pre></div></div>
-            
-        </li>
-        
-        
-        <li id="section-95">
-            <div class="annotation">
-              
-              <div class="pilwrap ">
-                <a class="pilcrow" href="#section-95">&#182;</a>
-              </div>
-              <p>Insert the view into the list.</p>
-
-            </div>
-            
-            <div class="content"><div class='highlight'><pre>    $list = <span class="property">@$list</span>
-
-    <span class="keyword">if</span> insertInMiddle <span class="keyword">or</span> <span class="property">@itemSelector</span></pre></div></div>
-            
-        </li>
-        
-        
-        <li id="section-96">
-            <div class="annotation">
-              
-              <div class="pilwrap ">
-                <a class="pilcrow" href="#section-96">&#182;</a>
-              </div>
-              <p>Get the children which originate from item views.</p>
-
-            </div>
-            
-            <div class="content"><div class='highlight'><pre>      children = $list.children <span class="property">@itemSelector</span>
-      childrenLength = children.length</pre></div></div>
-            
-        </li>
-        
-        
-        <li id="section-97">
-            <div class="annotation">
-              
-              <div class="pilwrap ">
-                <a class="pilcrow" href="#section-97">&#182;</a>
-              </div>
-              <p>Check if it needs to be inserted.</p>
-
-            </div>
-            
-            <div class="content"><div class='highlight'><pre>      <span class="keyword">unless</span> children.get(position) <span class="keyword">is</span> viewEl
-        <span class="keyword">if</span> isEnd childrenLength</pre></div></div>
-            
-        </li>
-        
-        
-        <li id="section-98">
-            <div class="annotation">
-              
-              <div class="pilwrap ">
-                <a class="pilcrow" href="#section-98">&#182;</a>
-              </div>
-              <p>Insert at the end.</p>
-
-            </div>
-            
-            <div class="content"><div class='highlight'><pre>          $list.append viewEl
-        <span class="keyword">else</span></pre></div></div>
-            
-        </li>
-        
-        
-        <li id="section-99">
-            <div class="annotation">
-              
-              <div class="pilwrap ">
-                <a class="pilcrow" href="#section-99">&#182;</a>
-              </div>
-              <p>Insert at the right position.</p>
-
-            </div>
-            
-            <div class="content"><div class='highlight'><pre>          <span class="keyword">if</span> position <span class="keyword">is</span> <span class="number">0</span>
-            $next = children.eq position
-            $next.before viewEl
-          <span class="keyword">else</span>
-            $previous = children.eq position - <span class="number">1</span>
-            $previous.after viewEl
-    <span class="keyword">else</span>
-      method = <span class="keyword">if</span> isEnd length <span class="keyword">then</span> <span class="string">'append'</span> <span class="keyword">else</span> <span class="string">'prepend'</span>
-      $list[method] viewEl</pre></div></div>
-            
-        </li>
-        
-        
         <li id="section-100">
             <div class="annotation">
               
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-100">&#182;</a>
               </div>
-              <p>Tell the view that it was added to its parent.</p>
+              <p>Get the view’s top element.</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>    view.trigger <span class="string">'addedToParent'</span></pre></div></div>
+            <div class="content"><div class='highlight'><pre>    elem = <span class="keyword">if</span> $ <span class="keyword">then</span> view.$el <span class="keyword">else</span> view.el</pre></div></div>
             
         </li>
         
@@ -1726,11 +1797,12 @@ on the model type or data.</p>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-101">&#182;</a>
               </div>
-              <p>Update the list of visible items, trigger a <code>visibilityChange</code> event.</p>
+              <p>Start animation.</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>    <span class="property">@updateVisibleItems</span> item, included</pre></div></div>
+            <div class="content"><div class='highlight'><pre>    <span class="keyword">if</span> included <span class="keyword">and</span> enableAnimation
+      startAnimation elem, <span class="property">@useCssAnimation</span>, <span class="property">@animationStartClass</span></pre></div></div>
             
         </li>
         
@@ -1740,6 +1812,70 @@ on the model type or data.</p>
               
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-102">&#182;</a>
+              </div>
+              <p>Hide or mark the view if it’s filtered.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    <span class="property">@filterCallback</span> view, included <span class="keyword">if</span> <span class="property">@filterer</span>
+
+    length = <span class="property">@collection</span>.length</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-103">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-103">&#182;</a>
+              </div>
+              <p>Insert the view into the list.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    list = <span class="keyword">if</span> $ <span class="keyword">then</span> <span class="property">@$list</span> <span class="keyword">else</span> <span class="property">@list</span>
+
+    insertView list, elem, position, length, <span class="property">@itemSelector</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-104">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-104">&#182;</a>
+              </div>
+              <p>Tell the view that it was added to its parent.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    view.trigger <span class="string">'addedToParent'</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-105">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-105">&#182;</a>
+              </div>
+              <p>Update the list of visible items, trigger a <code>visibilityChange</code> event.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    <span class="property">@updateVisibleItems</span> item, included</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-106">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-106">&#182;</a>
               </div>
               <p>End animation.</p>
 
@@ -1751,61 +1887,59 @@ on the model type or data.</p>
         </li>
         
         
-        <li id="section-103">
+        <li id="section-107">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-103">&#182;</a>
+                <a class="pilcrow" href="#section-107">&#182;</a>
               </div>
               <p>Wait for DOM state change.</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>        setTimeout =&gt;
-          $viewEl.addClass <span class="property">@animationEndClass</span>
-        , <span class="number">0</span>
+            <div class="content"><div class='highlight'><pre>        setTimeout (<span class="function">=&gt;</span> addClass elem, <span class="property">@animationEndClass</span>), <span class="number">0</span>
       <span class="keyword">else</span></pre></div></div>
             
         </li>
         
         
-        <li id="section-104">
+        <li id="section-108">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-104">&#182;</a>
+                <a class="pilcrow" href="#section-108">&#182;</a>
               </div>
               <p>Fade the view in if it was made transparent before.</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>        $viewEl.animate {opacity: <span class="number">1</span>}, <span class="property">@animationDuration</span>
+            <div class="content"><div class='highlight'><pre>        endAnimation elem, <span class="property">@animationDuration</span>
 
     view</pre></div></div>
             
         </li>
         
         
-        <li id="section-105">
+        <li id="section-109">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-105">&#182;</a>
+                <a class="pilcrow" href="#section-109">&#182;</a>
               </div>
               <p>Remove the view for an item.</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>  removeViewForItem: (item) -&gt;</pre></div></div>
+            <div class="content"><div class='highlight'><pre>  <span class="attribute">removeViewForItem</span>: <span class="function"><span class="params">(item)</span> -&gt;</span></pre></div></div>
             
         </li>
         
         
-        <li id="section-106">
+        <li id="section-110">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-106">&#182;</a>
+                <a class="pilcrow" href="#section-110">&#182;</a>
               </div>
               <p>Remove item from visibleItems list, trigger a <code>visibilityChange</code> event.</p>
 
@@ -1817,34 +1951,34 @@ on the model type or data.</p>
         </li>
         
         
-        <li id="section-107">
+        <li id="section-111">
             <div class="annotation">
               
-              <div class="pilwrap for-h2">
-                <a class="pilcrow" href="#section-107">&#182;</a>
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-111">&#182;</a>
               </div>
-              <h2>List of visible items</h2>
+              <h2 id="list-of-visible-items">List of visible items</h2>
 
             </div>
             
         </li>
         
         
-        <li id="section-108">
+        <li id="section-112">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-108">&#182;</a>
+                <a class="pilcrow" href="#section-112">&#182;</a>
               </div>
               <p>Update visibleItems list and trigger a <code>visibilityChanged</code> event
 if an item changed its visibility.</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>  updateVisibleItems: (item, includedInFilter, triggerEvent = <span class="literal">true</span>) -&gt;
+            <div class="content"><div class='highlight'><pre>  <span class="attribute">updateVisibleItems</span>: <span class="function"><span class="params">(item, includedInFilter, triggerEvent = <span class="literal">true</span>)</span> -&gt;</span>
     visibilityChanged = <span class="literal">false</span>
 
-    visibleItemsIndex = _.indexOf <span class="property">@visibleItems</span>, item
+    visibleItemsIndex = utils.indexOf <span class="property">@visibleItems</span>, item
     includedInVisibleItems = visibleItemsIndex <span class="keyword">isnt</span> -<span class="number">1</span>
 
     <span class="keyword">if</span> includedInFilter <span class="keyword">and</span> <span class="keyword">not</span> includedInVisibleItems</pre></div></div>
@@ -1852,11 +1986,11 @@ if an item changed its visibility.</p>
         </li>
         
         
-        <li id="section-109">
+        <li id="section-113">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-109">&#182;</a>
+                <a class="pilcrow" href="#section-113">&#182;</a>
               </div>
               <p>Add item to the visible items list.</p>
 
@@ -1869,11 +2003,11 @@ if an item changed its visibility.</p>
         </li>
         
         
-        <li id="section-110">
+        <li id="section-114">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-110">&#182;</a>
+                <a class="pilcrow" href="#section-114">&#182;</a>
               </div>
               <p>Remove item from the visible items list.</p>
 
@@ -1885,11 +2019,11 @@ if an item changed its visibility.</p>
         </li>
         
         
-        <li id="section-111">
+        <li id="section-115">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-111">&#182;</a>
+                <a class="pilcrow" href="#section-115">&#182;</a>
               </div>
               <p>Trigger a <code>visibilityChange</code> event if the visible items changed.</p>
 
@@ -1903,39 +2037,39 @@ if an item changed its visibility.</p>
         </li>
         
         
-        <li id="section-112">
+        <li id="section-116">
             <div class="annotation">
               
-              <div class="pilwrap for-h2">
-                <a class="pilcrow" href="#section-112">&#182;</a>
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-116">&#182;</a>
               </div>
-              <h2>Disposal</h2>
+              <h2 id="disposal">Disposal</h2>
 
             </div>
             
         </li>
         
         
-        <li id="section-113">
+        <li id="section-117">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-113">&#182;</a>
+                <a class="pilcrow" href="#section-117">&#182;</a>
               </div>
               
             </div>
             
-            <div class="content"><div class='highlight'><pre>  dispose: -&gt;
+            <div class="content"><div class='highlight'><pre>  <span class="attribute">dispose</span>:<span class="function"> -&gt;</span>
     <span class="keyword">return</span> <span class="keyword">if</span> <span class="property">@disposed</span></pre></div></div>
             
         </li>
         
         
-        <li id="section-114">
+        <li id="section-118">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-114">&#182;</a>
+                <a class="pilcrow" href="#section-118">&#182;</a>
               </div>
               <p>Remove jQuery objects, item view cache and visible items list.</p>
 
@@ -1947,11 +2081,11 @@ if an item changed its visibility.</p>
         </li>
         
         
-        <li id="section-115">
+        <li id="section-119">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-115">&#182;</a>
+                <a class="pilcrow" href="#section-119">&#182;</a>
               </div>
               <p>Self-disposal.</p>
 

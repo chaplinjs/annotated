@@ -148,8 +148,8 @@
             
             <div class="content"><div class='highlight'><pre><span class="string">'use strict'</span>
 
-_ = require <span class="string">'underscore'</span>
-support = require <span class="string">'chaplin/lib/support'</span></pre></div></div>
+_ = <span class="built_in">require</span> <span class="string">'underscore'</span>
+support = <span class="built_in">require</span> <span class="string">'chaplin/lib/support'</span></pre></div></div>
             
         </li>
         
@@ -157,10 +157,10 @@ support = require <span class="string">'chaplin/lib/support'</span></pre></div><
         <li id="section-2">
             <div class="annotation">
               
-              <div class="pilwrap for-h2">
+              <div class="pilwrap ">
                 <a class="pilcrow" href="#section-2">&#182;</a>
               </div>
-              <h2>Utilities</h2>
+              <h2 id="utilities">Utilities</h2>
 
             </div>
             
@@ -184,10 +184,10 @@ support = require <span class="string">'chaplin/lib/support'</span></pre></div><
         <li id="section-4">
             <div class="annotation">
               
-              <div class="pilwrap for-h2">
+              <div class="pilwrap ">
                 <a class="pilcrow" href="#section-4">&#182;</a>
               </div>
-              <h2>Object Helpers</h2>
+              <h2 id="object-helpers">Object Helpers</h2>
 
             </div>
             
@@ -205,14 +205,22 @@ to another object.</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>  beget: <span class="keyword">do</span> -&gt;
+            <div class="content"><div class='highlight'><pre>  <span class="attribute">beget</span>: <span class="keyword">do</span><span class="function"> -&gt;</span>
     <span class="keyword">if</span> <span class="keyword">typeof</span> Object.create <span class="keyword">is</span> <span class="string">'function'</span>
       Object.create
     <span class="keyword">else</span>
-      <span class="function"><span class="title">ctor</span></span> = -&gt;
-      (obj) -&gt;
+      <span class="function"><span class="title">ctor</span> = -&gt;</span>
+      <span class="function"><span class="params">(obj)</span> -&gt;</span>
         ctor.prototype = obj
-        <span class="keyword">new</span> ctor</pre></div></div>
+        <span class="keyword">new</span> ctor
+
+  <span class="attribute">indexOf</span>: <span class="keyword">do</span><span class="function"> -&gt;</span>
+    <span class="keyword">if</span> <span class="attribute">Array</span>::indexOf
+      <span class="function"><span class="params">(list, index)</span> -&gt;</span> list.indexOf index
+    <span class="keyword">else</span> <span class="keyword">if</span> _.indexOf
+      _.indexOf
+
+  <span class="attribute">isArray</span>: Array.isArray <span class="keyword">or</span> _.isArray</pre></div></div>
             
         </li>
         
@@ -227,7 +235,7 @@ to another object.</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>  serialize: (data) -&gt;
+            <div class="content"><div class='highlight'><pre>  <span class="attribute">serialize</span>: <span class="function"><span class="params">(data)</span> -&gt;</span>
     <span class="keyword">if</span> <span class="keyword">typeof</span> data.serialize <span class="keyword">is</span> <span class="string">'function'</span>
       data.serialize()
     <span class="keyword">else</span> <span class="keyword">if</span> <span class="keyword">typeof</span> data.toJSON <span class="keyword">is</span> <span class="string">'function'</span>
@@ -249,19 +257,19 @@ using ECMAScript 5 property descriptors.</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>  readonly: <span class="keyword">do</span> -&gt;
+            <div class="content"><div class='highlight'><pre>  <span class="attribute">readonly</span>: <span class="keyword">do</span><span class="function"> -&gt;</span>
     <span class="keyword">if</span> support.propertyDescriptors
       readonlyDescriptor =
-        writable: <span class="literal">false</span>
-        enumerable: <span class="literal">true</span>
-        configurable: <span class="literal">false</span>
-      (obj, properties...) -&gt;
+        <span class="attribute">writable</span>: <span class="literal">false</span>
+        <span class="attribute">enumerable</span>: <span class="literal">true</span>
+        <span class="attribute">configurable</span>: <span class="literal">false</span>
+      <span class="function"><span class="params">(obj, properties...)</span> -&gt;</span>
         <span class="keyword">for</span> prop <span class="keyword">in</span> properties
           readonlyDescriptor.value = obj[prop]
           Object.defineProperty obj, prop, readonlyDescriptor
         <span class="literal">true</span>
-    <span class="keyword">else</span>
-      -&gt;
+    <span class="keyword">else</span><span class="function">
+      -&gt;</span>
         <span class="literal">false</span></pre></div></div>
             
         </li>
@@ -277,7 +285,7 @@ using ECMAScript 5 property descriptors.</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>  getPrototypeChain: (object) -&gt;
+            <div class="content"><div class='highlight'><pre>  <span class="attribute">getPrototypeChain</span>: <span class="function"><span class="params">(object)</span> -&gt;</span>
     chain = [object.constructor.prototype]
     <span class="keyword">while</span> object = object.constructor?.__super__ ? object.constructor?.superclass
       chain.push object
@@ -298,7 +306,7 @@ object1, it will get [object1prop, object2prop].</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>  getAllPropertyVersions: (object, property) -&gt;
+            <div class="content"><div class='highlight'><pre>  <span class="attribute">getAllPropertyVersions</span>: <span class="function"><span class="params">(object, property)</span> -&gt;</span>
     result = []
     <span class="keyword">for</span> proto <span class="keyword">in</span> utils.getPrototypeChain object
       value = proto[property]
@@ -312,10 +320,10 @@ object1, it will get [object1prop, object2prop].</p>
         <li id="section-10">
             <div class="annotation">
               
-              <div class="pilwrap for-h2">
+              <div class="pilwrap ">
                 <a class="pilcrow" href="#section-10">&#182;</a>
               </div>
-              <h2>String Helpers</h2>
+              <h2 id="string-helpers">String Helpers</h2>
 
             </div>
             
@@ -332,7 +340,7 @@ object1, it will get [object1prop, object2prop].</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>  upcase: (str) -&gt;
+            <div class="content"><div class='highlight'><pre>  <span class="attribute">upcase</span>: <span class="function"><span class="params">(str)</span> -&gt;</span>
     str.charAt(<span class="number">0</span>).toUpperCase() + str.substring(<span class="number">1</span>)</pre></div></div>
             
         </li>
@@ -348,7 +356,7 @@ object1, it will get [object1prop, object2prop].</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>  escapeRegExp: (str) -&gt;
+            <div class="content"><div class='highlight'><pre>  <span class="attribute">escapeRegExp</span>: <span class="function"><span class="params">(str)</span> -&gt;</span>
     <span class="keyword">return</span> String(str <span class="keyword">or</span> <span class="string">''</span>).replace <span class="regexp">/([.*+?^=!:${}()|[\]\/\\])/g</span>, <span class="string">'\\$1'</span></pre></div></div>
             
         </li>
@@ -357,10 +365,10 @@ object1, it will get [object1prop, object2prop].</p>
         <li id="section-13">
             <div class="annotation">
               
-              <div class="pilwrap for-h2">
+              <div class="pilwrap ">
                 <a class="pilcrow" href="#section-13">&#182;</a>
               </div>
-              <h2>Event handling helpers</h2>
+              <h2 id="event-handling-helpers">Event handling helpers</h2>
 
             </div>
             
@@ -377,7 +385,7 @@ object1, it will get [object1prop, object2prop].</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>  modifierKeyPressed: (event) -&gt;
+            <div class="content"><div class='highlight'><pre>  <span class="attribute">modifierKeyPressed</span>: <span class="function"><span class="params">(event)</span> -&gt;</span>
     event.shiftKey <span class="keyword">or</span> event.altKey <span class="keyword">or</span> event.ctrlKey <span class="keyword">or</span> event.metaKey</pre></div></div>
             
         </li>
@@ -386,10 +394,10 @@ object1, it will get [object1prop, object2prop].</p>
         <li id="section-15">
             <div class="annotation">
               
-              <div class="pilwrap for-h2">
+              <div class="pilwrap ">
                 <a class="pilcrow" href="#section-15">&#182;</a>
               </div>
-              <h2>Query parameters Helpers</h2>
+              <h2 id="query-parameters-helpers">Query parameters Helpers</h2>
 
             </div>
             
@@ -405,7 +413,7 @@ object1, it will get [object1prop, object2prop].</p>
               
             </div>
             
-            <div class="content"><div class='highlight'><pre>  queryParams:</pre></div></div>
+            <div class="content"><div class='highlight'><pre>  <span class="attribute">queryParams</span>:</pre></div></div>
             
         </li>
         
@@ -420,13 +428,13 @@ object1, it will get [object1prop, object2prop].</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>    stringify: (queryParams) -&gt;
+            <div class="content"><div class='highlight'><pre>    <span class="attribute">stringify</span>: <span class="function"><span class="params">(queryParams)</span> -&gt;</span>
       query = <span class="string">''</span>
-      <span class="function"><span class="title">stringifyKeyValuePair</span></span> = (encodedKey, value) -&gt;
+      <span class="function"><span class="title">stringifyKeyValuePair</span> = <span class="params">(encodedKey, value)</span> -&gt;</span>
         <span class="keyword">if</span> value? <span class="keyword">then</span> <span class="string">'&amp;'</span> + encodedKey + <span class="string">'='</span> + encodeURIComponent value <span class="keyword">else</span> <span class="string">''</span>
       <span class="keyword">for</span> own key, value <span class="keyword">of</span> queryParams
         encodedKey = encodeURIComponent key
-        <span class="keyword">if</span> _.isArray value
+        <span class="keyword">if</span> utils.isArray value
           <span class="keyword">for</span> arrParam <span class="keyword">in</span> value
             query += stringifyKeyValuePair encodedKey, arrParam
         <span class="keyword">else</span>
@@ -446,7 +454,7 @@ object1, it will get [object1prop, object2prop].</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>    parse: (queryString) -&gt;
+            <div class="content"><div class='highlight'><pre>    <span class="attribute">parse</span>: <span class="function"><span class="params">(queryString)</span> -&gt;</span>
       params = {}
       <span class="keyword">return</span> params <span class="keyword">unless</span> queryString
       pairs = queryString.split <span class="string">'&amp;'</span>
@@ -516,10 +524,10 @@ Aggregate them in an array.</p>
         <li id="section-22">
             <div class="annotation">
               
-              <div class="pilwrap for-h2">
+              <div class="pilwrap ">
                 <a class="pilcrow" href="#section-22">&#182;</a>
               </div>
-              <h2>Finish</h2>
+              <h2 id="finish">Finish</h2>
 
             </div>
             
@@ -551,7 +559,7 @@ Aggregate them in an array.</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>module.exports = utils</pre></div></div>
+            <div class="content"><div class='highlight'><pre>module.<span class="built_in">exports</span> = utils</pre></div></div>
             
         </li>
         

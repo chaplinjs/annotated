@@ -148,9 +148,11 @@
             
             <div class="content"><div class='highlight'><pre><span class="string">'use strict'</span>
 
-_ = require <span class="string">'underscore'</span>
-Backbone = require <span class="string">'backbone'</span>
-EventBroker = require <span class="string">'chaplin/lib/event_broker'</span></pre></div></div>
+_ = <span class="built_in">require</span> <span class="string">'underscore'</span>
+Backbone = <span class="built_in">require</span> <span class="string">'backbone'</span>
+EventBroker = <span class="built_in">require</span> <span class="string">'chaplin/lib/event_broker'</span>
+
+has = <span class="attribute">Object</span>::hasOwnProperty</pre></div></div>
             
         </li>
         
@@ -158,10 +160,10 @@ EventBroker = require <span class="string">'chaplin/lib/event_broker'</span></pr
         <li id="section-2">
             <div class="annotation">
               
-              <div class="pilwrap for-h2">
+              <div class="pilwrap ">
                 <a class="pilcrow" href="#section-2">&#182;</a>
               </div>
-              <h2>Composition</h2>
+              <h2 id="composition">Composition</h2>
 
             </div>
             
@@ -181,7 +183,7 @@ control over the composition process.</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>module.exports = <span class="class"><span class="keyword">class</span> <span class="title">Composition</span></span></pre></div></div>
+            <div class="content"><div class='highlight'><pre>module.<span class="built_in">exports</span> = <span class="class"><span class="keyword">class</span> <span class="title">Composition</span></span></pre></div></div>
             
         </li>
         
@@ -227,7 +229,7 @@ control over the composition process.</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>  item: <span class="literal">null</span></pre></div></div>
+            <div class="content"><div class='highlight'><pre>  <span class="attribute">item</span>: <span class="literal">null</span></pre></div></div>
             
         </li>
         
@@ -242,7 +244,7 @@ control over the composition process.</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>  options: <span class="literal">null</span></pre></div></div>
+            <div class="content"><div class='highlight'><pre>  <span class="attribute">options</span>: <span class="literal">null</span></pre></div></div>
             
         </li>
         
@@ -257,14 +259,14 @@ control over the composition process.</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>  _stale: <span class="literal">false</span>
+            <div class="content"><div class='highlight'><pre>  <span class="attribute">_stale</span>: <span class="literal">false</span>
 
-  constructor: (options) -&gt;
-    <span class="property">@options</span> = _.clone options <span class="keyword">if</span> options?
+  <span class="attribute">constructor</span>: <span class="function"><span class="params">(options)</span> -&gt;</span>
+    <span class="property">@options</span> = _.extend {}, options <span class="keyword">if</span> options?
     <span class="property">@item</span> = <span class="keyword">this</span>
     <span class="property">@initialize</span> <span class="property">@options</span>
 
-  initialize: -&gt;</pre></div></div>
+  <span class="attribute">initialize</span>:<span class="function"> -&gt;</span></pre></div></div>
             
         </li>
         
@@ -280,7 +282,7 @@ control over the composition process.</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>  compose: -&gt;</pre></div></div>
+            <div class="content"><div class='highlight'><pre>  <span class="attribute">compose</span>:<span class="function"> -&gt;</span></pre></div></div>
             
         </li>
         
@@ -298,7 +300,8 @@ If this returns false then the composition is re-composed.</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>  check: (options) -&gt; <span class="keyword">return</span> _.isEqual <span class="property">@options</span>, options</pre></div></div>
+            <div class="content"><div class='highlight'><pre>  <span class="attribute">check</span>: <span class="function"><span class="params">(options)</span> -&gt;</span>
+    _.isEqual <span class="property">@options</span>, options</pre></div></div>
             
         </li>
         
@@ -313,7 +316,7 @@ If this returns false then the composition is re-composed.</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>  stale: (value) -&gt;</pre></div></div>
+            <div class="content"><div class='highlight'><pre>  <span class="attribute">stale</span>: <span class="function"><span class="params">(value)</span> -&gt;</span></pre></div></div>
             
         </li>
         
@@ -344,7 +347,10 @@ If this returns false then the composition is re-composed.</p>
             </div>
             
             <div class="content"><div class='highlight'><pre>    <span class="property">@_stale</span> = value
-    <span class="keyword">for</span> name, item <span class="keyword">of</span> <span class="keyword">this</span> <span class="keyword">when</span> item <span class="keyword">and</span> item <span class="keyword">isnt</span> <span class="keyword">this</span> <span class="keyword">and</span> _.has item, <span class="string">'stale'</span>
+    <span class="keyword">for</span> name, item <span class="keyword">of</span> <span class="keyword">this</span> <span class="keyword">when</span> (
+      item <span class="keyword">and</span> item <span class="keyword">isnt</span> <span class="keyword">this</span> <span class="keyword">and</span>
+      <span class="keyword">typeof</span> item <span class="keyword">is</span> <span class="string">'object'</span> <span class="keyword">and</span> has.call(item, <span class="string">'stale'</span>)
+    )
       item.stale = value</pre></div></div>
             
         </li>
@@ -368,10 +374,10 @@ If this returns false then the composition is re-composed.</p>
         <li id="section-15">
             <div class="annotation">
               
-              <div class="pilwrap for-h2">
+              <div class="pilwrap ">
                 <a class="pilcrow" href="#section-15">&#182;</a>
               </div>
-              <h2>Disposal</h2>
+              <h2 id="disposal">Disposal</h2>
 
             </div>
             
@@ -387,9 +393,9 @@ If this returns false then the composition is re-composed.</p>
               
             </div>
             
-            <div class="content"><div class='highlight'><pre>  disposed: <span class="literal">false</span>
+            <div class="content"><div class='highlight'><pre>  <span class="attribute">disposed</span>: <span class="literal">false</span>
 
-  dispose: -&gt;
+  <span class="attribute">dispose</span>:<span class="function"> -&gt;</span>
     <span class="keyword">return</span> <span class="keyword">if</span> <span class="property">@disposed</span></pre></div></div>
             
         </li>

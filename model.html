@@ -148,10 +148,10 @@
             
             <div class="content"><div class='highlight'><pre><span class="string">'use strict'</span>
 
-_ = require <span class="string">'underscore'</span>
-Backbone = require <span class="string">'backbone'</span>
-utils = require <span class="string">'chaplin/lib/utils'</span>
-EventBroker = require <span class="string">'chaplin/lib/event_broker'</span></pre></div></div>
+_ = <span class="built_in">require</span> <span class="string">'underscore'</span>
+Backbone = <span class="built_in">require</span> <span class="string">'backbone'</span>
+utils = <span class="built_in">require</span> <span class="string">'chaplin/lib/utils'</span>
+EventBroker = <span class="built_in">require</span> <span class="string">'chaplin/lib/event_broker'</span></pre></div></div>
             
         </li>
         
@@ -168,7 +168,7 @@ in order to protect them from changes.</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre><span class="function"><span class="title">serializeAttributes</span></span> = (model, attributes, modelStack) -&gt;</pre></div></div>
+            <div class="content"><div class='highlight'><pre><span class="function"><span class="title">serializeAttributes</span> = <span class="params">(model, attributes, modelStack)</span> -&gt;</span></pre></div></div>
             
         </li>
         
@@ -298,7 +298,7 @@ in the context of a given tree.</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre><span class="function"><span class="title">serializeModelAttributes</span></span> = (model, currentModel, modelStack) -&gt;</pre></div></div>
+            <div class="content"><div class='highlight'><pre><span class="function"><span class="title">serializeModelAttributes</span> = <span class="params">(model, currentModel, modelStack)</span> -&gt;</span></pre></div></div>
             
         </li>
         
@@ -313,7 +313,7 @@ in the context of a given tree.</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>  <span class="keyword">return</span> <span class="literal">null</span> <span class="keyword">if</span> model <span class="keyword">is</span> currentModel <span class="keyword">or</span> _.has modelStack, model.cid</pre></div></div>
+            <div class="content"><div class='highlight'><pre>  <span class="keyword">return</span> <span class="literal">null</span> <span class="keyword">if</span> model <span class="keyword">is</span> currentModel <span class="keyword">or</span> model.cid <span class="keyword">of</span> modelStack</pre></div></div>
             
         </li>
         
@@ -375,7 +375,7 @@ in the context of a given tree.</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>module.exports = <span class="class"><span class="keyword">class</span> <span class="title">Model</span> <span class="keyword">extends</span> <span class="title">Backbone</span>.<span class="title">Model</span></span></pre></div></div>
+            <div class="content"><div class='highlight'><pre>module.<span class="built_in">exports</span> = <span class="class"><span class="keyword">class</span> <span class="title">Model</span> <span class="keyword">extends</span> <span class="title">Backbone</span>.<span class="title">Model</span></span></pre></div></div>
             
         </li>
         
@@ -407,7 +407,7 @@ proper <code>attributes</code> getter due to ECMAScript 3 limits.</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>  getAttributes: -&gt;
+            <div class="content"><div class='highlight'><pre>  <span class="attribute">getAttributes</span>:<span class="function"> -&gt;</span>
     <span class="property">@attributes</span></pre></div></div>
             
         </li>
@@ -426,7 +426,7 @@ Map models to their attributes, recursively.</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>  serialize: -&gt;
+            <div class="content"><div class='highlight'><pre>  <span class="attribute">serialize</span>:<span class="function"> -&gt;</span>
     serializeAttributes <span class="keyword">this</span>, <span class="property">@getAttributes</span>()</pre></div></div>
             
         </li>
@@ -435,10 +435,10 @@ Map models to their attributes, recursively.</p>
         <li id="section-19">
             <div class="annotation">
               
-              <div class="pilwrap for-h2">
+              <div class="pilwrap ">
                 <a class="pilcrow" href="#section-19">&#182;</a>
               </div>
-              <h2>Disposal</h2>
+              <h2 id="disposal">Disposal</h2>
 
             </div>
             
@@ -454,9 +454,9 @@ Map models to their attributes, recursively.</p>
               
             </div>
             
-            <div class="content"><div class='highlight'><pre>  disposed: <span class="literal">false</span>
+            <div class="content"><div class='highlight'><pre>  <span class="attribute">disposed</span>: <span class="literal">false</span>
 
-  dispose: -&gt;
+  <span class="attribute">dispose</span>:<span class="function"> -&gt;</span>
     <span class="keyword">return</span> <span class="keyword">if</span> <span class="property">@disposed</span></pre></div></div>
             
         </li>

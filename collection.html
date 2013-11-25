@@ -148,11 +148,11 @@
             
             <div class="content"><div class='highlight'><pre><span class="string">'use strict'</span>
 
-_ = require <span class="string">'underscore'</span>
-Backbone = require <span class="string">'backbone'</span>
-EventBroker = require <span class="string">'chaplin/lib/event_broker'</span>
-Model = require <span class="string">'chaplin/models/model'</span>
-utils = require <span class="string">'chaplin/lib/utils'</span></pre></div></div>
+_ = <span class="built_in">require</span> <span class="string">'underscore'</span>
+Backbone = <span class="built_in">require</span> <span class="string">'backbone'</span>
+EventBroker = <span class="built_in">require</span> <span class="string">'chaplin/lib/event_broker'</span>
+Model = <span class="built_in">require</span> <span class="string">'chaplin/models/model'</span>
+utils = <span class="built_in">require</span> <span class="string">'chaplin/lib/utils'</span></pre></div></div>
             
         </li>
         
@@ -168,7 +168,7 @@ in order to add some functionality.</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>module.exports = <span class="class"><span class="keyword">class</span> <span class="title">Collection</span> <span class="keyword">extends</span> <span class="title">Backbone</span>.<span class="title">Collection</span></span></pre></div></div>
+            <div class="content"><div class='highlight'><pre>module.<span class="built_in">exports</span> = <span class="class"><span class="keyword">class</span> <span class="title">Collection</span> <span class="keyword">extends</span> <span class="title">Backbone</span>.<span class="title">Collection</span></span></pre></div></div>
             
         </li>
         
@@ -198,7 +198,7 @@ in order to add some functionality.</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>  model: Model</pre></div></div>
+            <div class="content"><div class='highlight'><pre>  <span class="attribute">model</span>: Model</pre></div></div>
             
         </li>
         
@@ -213,7 +213,7 @@ in order to add some functionality.</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>  serialize: -&gt;
+            <div class="content"><div class='highlight'><pre>  <span class="attribute">serialize</span>:<span class="function"> -&gt;</span>
     <span class="property">@map</span> utils.serialize</pre></div></div>
             
         </li>
@@ -222,10 +222,10 @@ in order to add some functionality.</p>
         <li id="section-6">
             <div class="annotation">
               
-              <div class="pilwrap for-h2">
+              <div class="pilwrap ">
                 <a class="pilcrow" href="#section-6">&#182;</a>
               </div>
-              <h2>Disposal</h2>
+              <h2 id="disposal">Disposal</h2>
 
             </div>
             
@@ -241,9 +241,9 @@ in order to add some functionality.</p>
               
             </div>
             
-            <div class="content"><div class='highlight'><pre>  disposed: <span class="literal">false</span>
+            <div class="content"><div class='highlight'><pre>  <span class="attribute">disposed</span>: <span class="literal">false</span>
 
-  dispose: -&gt;
+  <span class="attribute">dispose</span>:<span class="function"> -&gt;</span>
     <span class="keyword">return</span> <span class="keyword">if</span> <span class="property">@disposed</span></pre></div></div>
             
         </li>
@@ -275,7 +275,7 @@ they might be referenced elsewhere.</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>    <span class="property">@reset</span> [], silent: <span class="literal">true</span></pre></div></div>
+            <div class="content"><div class='highlight'><pre>    <span class="property">@reset</span> [], <span class="attribute">silent</span>: <span class="literal">true</span></pre></div></div>
             
         </li>
         

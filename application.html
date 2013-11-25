@@ -148,14 +148,14 @@
             
             <div class="content"><div class='highlight'><pre><span class="string">'use strict'</span>
 
-_ = require <span class="string">'underscore'</span>
-Backbone = require <span class="string">'backbone'</span>
-mediator = require <span class="string">'chaplin/mediator'</span>
-Dispatcher = require <span class="string">'chaplin/dispatcher'</span>
-Layout = require <span class="string">'chaplin/views/layout'</span>
-Composer = require <span class="string">'chaplin/composer'</span>
-Router = require <span class="string">'chaplin/lib/router'</span>
-EventBroker = require <span class="string">'chaplin/lib/event_broker'</span></pre></div></div>
+_ = <span class="built_in">require</span> <span class="string">'underscore'</span>
+Backbone = <span class="built_in">require</span> <span class="string">'backbone'</span>
+mediator = <span class="built_in">require</span> <span class="string">'chaplin/mediator'</span>
+Dispatcher = <span class="built_in">require</span> <span class="string">'chaplin/dispatcher'</span>
+Layout = <span class="built_in">require</span> <span class="string">'chaplin/views/layout'</span>
+Composer = <span class="built_in">require</span> <span class="string">'chaplin/composer'</span>
+Router = <span class="built_in">require</span> <span class="string">'chaplin/lib/router'</span>
+EventBroker = <span class="built_in">require</span> <span class="string">'chaplin/lib/event_broker'</span></pre></div></div>
             
         </li>
         
@@ -170,7 +170,7 @@ EventBroker = require <span class="string">'chaplin/lib/event_broker'</span></pr
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>module.exports = <span class="class"><span class="keyword">class</span> <span class="title">Application</span></span></pre></div></div>
+            <div class="content"><div class='highlight'><pre>module.<span class="built_in">exports</span> = <span class="class"><span class="keyword">class</span> <span class="title">Application</span></span></pre></div></div>
             
         </li>
         
@@ -215,7 +215,7 @@ EventBroker = require <span class="string">'chaplin/lib/event_broker'</span></pr
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>  title: <span class="string">''</span></pre></div></div>
+            <div class="content"><div class='highlight'><pre>  <span class="attribute">title</span>: <span class="string">''</span></pre></div></div>
             
         </li>
         
@@ -223,10 +223,10 @@ EventBroker = require <span class="string">'chaplin/lib/event_broker'</span></pr
         <li id="section-6">
             <div class="annotation">
               
-              <div class="pilwrap for-h2">
+              <div class="pilwrap ">
                 <a class="pilcrow" href="#section-6">&#182;</a>
               </div>
-              <h2>Core Object Instantiation</h2>
+              <h2 id="core-object-instantiation">Core Object Instantiation</h2>
 
             </div>
             
@@ -243,16 +243,16 @@ EventBroker = require <span class="string">'chaplin/lib/event_broker'</span></pr
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>  dispatcher: <span class="literal">null</span>
-  layout: <span class="literal">null</span>
-  router: <span class="literal">null</span>
-  composer: <span class="literal">null</span>
-  started: <span class="literal">false</span>
+            <div class="content"><div class='highlight'><pre>  <span class="attribute">dispatcher</span>: <span class="literal">null</span>
+  <span class="attribute">layout</span>: <span class="literal">null</span>
+  <span class="attribute">router</span>: <span class="literal">null</span>
+  <span class="attribute">composer</span>: <span class="literal">null</span>
+  <span class="attribute">started</span>: <span class="literal">false</span>
 
-  constructor: (options = {}) -&gt;
+  <span class="attribute">constructor</span>: <span class="function"><span class="params">(options = {})</span> -&gt;</span>
     <span class="property">@initialize</span> options
 
-  initialize: (options = {}) -&gt;</pre></div></div>
+  <span class="attribute">initialize</span>: <span class="function"><span class="params">(options = {})</span> -&gt;</span></pre></div></div>
             
         </li>
         
@@ -276,10 +276,10 @@ EventBroker = require <span class="string">'chaplin/lib/event_broker'</span></pr
         <li id="section-9">
             <div class="annotation">
               
-              <div class="pilwrap for-h2">
+              <div class="pilwrap ">
                 <a class="pilcrow" href="#section-9">&#182;</a>
               </div>
-              <h2>Initialize core components.</h2>
+              <h2 id="initialize-core-components-">Initialize core components.</h2>
 
             </div>
             
@@ -394,7 +394,7 @@ Any previously active controller is automatically disposed.</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>  initDispatcher: (options) -&gt;
+            <div class="content"><div class='highlight'><pre>  <span class="attribute">initDispatcher</span>: <span class="function"><span class="params">(options)</span> -&gt;</span>
     <span class="property">@dispatcher</span> = <span class="keyword">new</span> Dispatcher options</pre></div></div>
             
         </li>
@@ -415,11 +415,11 @@ the view of the new controller.</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>  initLayout: (options = {}) -&gt;
+            <div class="content"><div class='highlight'><pre>  <span class="attribute">initLayout</span>: <span class="function"><span class="params">(options = {})</span> -&gt;</span>
     options.title ?= <span class="property">@title</span>
     <span class="property">@layout</span> = <span class="keyword">new</span> Layout options
 
-  initComposer: (options = {}) -&gt;
+  <span class="attribute">initComposer</span>: <span class="function"><span class="params">(options = {})</span> -&gt;</span>
     <span class="property">@composer</span> = <span class="keyword">new</span> Composer options</pre></div></div>
             
         </li>
@@ -439,7 +439,7 @@ mediator.</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>  initMediator: -&gt;
+            <div class="content"><div class='highlight'><pre>  <span class="attribute">initMediator</span>:<span class="function"> -&gt;</span>
     mediator.seal()</pre></div></div>
             
         </li>
@@ -459,7 +459,7 @@ initialized by passing the function returned by <strong>routes.coffee</strong>.<
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>  initRouter: (routes, options) -&gt;</pre></div></div>
+            <div class="content"><div class='highlight'><pre>  <span class="attribute">initRouter</span>: <span class="function"><span class="params">(routes, options)</span> -&gt;</span></pre></div></div>
             
         </li>
         
@@ -505,7 +505,7 @@ Modules should communicate with each other via <strong>publish/subscribe</strong
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>  start: -&gt;</pre></div></div>
+            <div class="content"><div class='highlight'><pre>  <span class="attribute">start</span>:<span class="function"> -&gt;</span></pre></div></div>
             
         </li>
         
@@ -558,10 +558,10 @@ Modules should communicate with each other via <strong>publish/subscribe</strong
         <li id="section-26">
             <div class="annotation">
               
-              <div class="pilwrap for-h2">
+              <div class="pilwrap ">
                 <a class="pilcrow" href="#section-26">&#182;</a>
               </div>
-              <h2>Disposal</h2>
+              <h2 id="disposal">Disposal</h2>
 
             </div>
             
@@ -577,9 +577,9 @@ Modules should communicate with each other via <strong>publish/subscribe</strong
               
             </div>
             
-            <div class="content"><div class='highlight'><pre>  disposed: <span class="literal">false</span>
+            <div class="content"><div class='highlight'><pre>  <span class="attribute">disposed</span>: <span class="literal">false</span>
 
-  dispose: -&gt;</pre></div></div>
+  <span class="attribute">dispose</span>:<span class="function"> -&gt;</span></pre></div></div>
             
         </li>
         

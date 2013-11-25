@@ -154,10 +154,10 @@
         <li id="section-2">
             <div class="annotation">
               
-              <div class="pilwrap for-h2">
+              <div class="pilwrap ">
                 <a class="pilcrow" href="#section-2">&#182;</a>
               </div>
-              <h2>Delayer</h2>
+              <h2 id="delayer">Delayer</h2>
 
             </div>
             
@@ -188,48 +188,48 @@ timeouts and running intervals:</p>
             </div>
             
             <div class="content"><div class='highlight'><pre>Delayer =
-  setTimeout: (name, time, handler) -&gt;
+  <span class="attribute">setTimeout</span>: <span class="function"><span class="params">(name, time, handler)</span> -&gt;</span>
     <span class="property">@timeouts</span> ?= {}
     <span class="property">@clearTimeout</span> name
-    <span class="function"><span class="title">wrappedHandler</span></span> = =&gt;
+    <span class="function"><span class="title">wrappedHandler</span> = =&gt;</span>
       <span class="keyword">delete</span> <span class="property">@timeouts</span>[name]
       handler()
     handle = setTimeout wrappedHandler, time
     <span class="property">@timeouts</span>[name] = handle
     handle
 
-  clearTimeout: (name) -&gt;
+  <span class="attribute">clearTimeout</span>: <span class="function"><span class="params">(name)</span> -&gt;</span>
     <span class="keyword">return</span> <span class="keyword">unless</span> <span class="property">@timeouts</span> <span class="keyword">and</span> <span class="property">@timeouts</span>[name]?
     clearTimeout <span class="property">@timeouts</span>[name]
     <span class="keyword">delete</span> <span class="property">@timeouts</span>[name]
     <span class="keyword">return</span>
 
-  clearAllTimeouts: -&gt;
+  <span class="attribute">clearAllTimeouts</span>:<span class="function"> -&gt;</span>
     <span class="keyword">return</span> <span class="keyword">unless</span> <span class="property">@timeouts</span>
     <span class="keyword">for</span> name, handle <span class="keyword">of</span> <span class="property">@timeouts</span>
       <span class="property">@clearTimeout</span> name
     <span class="keyword">return</span>
 
-  setInterval: (name, time, handler) -&gt;
+  <span class="attribute">setInterval</span>: <span class="function"><span class="params">(name, time, handler)</span> -&gt;</span>
     <span class="property">@clearInterval</span> name
     <span class="property">@intervals</span> ?= {}
     handle = setInterval handler, time
     <span class="property">@intervals</span>[name] = handle
     handle
 
-  clearInterval: (name) -&gt;
+  <span class="attribute">clearInterval</span>: <span class="function"><span class="params">(name)</span> -&gt;</span>
     <span class="keyword">return</span> <span class="keyword">unless</span> <span class="property">@intervals</span> <span class="keyword">and</span> <span class="property">@intervals</span>[name]
     clearInterval <span class="property">@intervals</span>[name]
     <span class="keyword">delete</span> <span class="property">@intervals</span>[name]
     <span class="keyword">return</span>
 
-  clearAllIntervals: -&gt;
+  <span class="attribute">clearAllIntervals</span>:<span class="function"> -&gt;</span>
     <span class="keyword">return</span> <span class="keyword">unless</span> <span class="property">@intervals</span>
     <span class="keyword">for</span> name, handle <span class="keyword">of</span> <span class="property">@intervals</span>
       <span class="property">@clearInterval</span> name
     <span class="keyword">return</span>
 
-  clearDelayed: -&gt;
+  <span class="attribute">clearDelayed</span>:<span class="function"> -&gt;</span>
     <span class="property">@clearAllTimeouts</span>()
     <span class="property">@clearAllIntervals</span>()
     <span class="keyword">return</span></pre></div></div>
@@ -262,7 +262,7 @@ timeouts and running intervals:</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>module.exports = Delayer</pre></div></div>
+            <div class="content"><div class='highlight'><pre>module.<span class="built_in">exports</span> = Delayer</pre></div></div>
             
         </li>
         

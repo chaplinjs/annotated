@@ -148,7 +148,7 @@
             
             <div class="content"><div class='highlight'><pre><span class="string">'use strict'</span>
 
-mediator = require <span class="string">'chaplin/mediator'</span></pre></div></div>
+mediator = <span class="built_in">require</span> <span class="string">'chaplin/mediator'</span></pre></div></div>
             
         </li>
         
@@ -172,7 +172,7 @@ that a handler cannot be registered twice for the same event.</p>
             </div>
             
             <div class="content"><div class='highlight'><pre>EventBroker =
-  subscribeEvent: (type, handler) -&gt;
+  <span class="attribute">subscribeEvent</span>: <span class="function"><span class="params">(type, handler)</span> -&gt;</span>
     <span class="keyword">if</span> <span class="keyword">typeof</span> type <span class="keyword">isnt</span> <span class="string">'string'</span>
       <span class="keyword">throw</span> <span class="keyword">new</span> TypeError <span class="string">'EventBroker#subscribeEvent: '</span> +
         <span class="string">'type argument must be a string'</span>
@@ -210,7 +210,7 @@ that a handler cannot be registered twice for the same event.</p>
             
             <div class="content"><div class='highlight'><pre>    mediator.subscribe type, handler, <span class="keyword">this</span>
 
-  unsubscribeEvent: (type, handler) -&gt;
+  <span class="attribute">unsubscribeEvent</span>: <span class="function"><span class="params">(type, handler)</span> -&gt;</span>
     <span class="keyword">if</span> <span class="keyword">typeof</span> type <span class="keyword">isnt</span> <span class="string">'string'</span>
       <span class="keyword">throw</span> <span class="keyword">new</span> TypeError <span class="string">'EventBroker#unsubscribeEvent: '</span> +
         <span class="string">'type argument must be a string'</span>
@@ -246,7 +246,7 @@ that a handler cannot be registered twice for the same event.</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>  unsubscribeAllEvents: -&gt;</pre></div></div>
+            <div class="content"><div class='highlight'><pre>  <span class="attribute">unsubscribeAllEvents</span>:<span class="function"> -&gt;</span></pre></div></div>
             
         </li>
         
@@ -263,7 +263,7 @@ that a handler cannot be registered twice for the same event.</p>
             
             <div class="content"><div class='highlight'><pre>    mediator.unsubscribe <span class="literal">null</span>, <span class="literal">null</span>, <span class="keyword">this</span>
 
-  publishEvent: (type, args...) -&gt;
+  <span class="attribute">publishEvent</span>: <span class="function"><span class="params">(type, args...)</span> -&gt;</span>
     <span class="keyword">if</span> <span class="keyword">typeof</span> type <span class="keyword">isnt</span> <span class="string">'string'</span>
       <span class="keyword">throw</span> <span class="keyword">new</span> TypeError <span class="string">'EventBroker#publishEvent: '</span> +
         <span class="string">'type argument must be a string'</span></pre></div></div>
@@ -311,7 +311,7 @@ that a handler cannot be registered twice for the same event.</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>module.exports = EventBroker</pre></div></div>
+            <div class="content"><div class='highlight'><pre>module.<span class="built_in">exports</span> = EventBroker</pre></div></div>
             
         </li>
         

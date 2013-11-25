@@ -174,8 +174,8 @@ SYNCED   = <span class="string">'synced'</span>
 STATE_CHANGE = <span class="string">'syncStateChange'</span>
 
 SyncMachine =
-  _syncState: UNSYNCED
-  _previousSyncState: <span class="literal">null</span></pre></div></div>
+  <span class="attribute">_syncState</span>: UNSYNCED
+  <span class="attribute">_previousSyncState</span>: <span class="literal">null</span></pre></div></div>
             
         </li>
         
@@ -183,10 +183,10 @@ SyncMachine =
         <li id="section-3">
             <div class="annotation">
               
-              <div class="pilwrap for-h2">
+              <div class="pilwrap ">
                 <a class="pilcrow" href="#section-3">&#182;</a>
               </div>
-              <h2>Get the current state</h2>
+              <h2 id="get-the-current-state">Get the current state</h2>
 
             </div>
             
@@ -202,16 +202,16 @@ SyncMachine =
               
             </div>
             
-            <div class="content"><div class='highlight'><pre>  syncState: -&gt;
+            <div class="content"><div class='highlight'><pre>  <span class="attribute">syncState</span>:<span class="function"> -&gt;</span>
     <span class="property">@_syncState</span>
 
-  isUnsynced: -&gt;
+  <span class="attribute">isUnsynced</span>:<span class="function"> -&gt;</span>
     <span class="property">@_syncState</span> <span class="keyword">is</span> UNSYNCED
 
-  isSynced: -&gt;
+  <span class="attribute">isSynced</span>:<span class="function"> -&gt;</span>
     <span class="property">@_syncState</span> <span class="keyword">is</span> SYNCED
 
-  isSyncing: -&gt;
+  <span class="attribute">isSyncing</span>:<span class="function"> -&gt;</span>
     <span class="property">@_syncState</span> <span class="keyword">is</span> SYNCING</pre></div></div>
             
         </li>
@@ -220,10 +220,10 @@ SyncMachine =
         <li id="section-5">
             <div class="annotation">
               
-              <div class="pilwrap for-h2">
+              <div class="pilwrap ">
                 <a class="pilcrow" href="#section-5">&#182;</a>
               </div>
-              <h2>Transitions</h2>
+              <h2 id="transitions">Transitions</h2>
 
             </div>
             
@@ -239,7 +239,7 @@ SyncMachine =
               
             </div>
             
-            <div class="content"><div class='highlight'><pre>  unsync: -&gt;
+            <div class="content"><div class='highlight'><pre>  <span class="attribute">unsync</span>:<span class="function"> -&gt;</span>
     <span class="keyword">if</span> <span class="property">@_syncState</span> <span class="keyword">in</span> [SYNCING, SYNCED]
       <span class="property">@_previousSync</span> = <span class="property">@_syncState</span>
       <span class="property">@_syncState</span> = UNSYNCED
@@ -261,7 +261,7 @@ SyncMachine =
             
             <div class="content"><div class='highlight'><pre>    <span class="keyword">return</span>
 
-  beginSync: -&gt;
+  <span class="attribute">beginSync</span>:<span class="function"> -&gt;</span>
     <span class="keyword">if</span> <span class="property">@_syncState</span> <span class="keyword">in</span> [UNSYNCED, SYNCED]
       <span class="property">@_previousSync</span> = <span class="property">@_syncState</span>
       <span class="property">@_syncState</span> = SYNCING
@@ -283,7 +283,7 @@ SyncMachine =
             
             <div class="content"><div class='highlight'><pre>    <span class="keyword">return</span>
 
-  finishSync: -&gt;
+  <span class="attribute">finishSync</span>:<span class="function"> -&gt;</span>
     <span class="keyword">if</span> <span class="property">@_syncState</span> <span class="keyword">is</span> SYNCING
       <span class="property">@_previousSync</span> = <span class="property">@_syncState</span>
       <span class="property">@_syncState</span> = SYNCED
@@ -305,7 +305,7 @@ SyncMachine =
             
             <div class="content"><div class='highlight'><pre>    <span class="keyword">return</span>
 
-  abortSync: -&gt;
+  <span class="attribute">abortSync</span>:<span class="function"> -&gt;</span>
     <span class="keyword">if</span> <span class="property">@_syncState</span> <span class="keyword">is</span> SYNCING
       <span class="property">@_syncState</span> = <span class="property">@_previousSync</span>
       <span class="property">@_previousSync</span> = <span class="property">@_syncState</span>
@@ -333,10 +333,10 @@ SyncMachine =
         <li id="section-11">
             <div class="annotation">
               
-              <div class="pilwrap for-h2">
+              <div class="pilwrap ">
                 <a class="pilcrow" href="#section-11">&#182;</a>
               </div>
-              <h2>Create shortcut methods to bind a handler to a state change</h2>
+              <h2 id="create-shortcut-methods-to-bind-a-handler-to-a-state-change">Create shortcut methods to bind a handler to a state change</h2>
 
             </div>
             
@@ -353,8 +353,8 @@ SyncMachine =
             </div>
             
             <div class="content"><div class='highlight'><pre><span class="keyword">for</span> event <span class="keyword">in</span> [UNSYNCED, SYNCING, SYNCED, STATE_CHANGE]
-  <span class="keyword">do</span> (event) -&gt;
-    SyncMachine[event] = (callback, context = <span class="keyword">this</span>) -&gt;
+  <span class="keyword">do</span> <span class="function"><span class="params">(event)</span> -&gt;</span>
+    SyncMachine[event] = <span class="function"><span class="params">(callback, context = <span class="keyword">this</span>)</span> -&gt;</span>
       <span class="property">@on</span> event, callback, context
       callback.call(context) <span class="keyword">if</span> <span class="property">@_syncState</span> <span class="keyword">is</span> event</pre></div></div>
             
@@ -386,7 +386,7 @@ SyncMachine =
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>module.exports = SyncMachine</pre></div></div>
+            <div class="content"><div class='highlight'><pre>module.<span class="built_in">exports</span> = SyncMachine</pre></div></div>
             
         </li>
         

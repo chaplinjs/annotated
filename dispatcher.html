@@ -148,13 +148,13 @@
             
             <div class="content"><div class='highlight'><pre><span class="string">'use strict'</span>
 
-_ = require <span class="string">'underscore'</span>
-Backbone = require <span class="string">'backbone'</span>
-mediator = require <span class="string">'chaplin/mediator'</span>
-utils = require <span class="string">'chaplin/lib/utils'</span>
-EventBroker = require <span class="string">'chaplin/lib/event_broker'</span>
+_ = <span class="built_in">require</span> <span class="string">'underscore'</span>
+Backbone = <span class="built_in">require</span> <span class="string">'backbone'</span>
+mediator = <span class="built_in">require</span> <span class="string">'chaplin/mediator'</span>
+utils = <span class="built_in">require</span> <span class="string">'chaplin/lib/utils'</span>
+EventBroker = <span class="built_in">require</span> <span class="string">'chaplin/lib/event_broker'</span>
 
-module.exports = <span class="class"><span class="keyword">class</span> <span class="title">Dispatcher</span></span></pre></div></div>
+module.<span class="built_in">exports</span> = <span class="class"><span class="keyword">class</span> <span class="title">Dispatcher</span></span></pre></div></div>
             
         </li>
         
@@ -200,7 +200,7 @@ This object contains the controller name, action, path, and name (if any).</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>  previousRoute: <span class="literal">null</span></pre></div></div>
+            <div class="content"><div class='highlight'><pre>  <span class="attribute">previousRoute</span>: <span class="literal">null</span></pre></div></div>
             
         </li>
         
@@ -216,15 +216,15 @@ The current route object contains the same information as previous.</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>  currentController: <span class="literal">null</span>
-  currentRoute: <span class="literal">null</span>
-  currentParams: <span class="literal">null</span>
-  currentQuery: <span class="literal">null</span>
+            <div class="content"><div class='highlight'><pre>  <span class="attribute">currentController</span>: <span class="literal">null</span>
+  <span class="attribute">currentRoute</span>: <span class="literal">null</span>
+  <span class="attribute">currentParams</span>: <span class="literal">null</span>
+  <span class="attribute">currentQuery</span>: <span class="literal">null</span>
 
-  constructor: -&gt;
+  <span class="attribute">constructor</span>:<span class="function"> -&gt;</span>
     <span class="property">@initialize</span> arguments...
 
-  initialize: (options = {}) -&gt;</pre></div></div>
+  <span class="attribute">initialize</span>: <span class="function"><span class="params">(options = {})</span> -&gt;</span></pre></div></div>
             
         </li>
         
@@ -240,8 +240,8 @@ The current route object contains the same information as previous.</p>
             </div>
             
             <div class="content"><div class='highlight'><pre>    <span class="property">@settings</span> = _.defaults options,
-      controllerPath: <span class="string">'controllers/'</span>
-      controllerSuffix: <span class="string">'_controller'</span></pre></div></div>
+      <span class="attribute">controllerPath</span>: <span class="string">'controllers/'</span>
+      <span class="attribute">controllerSuffix</span>: <span class="string">'_controller'</span></pre></div></div>
             
         </li>
         
@@ -268,7 +268,7 @@ The current route object contains the same information as previous.</p>
                 <a class="pilcrow" href="#section-8">&#182;</a>
               </div>
               <p>Controller management.</p>
-<h2>Starting and disposing controllers.</h2>
+<h2 id="starting-and-disposing-controllers-">Starting and disposing controllers.</h2>
 
             </div>
             
@@ -292,7 +292,7 @@ The current route object contains the same information as previous.</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>  dispatch: (route, params, options) -&gt;</pre></div></div>
+            <div class="content"><div class='highlight'><pre>  <span class="attribute">dispatch</span>: <span class="function"><span class="params">(route, params, options)</span> -&gt;</span></pre></div></div>
             
         </li>
         
@@ -307,8 +307,8 @@ The current route object contains the same information as previous.</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>    params = <span class="keyword">if</span> params <span class="keyword">then</span> _.clone(params) <span class="keyword">else</span> {}
-    options = <span class="keyword">if</span> options <span class="keyword">then</span> _.clone(options) <span class="keyword">else</span> {}</pre></div></div>
+            <div class="content"><div class='highlight'><pre>    params = <span class="keyword">if</span> params <span class="keyword">then</span> _.extend {}, params <span class="keyword">else</span> {}
+    options = <span class="keyword">if</span> options <span class="keyword">then</span> _.extend {}, options <span class="keyword">else</span> {}</pre></div></div>
             
         </li>
         
@@ -391,7 +391,7 @@ with the same params.</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>    <span class="property">@loadController</span> route.controller, (Controller) =&gt;
+            <div class="content"><div class='highlight'><pre>    <span class="property">@loadController</span> route.controller, <span class="function"><span class="params">(Controller)</span> =&gt;</span>
       <span class="property">@controllerLoaded</span> route, params, options, Controller</pre></div></div>
             
         </li>
@@ -409,13 +409,13 @@ like RequireJS to fetch the constructor.</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>  loadController: (name, handler) -&gt;
+            <div class="content"><div class='highlight'><pre>  <span class="attribute">loadController</span>: <span class="function"><span class="params">(name, handler)</span> -&gt;</span>
     fileName = name + <span class="property">@settings</span>.controllerSuffix
     moduleName = <span class="property">@settings</span>.controllerPath + fileName
     <span class="keyword">if</span> define?.amd
-      require [moduleName], handler
+      <span class="built_in">require</span> [moduleName], handler
     <span class="keyword">else</span>
-      handler require moduleName</pre></div></div>
+      handler <span class="built_in">require</span> moduleName</pre></div></div>
             
         </li>
         
@@ -430,9 +430,9 @@ like RequireJS to fetch the constructor.</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>  controllerLoaded: (route, params, options, Controller) -&gt;
+            <div class="content"><div class='highlight'><pre>  <span class="attribute">controllerLoaded</span>: <span class="function"><span class="params">(route, params, options, Controller)</span> -&gt;</span>
     <span class="property">@previousRoute</span> = <span class="property">@currentRoute</span>
-    <span class="property">@currentRoute</span> = _.extend {}, route, {previous: utils.beget(<span class="property">@previousRoute</span>)}
+    <span class="property">@currentRoute</span> = _.extend {}, route, {<span class="attribute">previous</span>: utils.beget(<span class="property">@previousRoute</span>)}
     controller = <span class="keyword">new</span> Controller params, <span class="property">@currentRoute</span>, options
     <span class="property">@executeBeforeAction</span> controller, <span class="property">@currentRoute</span>, params, options</pre></div></div>
             
@@ -449,7 +449,7 @@ like RequireJS to fetch the constructor.</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>  executeAction: (controller, route, params, options) -&gt;</pre></div></div>
+            <div class="content"><div class='highlight'><pre>  <span class="attribute">executeAction</span>: <span class="function"><span class="params">(controller, route, params, options)</span> -&gt;</span></pre></div></div>
             
         </li>
         
@@ -587,10 +587,10 @@ like RequireJS to fetch the constructor.</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>  executeBeforeAction: (controller, route, params, options) -&gt;
+            <div class="content"><div class='highlight'><pre>  <span class="attribute">executeBeforeAction</span>: <span class="function"><span class="params">(controller, route, params, options)</span> -&gt;</span>
     before = controller.beforeAction
 
-    <span class="function"><span class="title">executeAction</span></span> = =&gt;
+    <span class="function"><span class="title">executeAction</span> = =&gt;</span>
       <span class="keyword">if</span> controller.redirected <span class="keyword">or</span> <span class="property">@currentRoute</span> <span class="keyword">and</span> route <span class="keyword">isnt</span> <span class="property">@currentRoute</span>
         controller.dispose()
         <span class="keyword">return</span>
@@ -649,7 +649,7 @@ like RequireJS to fetch the constructor.</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>  adjustURL: (route, params, options) -&gt;
+            <div class="content"><div class='highlight'><pre>  <span class="attribute">adjustURL</span>: <span class="function"><span class="params">(route, params, options)</span> -&gt;</span>
     <span class="keyword">return</span> <span class="keyword">unless</span> route.path?</pre></div></div>
             
         </li>
@@ -674,10 +674,10 @@ like RequireJS to fetch the constructor.</p>
         <li id="section-32">
             <div class="annotation">
               
-              <div class="pilwrap for-h2">
+              <div class="pilwrap ">
                 <a class="pilcrow" href="#section-32">&#182;</a>
               </div>
-              <h2>Disposal</h2>
+              <h2 id="disposal">Disposal</h2>
 
             </div>
             
@@ -693,9 +693,9 @@ like RequireJS to fetch the constructor.</p>
               
             </div>
             
-            <div class="content"><div class='highlight'><pre>  disposed: <span class="literal">false</span>
+            <div class="content"><div class='highlight'><pre>  <span class="attribute">disposed</span>: <span class="literal">false</span>
 
-  dispose: -&gt;
+  <span class="attribute">dispose</span>:<span class="function"> -&gt;</span>
     <span class="keyword">return</span> <span class="keyword">if</span> <span class="property">@disposed</span>
 
     <span class="property">@unsubscribeAllEvents</span>()
