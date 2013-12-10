@@ -49,18 +49,8 @@
               </a>
             
               
-              <a class="source" href="delayer.html">
-                delayer.coffee
-              </a>
-            
-              
               <a class="source" href="event_broker.html">
                 event_broker.coffee
-              </a>
-            
-              
-              <a class="source" href="helpers.html">
-                helpers.coffee
               </a>
             
               
@@ -151,7 +141,7 @@
 _ = <span class="built_in">require</span> <span class="string">'underscore'</span>
 Backbone = <span class="built_in">require</span> <span class="string">'backbone'</span>
 EventBroker = <span class="built_in">require</span> <span class="string">'chaplin/lib/event_broker'</span>
-helpers = <span class="built_in">require</span> <span class="string">'chaplin/lib/helpers'</span>
+utils = <span class="built_in">require</span> <span class="string">'chaplin/lib/utils'</span>
 mediator = <span class="built_in">require</span> <span class="string">'chaplin/mediator'</span>
 
 module.<span class="built_in">exports</span> = <span class="class"><span class="keyword">class</span> <span class="title">Controller</span></span></pre></div></div>
@@ -301,7 +291,7 @@ composer for information on parameters, etc.</p>
             
             <div class="content"><div class='highlight'><pre>  <span class="attribute">redirectTo</span>: <span class="function"><span class="params">(pathDesc, params, options)</span> -&gt;</span>
     <span class="property">@redirected</span> = <span class="literal">true</span>
-    helpers.redirectTo pathDesc, params, options</pre></div></div>
+    utils.redirectTo pathDesc, params, options</pre></div></div>
             
         </li>
         

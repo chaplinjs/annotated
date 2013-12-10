@@ -49,18 +49,8 @@
               </a>
             
               
-              <a class="source" href="delayer.html">
-                delayer.coffee
-              </a>
-            
-              
               <a class="source" href="event_broker.html">
                 event_broker.coffee
-              </a>
-            
-              
-              <a class="source" href="helpers.html">
-                helpers.coffee
               </a>
             
               
@@ -757,7 +747,8 @@ For an element in the passing a selector:
             </div>
             
             <div class="content"><div class='highlight'><pre>  <span class="attribute">delegate</span>: <span class="function"><span class="params">(eventName, second, third)</span> -&gt;</span>
-    <span class="keyword">return</span> <span class="keyword">super</span> <span class="keyword">if</span> Backbone.<span class="attribute">View</span>::delegate
+    <span class="keyword">if</span> Backbone.utils
+      <span class="keyword">return</span> Backbone.utils.delegate(<span class="keyword">this</span>, eventName, second, third)
     <span class="keyword">if</span> <span class="keyword">typeof</span> eventName <span class="keyword">isnt</span> <span class="string">'string'</span>
       <span class="keyword">throw</span> <span class="keyword">new</span> TypeError <span class="string">'View#delegate: first argument must be a string'</span>
 
@@ -887,7 +878,8 @@ of the parent view if it exists.</p>
             </div>
             
             <div class="content"><div class='highlight'><pre>  <span class="attribute">undelegate</span>: <span class="function"><span class="params">(eventName, second, third)</span> -&gt;</span>
-    <span class="keyword">return</span> <span class="keyword">super</span> <span class="keyword">if</span> Backbone.<span class="attribute">View</span>::undelegate
+    <span class="keyword">if</span> Backbone.utils
+      <span class="keyword">return</span> Backbone.utils.undelegate(<span class="keyword">this</span>, eventName, second, third)
     <span class="keyword">if</span> eventName
       <span class="keyword">if</span> <span class="keyword">typeof</span> eventName <span class="keyword">isnt</span> <span class="string">'string'</span>
         <span class="keyword">throw</span> <span class="keyword">new</span> TypeError <span class="string">'View#undelegate: first argument must be a string'</span>

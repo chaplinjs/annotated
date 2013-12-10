@@ -49,18 +49,8 @@
               </a>
             
               
-              <a class="source" href="delayer.html">
-                delayer.coffee
-              </a>
-            
-              
               <a class="source" href="event_broker.html">
                 event_broker.coffee
-              </a>
-            
-              
-              <a class="source" href="helpers.html">
-                helpers.coffee
               </a>
             
               
@@ -415,7 +405,9 @@ like RequireJS to fetch the constructor.</p>
     <span class="keyword">if</span> define?.amd
       <span class="built_in">require</span> [moduleName], handler
     <span class="keyword">else</span>
-      handler <span class="built_in">require</span> moduleName</pre></div></div>
+      setTimeout<span class="function"> =&gt;</span>
+        handler <span class="built_in">require</span> moduleName
+      , <span class="number">0</span></pre></div></div>
             
         </li>
         

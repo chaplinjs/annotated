@@ -49,18 +49,8 @@
               </a>
             
               
-              <a class="source" href="delayer.html">
-                delayer.coffee
-              </a>
-            
-              
               <a class="source" href="event_broker.html">
                 event_broker.coffee
-              </a>
-            
-              
-              <a class="source" href="helpers.html">
-                helpers.coffee
               </a>
             
               
@@ -397,7 +387,7 @@ object1, it will get [object1prop, object2prop].</p>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-15">&#182;</a>
               </div>
-              <h2 id="query-parameters-helpers">Query parameters Helpers</h2>
+              <h2 id="routing-helpers">Routing Helpers</h2>
 
             </div>
             
@@ -410,10 +400,12 @@ object1, it will get [object1prop, object2prop].</p>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-16">&#182;</a>
               </div>
-              
+              <p>Returns the url for a named route and any params.</p>
+
             </div>
             
-            <div class="content"><div class='highlight'><pre>  <span class="attribute">queryParams</span>:</pre></div></div>
+            <div class="content"><div class='highlight'><pre>  <span class="attribute">reverse</span>: <span class="function"><span class="params">(criteria, params, query)</span> -&gt;</span>
+    <span class="built_in">require</span>(<span class="string">'chaplin/mediator'</span>).execute <span class="string">'router:reverse'</span>, criteria, params, query</pre></div></div>
             
         </li>
         
@@ -423,6 +415,49 @@ object1, it will get [object1prop, object2prop].</p>
               
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-17">&#182;</a>
+              </div>
+              <p>Redirects to URL, route name or controller and action pair.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  <span class="attribute">redirectTo</span>: <span class="function"><span class="params">(pathDesc, params, options)</span> -&gt;</span>
+    <span class="built_in">require</span>(<span class="string">'chaplin/mediator'</span>).execute <span class="string">'router:route'</span>, pathDesc, params, options</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-18">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-18">&#182;</a>
+              </div>
+              <h2 id="query-parameters-helpers">Query parameters Helpers</h2>
+
+            </div>
+            
+        </li>
+        
+        
+        <li id="section-19">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-19">&#182;</a>
+              </div>
+              
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  <span class="attribute">queryParams</span>:</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-20">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-20">&#182;</a>
               </div>
               <p>Returns a query string from a hash</p>
 
@@ -444,11 +479,11 @@ object1, it will get [object1prop, object2prop].</p>
         </li>
         
         
-        <li id="section-18">
+        <li id="section-21">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-18">&#182;</a>
+                <a class="pilcrow" href="#section-21">&#182;</a>
               </div>
               <p>Returns a hash with query parameters from a query string</p>
 
@@ -470,11 +505,11 @@ object1, it will get [object1prop, object2prop].</p>
         </li>
         
         
-        <li id="section-19">
+        <li id="section-22">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-19">&#182;</a>
+                <a class="pilcrow" href="#section-22">&#182;</a>
               </div>
               <p>Handle multiple params with same name:
 Aggregate them in an array.</p>
@@ -486,11 +521,11 @@ Aggregate them in an array.</p>
         </li>
         
         
-        <li id="section-20">
+        <li id="section-23">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-20">&#182;</a>
+                <a class="pilcrow" href="#section-23">&#182;</a>
               </div>
               <p>Add the existing array.</p>
 
@@ -502,11 +537,11 @@ Aggregate them in an array.</p>
         </li>
         
         
-        <li id="section-21">
+        <li id="section-24">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-21">&#182;</a>
+                <a class="pilcrow" href="#section-24">&#182;</a>
               </div>
               <p>Create a new array.</p>
 
@@ -521,11 +556,11 @@ Aggregate them in an array.</p>
         </li>
         
         
-        <li id="section-22">
+        <li id="section-25">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-22">&#182;</a>
+                <a class="pilcrow" href="#section-25">&#182;</a>
               </div>
               <h2 id="finish">Finish</h2>
 
@@ -534,11 +569,11 @@ Aggregate them in an array.</p>
         </li>
         
         
-        <li id="section-23">
+        <li id="section-26">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-23">&#182;</a>
+                <a class="pilcrow" href="#section-26">&#182;</a>
               </div>
               <p>Seal the utils object.</p>
 
@@ -549,11 +584,11 @@ Aggregate them in an array.</p>
         </li>
         
         
-        <li id="section-24">
+        <li id="section-27">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-24">&#182;</a>
+                <a class="pilcrow" href="#section-27">&#182;</a>
               </div>
               <p>Return our creation.</p>
 

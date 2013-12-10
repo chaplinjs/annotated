@@ -49,18 +49,8 @@
               </a>
             
               
-              <a class="source" href="delayer.html">
-                delayer.coffee
-              </a>
-            
-              
               <a class="source" href="event_broker.html">
                 event_broker.coffee
-              </a>
-            
-              
-              <a class="source" href="helpers.html">
-                helpers.coffee
               </a>
             
               
@@ -151,7 +141,6 @@
 _ = <span class="built_in">require</span> <span class="string">'underscore'</span>
 Backbone = <span class="built_in">require</span> <span class="string">'backbone'</span>
 mediator = <span class="built_in">require</span> <span class="string">'chaplin/mediator'</span>
-helpers = <span class="built_in">require</span> <span class="string">'chaplin/lib/helpers'</span>
 utils = <span class="built_in">require</span> <span class="string">'chaplin/lib/utils'</span>
 EventBroker = <span class="built_in">require</span> <span class="string">'chaplin/lib/event_broker'</span>
 View = <span class="built_in">require</span> <span class="string">'chaplin/views/view'</span></pre></div></div>
@@ -327,7 +316,7 @@ and passed as an option.</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>  <span class="attribute">scroll</span>: <span class="function"><span class="params">(controller)</span> -&gt;</span></pre></div></div>
+            <div class="content"><div class='highlight'><pre>  <span class="attribute">scroll</span>:<span class="function"> -&gt;</span></pre></div></div>
             
         </li>
         
@@ -574,7 +563,7 @@ but it doesn’t make sense to route it.</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>    helpers.redirectTo <span class="attribute">url</span>: href</pre></div></div>
+            <div class="content"><div class='highlight'><pre>    utils.redirectTo <span class="attribute">url</span>: href</pre></div></div>
             
         </li>
         
