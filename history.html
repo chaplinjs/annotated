@@ -432,6 +432,135 @@ as query params have been already included into @fragment</p>
 
     <span class="property">@loadUrl</span>() <span class="keyword">if</span> <span class="keyword">not</span> <span class="property">@options</span>.silent
 
+  <span class="attribute">navigate</span>: <span class="function"><span class="params">(fragment=<span class="string">''</span>, options)</span> -&gt;</span>
+    <span class="keyword">return</span> <span class="literal">false</span> <span class="keyword">unless</span> Backbone.History.started
+
+    options = {<span class="attribute">trigger</span>: options} <span class="keyword">if</span> <span class="keyword">not</span> options <span class="keyword">or</span> options <span class="keyword">is</span> <span class="literal">true</span>
+
+    fragment = <span class="property">@getFragment</span> fragment
+    url = <span class="property">@root</span> + fragment</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-19">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-19">&#182;</a>
+              </div>
+              <p>Remove fragment replace, coz query string different mean difference page
+Strip the fragment of the query and hash for matching.
+fragment = fragment.replace(pathStripper, &#39;&#39;)</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    <span class="keyword">return</span> <span class="literal">false</span> <span class="keyword">if</span> <span class="property">@fragment</span> <span class="keyword">is</span> fragment
+    <span class="property">@fragment</span> = fragment</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-20">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-20">&#182;</a>
+              </div>
+              <p>Don&#39;t include a trailing slash on the root.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    <span class="keyword">if</span> fragment.length <span class="keyword">is</span> <span class="number">0</span> <span class="keyword">and</span> url <span class="keyword">isnt</span> <span class="string">'/'</span>
+      url = url.slice <span class="number">0</span>, -<span class="number">1</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-21">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-21">&#182;</a>
+              </div>
+              <p>If pushState is available, we use it to set the fragment as a real URL.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    <span class="keyword">if</span> <span class="property">@_hasPushState</span>
+      historyMethod = <span class="keyword">if</span> options.replace <span class="keyword">then</span> <span class="string">'replaceState'</span> <span class="keyword">else</span> <span class="string">'pushState'</span>
+      <span class="property">@history</span>[historyMethod] {}, document.title, url</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-22">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-22">&#182;</a>
+              </div>
+              <p>If hash changes haven&#39;t been explicitly disabled, update the hash
+fragment to store history.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    <span class="keyword">else</span> <span class="keyword">if</span> <span class="property">@_wantsHashChange</span>
+      <span class="property">@_updateHash</span> <span class="property">@location</span>, fragment, options.replace</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-23">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-23">&#182;</a>
+              </div>
+              <p>iframe</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>      isSameFragment = fragment <span class="keyword">isnt</span> <span class="property">@getFragment</span> <span class="property">@getHash</span>(<span class="property">@iframe</span>)
+      <span class="keyword">if</span> <span class="property">@iframe</span>? <span class="keyword">and</span> isSameFragment</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-24">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-24">&#182;</a>
+              </div>
+              <p>Opening and closing the iframe tricks IE7 and earlier to push a
+history entry on hash-tag change.  When replace is true, we don&#39;t</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>        <span class="property">@iframe</span>.document.open().close() <span class="keyword">unless</span> options.replace
+        <span class="property">@_updateHash</span> <span class="property">@iframe</span>.location, fragment, options.replace</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-25">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-25">&#182;</a>
+              </div>
+              <p>If you&#39;ve told us that you explicitly don&#39;t want fallback hashchange-
+based history, then <code>navigate</code> becomes a page refresh.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    <span class="keyword">else</span>
+      <span class="keyword">return</span> <span class="property">@location</span>.assign url
+
+    <span class="keyword">if</span> options.trigger
+      <span class="keyword">return</span> <span class="property">@loadUrl</span>(fragment)
+
 module.<span class="built_in">exports</span> = <span class="keyword">if</span> Backbone.$ <span class="keyword">then</span> History <span class="keyword">else</span> Backbone.History</pre></div></div>
             
         </li>

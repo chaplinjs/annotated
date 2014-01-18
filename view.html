@@ -819,7 +819,7 @@ For an element in the passing a selector:
       <span class="keyword">return</span> Backbone.<span class="attribute">View</span>::delegateEvents.call <span class="keyword">this</span>, events, <span class="literal">true</span>
     <span class="keyword">for</span> key, value <span class="keyword">of</span> events
       handler = <span class="keyword">if</span> <span class="keyword">typeof</span> value <span class="keyword">is</span> <span class="string">'function'</span> <span class="keyword">then</span> value <span class="keyword">else</span> <span class="keyword">this</span>[value]
-      <span class="keyword">throw</span> <span class="keyword">new</span> Error <span class="string">"Method '<span class="subst">#{handler}</span>' does not exist"</span> <span class="keyword">unless</span> handler
+      <span class="keyword">throw</span> <span class="keyword">new</span> Error <span class="string">"Method '<span class="subst">#{value}</span>' does not exist"</span> <span class="keyword">unless</span> handler
       match = key.match <span class="regexp">/^(\S+)\s*(.*)$/</span>
       eventName = <span class="string">"<span class="subst">#{match[<span class="number">1</span>]}</span>.delegateEvents<span class="subst">#{<span class="property">@cid</span>}</span>"</span>
       selector = match[<span class="number">2</span>]
