@@ -456,7 +456,7 @@ Iterate and replace params in pattern.</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>    url = url.replace optionalRegExp, <span class="function"><span class="params">(match, portion)</span> -&gt;</span>
+            <div class="content"><div class='highlight'><pre>    raw = url.replace optionalRegExp, <span class="function"><span class="params">(match, portion)</span> -&gt;</span>
       <span class="keyword">if</span> portion.match <span class="regexp">/[:*]/g</span>
         <span class="string">""</span>
       <span class="keyword">else</span>
@@ -475,7 +475,7 @@ Iterate and replace params in pattern.</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>    url = processTrailingSlash url, <span class="property">@options</span>.trailing
+            <div class="content"><div class='highlight'><pre>    url = processTrailingSlash raw, <span class="property">@options</span>.trailing
 
     <span class="keyword">return</span> url <span class="keyword">unless</span> query</pre></div></div>
             
@@ -735,7 +735,7 @@ trailing slash or the begin of query string.</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>    <span class="property">@regExp</span> = <span class="regexp">///^<span class="comment">#{pattern}(?=\/?(\?|$))///</span>
+            <div class="content"><div class='highlight'><pre>    <span class="property">@regExp</span> = <span class="regexp">///^<span class="comment">#{pattern}(?=\/?(?=\?|$))///</span>
 
   parseOptionalPortion: (match, optionalPortion) =&gt;
 </span></pre></div></div>

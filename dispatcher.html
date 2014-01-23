@@ -407,11 +407,12 @@ like RequireJS to fetch the constructor.</p>
             </div>
             
             <div class="content"><div class='highlight'><pre>  <span class="attribute">controllerLoaded</span>: <span class="function"><span class="params">(route, params, options, Controller)</span> -&gt;</span>
-    <span class="property">@nextPreviousRoute</span> = <span class="property">@currentRoute</span>
-    previous = _.extend {}, <span class="property">@nextPreviousRoute</span>
-    previous.params = <span class="property">@currentParams</span> <span class="keyword">if</span> <span class="property">@currentParams</span>?
-    <span class="keyword">delete</span> previous.previous <span class="keyword">if</span> previous.previous
-    <span class="property">@nextCurrentRoute</span> = _.extend {}, route, {previous}
+    <span class="keyword">if</span> <span class="property">@nextPreviousRoute</span> = <span class="property">@currentRoute</span>
+      previous = _.extend {}, <span class="property">@nextPreviousRoute</span>
+      previous.params = <span class="property">@currentParams</span> <span class="keyword">if</span> <span class="property">@currentParams</span>?
+      <span class="keyword">delete</span> previous.previous <span class="keyword">if</span> previous.previous
+      prev = {previous}
+    <span class="property">@nextCurrentRoute</span> = _.extend {}, route, prev
 
     controller = <span class="keyword">new</span> Controller params, <span class="property">@nextCurrentRoute</span>, options
     <span class="property">@executeBeforeAction</span> controller, <span class="property">@nextCurrentRoute</span>, params, options</pre></div></div>
